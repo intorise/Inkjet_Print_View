@@ -249,6 +249,7 @@
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Moudules\HiWatchOpcMonitor.cs" />
+    <Compile Include="Moudules\PlcClearHelper.cs" />
     <Compile Include="Moudules\MecPlcHelper.cs" />
     <Compile Include="Moudules\ModBusTcpHelper.cs" />
     <Compile Include="Moudules\OPCuaHelper.cs" />

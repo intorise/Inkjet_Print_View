@@ -663,7 +663,7 @@ namespace PR_Spc_Tester.Moudules
                     ConnectPLC();
                 }
 
-                //称重2数据地址有些和称重1共用，所以读取时需要区分是哪个工位在测试，避免数据混淆
+                //[称重2]-数据地址表格里没有，是否有些和[称重1]共用?
                 float preSprayWeight = mc_net.ReadFloat("D5970").Content;//喷前重量2(单位;g)
                 float postSprayWeight = mc_net.ReadFloat("D5972").Content;//喷后重量2
                 float sedimentationWeight = mc_net.ReadFloat("D5974").Content;//沉积重量2

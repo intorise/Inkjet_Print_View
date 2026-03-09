@@ -1,8 +1,12 @@
 ﻿using HslCommunication;
 using MiniExcelLibs;
+using MiniExcelLibs.Attributes;
 using MiniExcelLibs.OpenXml;
-using OfficeOpenXml.Style;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;  // for xlsx
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Org.BouncyCastle.Ocsp;
 using PR_DAL;
 using PR_Model;
@@ -25,9 +29,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;  // for xlsx
-using MiniExcelLibs.Attributes;
 
 namespace PR_Spc_Tester
 {
@@ -42,6 +43,7 @@ namespace PR_Spc_Tester
         private static readonly object _lock = new object();
         private SpcHelper spcHelper = new SpcHelper();
         MecPlcHelper plcHelper = new MecPlcHelper();
+        PlcClearHelper clearHelper = new PlcClearHelper();
         private int TestCount = 0;
         private int LastId = 0; //最新ID;
         private bool PlcEnable = false;
@@ -195,10 +197,12 @@ namespace PR_Spc_Tester
                     {
                         bool resultPLC = plcHelper.ConnectPLC();
                         bool resultGun = gunHelp.ConnectServer();
+                        bool resultClear = clearHelper.ConnectPLC();
                         //bool resultGun = true;
-                        if (resultPLC&& resultGun)
+                        if (resultPLC&& resultGun&& resultClear)
                         {
                             LogService.AddLogToEnqueue("PLC连接成功！");
+                            Task.Factory.StartNew(PlcClearAction, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(PlcHeavyAction, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(PlcHeavyAction2, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(PlcColdSprayAction, TaskCreationOptions.LongRunning);
@@ -209,7 +213,7 @@ namespace PR_Spc_Tester
                         }
                         else
                         {
-                            LogService.AddLogToEnqueue($"连接PLC或冷喷枪失败，请检查网络,3S 后程序重连PLC连接{resultPLC}冷喷枪连接{resultGun}", EnumMsgType.Error);
+                            LogService.AddLogToEnqueue($"连接PLC、冷喷枪或清洗机失败，请检查网络,3S 后程序重连PLC连接{resultPLC}, 冷喷枪连接{resultGun}, 清洗机连接{resultClear}", EnumMsgType.Error);
                             Thread.Sleep(3000);
                         }
                     }
@@ -686,6 +690,106 @@ namespace PR_Spc_Tester
                 catch (Exception ex)
                 {
                     LogService.AddLogToEnqueue("采集称重数据异常:" + ex.Message+ex.StackTrace, EnumMsgType.Exception);
+                }
+            }
+        }
+
+        private void PlcClearAction()
+        {
+            LogService.AddLogToEnqueue("激光清洗->ready...");
+            while (true)
+            {
+                Thread.Sleep(1000);
+                try
+                {
+                    OperateResult<short> result = clearHelper.GetReadReady();
+                    if (result.Content == 1)
+                    {
+                        LogService.AddLogToEnqueue("激光清洗->收到二维码读ready信号");
+                        OperateResult<string> resultCode = clearHelper.GetBarcode();
+                        if (resultCode.Content == "")
+                        {
+                            LogService.AddLogToEnqueue($"激光清洗->读取二维码为空", EnumMsgType.Exception);
+                            if (!clearHelper.WriteAddCodeFailed().IsSuccess)
+                            {
+                                clearHelper.WriteAddCodeFailed();
+                            }
+                            continue;
+                        }
+                        string heavyCode = resultCode.Content;
+                        LogService.AddLogToEnqueue($"激光清洗->读取二维码为{heavyCode}", EnumMsgType.Info);
+                        // 创建新的测试数据对象
+                        TestData testData = new TestData()
+                        {
+                            Code = heavyCode,                    // 设置二维码
+                            PlacementTime = DateTime.Now,    // 设置摆放时间（当前时间）
+                        };
+
+                        // 从数据库加载测试项目参数（如果还没加载）
+                        if (list == null)
+                        {
+                            list = projectdal.GetList();  // 获取所有测试项目
+                        }
+
+                        // 遍历所有测试项目，设置对应的上下限值
+                        foreach (var item in list)
+                        {
+                            if (item.ProjectCode == "MinTemperature")
+                            {
+                                testData.MinTemperatureLowerLimit = item.LSL_Val;  // 最低温度下限
+                            }
+                            else if (item.ProjectCode == "AverageTemperature")
+                            {
+                                testData.AverageTemperatureLowerLimit = item.LSL_Val;  // 平均温度下限
+                                testData.AverageTemperatureUpperLimit = item.USL_Val;  // 平均温度上限
+                            }
+                            else if (item.ProjectCode == "MinNitrogenPressure")
+                            {
+                                testData.MinNitrogenPressureLowerLimit = item.LSL_Val;  // 最低氮气压力下限
+                            }
+                            else if (item.ProjectCode == "AverageNitrogenPressure")
+                            {
+                                testData.AverageNitrogenPressureLowerLimit = item.LSL_Val;  // 平均氮气压力下限
+                                testData.AverageNitrogenPressureUpperLimit = item.USL_Val;  // 平均氮气压力上限
+                            }
+                            else if (item.ProjectCode == "IntakePressure")
+                            {
+                                testData.IntakePressureLowerLimit = item.LSL_Val;  // 进气压力下限
+                            }
+                            else if (item.ProjectCode == "MinSpeed")
+                            {
+                                testData.MinSpeedLowerLimit = item.LSL_Val;  // 最低速度下限
+                            }
+                            else if (item.ProjectCode == "AverageSpeed")
+                            {
+                                testData.AverageSpeedLowerLimit = item.LSL_Val;  // 平均速度下限
+                                testData.AverageSpeedUpperLimit = item.USL_Val;  // 平均速度上限
+                            }
+                            else if (item.ProjectCode == "AverageConcentration")
+                            {
+                                testData.AverageConcentrationLowerLimit = item.LSL_Val;  // 平均浓度下限
+                                testData.AverageConcentrationUpperLimit = item.USL_Val;  // 平均浓度上限
+                            }
+                        }
+
+                        // 将数据插入数据库
+                        bool ret = dal.addNew(testData);
+
+                        if (ret)
+                        {
+                            clearHelper.WriteAddCodeOK();
+                            LogService.AddLogToEnqueue($"激光清洗->二维码{heavyCode}添加成功，时间:{DateTime.Now}", EnumMsgType.Info);
+                        }
+                        else
+                        {
+                            clearHelper.WriteAddCodeFailed();
+                            LogService.AddLogToEnqueue($"激光清洗->二维码{heavyCode}添加失败，原因:数据库插入失败", EnumMsgType.Error);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogService.AddLogToEnqueue("激光清洗->读取并新增激光二维码异常:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                 }
             }
         }
