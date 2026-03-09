@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inkjet_Print_View", "Inkjet_Print_View\Inkjet_Print_View.csproj", "{A79B28E0-E906-47B2-A729-BB39F9BEE3BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR_Model", "PR_Model\PR_Model.csproj", "{43B94ED6-900E-4966-8D45-CB33713A1ABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR_DAL", "PR_DAL\PR_DAL.csproj", "{063BD69A-5253-473B-A51A-BE68517E695A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR_Helper", "PR_Helper\PR_Helper.csproj", "{5A91B1C3-2668-4D11-97E6-A9FFB650446E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A79B28E0-E906-47B2-A729-BB39F9BEE3BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79B28E0-E906-47B2-A729-BB39F9BEE3BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79B28E0-E906-47B2-A729-BB39F9BEE3BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79B28E0-E906-47B2-A729-BB39F9BEE3BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B94ED6-900E-4966-8D45-CB33713A1ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B94ED6-900E-4966-8D45-CB33713A1ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B94ED6-900E-4966-8D45-CB33713A1ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B94ED6-900E-4966-8D45-CB33713A1ABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{063BD69A-5253-473B-A51A-BE68517E695A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{063BD69A-5253-473B-A51A-BE68517E695A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{063BD69A-5253-473B-A51A-BE68517E695A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{063BD69A-5253-473B-A51A-BE68517E695A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A91B1C3-2668-4D11-97E6-A9FFB650446E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A91B1C3-2668-4D11-97E6-A9FFB650446E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A91B1C3-2668-4D11-97E6-A9FFB650446E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A91B1C3-2668-4D11-97E6-A9FFB650446E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1ABE3DAB-638A-4381-93DF-DF095DD812B2}
+	EndGlobalSection
+EndGlobal
