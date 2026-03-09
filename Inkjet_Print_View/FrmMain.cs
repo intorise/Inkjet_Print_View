@@ -767,9 +767,9 @@ namespace PR_Spc_Tester
                                 testData.UtilizationRate = ((float)utilizationRate * 100).ToString("0.00") + "%";
                             }
                             LogService.AddLogToEnqueue("[称重2]-记录称重完成信号=2");
-                            if (!plcHelper.ResetReady().IsSuccess)
+                            if (!plcHelper.ResetReady2().IsSuccess)
                             {
-                                plcHelper.ResetReady();
+                                plcHelper.ResetReady2();
                             }
 
                             if (dal.UpHeavydate(testData))

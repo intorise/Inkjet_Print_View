@@ -294,6 +294,21 @@ namespace PR_Spc_Tester.Moudules
             }
         }
         /// <summary>
+        /// 复位
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult ResetReady2()
+        {
+            try
+            {
+                return mc_net.Write("D5714", (short)2);
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<short>(-1, "[称重2]-读取失败" + ex.Message);
+            }
+        }
+        /// <summary>
         /// 冷喷复位
         /// </summary>
         /// <returns></returns>
@@ -659,7 +674,7 @@ namespace PR_Spc_Tester.Moudules
                 float nozzleHeight = mc_net.ReadInt16("D5678").Content / 10.0f;//喷嘴高度，和称重1共用一个地址?
                 float powderSupplySpeed = mc_net.ReadInt16("D5677").Content / 10.0f;//供粉速度，和称重1共用一个地址?
                 float preSprayWeight_1s = mc_net.ReadFloat("D5978").Content;//喷前重量1.0S
-                float preSprayWeight_1_5s = mc_net.ReadFloat("D5978").Content;//D5978	喷前重量1.0S
+                float preSprayWeight_1_5s = mc_net.ReadFloat("D5980").Content;//D5980	喷前重量1.5S
                 float preSprayWeight_2s = mc_net.ReadFloat("D5982").Content;//D5982	喷前重量2.0S
                 float preSprayWeight_2_5s = mc_net.ReadFloat("D5984").Content;//D5984	喷前重量2.5S
                 float aftSprayWeight_1s = mc_net.ReadFloat("D5986").Content;//D5986	喷后重量1.0S
