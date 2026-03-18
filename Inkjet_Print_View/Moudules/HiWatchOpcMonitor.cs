@@ -388,6 +388,10 @@ namespace PR_Spc_Tester.Moudules
             // 将密度队列中的数据转换为数组
             var densityValues = _densityData.ToArray();
             var positionValues = _positionData.ToArray();
+            int rawSpeedCount = speedValues.Length;
+            int rawDensityCount = densityValues.Length;
+            int rawPositionCount = positionValues.Length;
+            LogService.AddLogToEnqueue($"OPC统计->原始样本数 speed:{rawSpeedCount}, density:{rawDensityCount}, position:{rawPositionCount}", EnumMsgType.Info);
 
             // 定义要移除的数据点数量（前15个和后15个）
             int removeCount = 15;
@@ -400,8 +404,8 @@ namespace PR_Spc_Tester.Moudules
             }
             else
             {
-                // 如果数据量不足，则清空速度数据数组
-                speedValues = new double[0];
+                // 样本不足30点时不做裁剪，避免短时采集被清空后统计值全部为0。
+                LogService.AddLogToEnqueue($"OPC统计->速度样本数{speedValues.Length}不足{removeCount * 2 + 1}，跳过前后裁剪", EnumMsgType.Info);
             }
 
             // 去掉密度数据的前15个和后15个数据点
@@ -412,8 +416,8 @@ namespace PR_Spc_Tester.Moudules
             }
             else
             {
-                // 如果数据量不足，则清空密度数据数组
-                densityValues = new double[0];
+                // 样本不足30点时不做裁剪，避免短时采集被清空后统计值全部为0。
+                LogService.AddLogToEnqueue($"OPC统计->浓度样本数{densityValues.Length}不足{removeCount * 2 + 1}，跳过前后裁剪", EnumMsgType.Info);
             }
 
             // 去掉位置数据的前15个和后15个数据点
@@ -424,9 +428,11 @@ namespace PR_Spc_Tester.Moudules
             }
             else
             {
-                // 如果位置量不足，则清空密度数据数组
-                positionValues = new double[0];
+                // 样本不足30点时不做裁剪，避免短时采集被清空后统计值全部为0。
+                LogService.AddLogToEnqueue($"OPC统计->位置样本数{positionValues.Length}不足{removeCount * 2 + 1}，跳过前后裁剪", EnumMsgType.Info);
             }
+
+            LogService.AddLogToEnqueue($"OPC统计->裁剪后样本数 speed:{speedValues.Length}, density:{densityValues.Length}, position:{positionValues.Length}", EnumMsgType.Info);
 
             // 计算速度统计量
             testData.AverageSpeed = speedValues.Length > 0 ? Math.Round(speedValues.Average(), 2) : 0;
@@ -445,6 +451,11 @@ namespace PR_Spc_Tester.Moudules
             testData.MinPosition = positionValues.Length > 0 ? Math.Round(positionValues.Min(), 2) : 0;
             testData.MaxPosition = positionValues.Length > 0 ? Math.Round(positionValues.Max(), 2) : 0;
             testData.StdDevPosition = positionValues.Length > 0 ? Math.Round(CalculateStandardDeviation(positionValues), 2) : 0;
+
+            if (speedValues.Length == 0 || densityValues.Length == 0 || positionValues.Length == 0)
+            {
+                LogService.AddLogToEnqueue("OPC统计->至少一类样本为0，统计结果可能为0；请检查MonitorIP、节点名和采样时长", EnumMsgType.Exception);
+            }
         }
         // 标准差计算方法（总体标准差）
         private double CalculateStandardDeviation(double[] values)
@@ -478,6 +489,9 @@ namespace PR_Spc_Tester.Moudules
             while (_speedData.TryDequeue(out _)) ;
             // 清空密度数据队列
             while (_densityData.TryDequeue(out _)) ;
+            // 清空位置数据队列
+            while (_positionData.TryDequeue(out _)) ;
+            LogService.AddLogToEnqueue("OPC缓存已清空(speed/density/position)", EnumMsgType.Info);
         }
 
         // 实现 IDisposable 接口，用于释放资源

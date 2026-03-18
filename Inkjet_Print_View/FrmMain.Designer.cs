@@ -68,44 +68,6 @@
             this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiGroupBox1 = new Sunny.UI.UIGroupBox();
             this.dgv_realtime = new Sunny.UI.UIDataGridView();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.dgv_his = new Sunny.UI.UIDataGridView();
-            this.pageData = new Sunny.UI.UIPagination();
-            this.uiPanel4 = new Sunny.UI.UIPanel();
-            this.uidtp_end = new Sunny.UI.UIDatetimePicker();
-            this.uidtp_start = new Sunny.UI.UIDatetimePicker();
-            this.uiLabel5 = new Sunny.UI.UILabel();
-            this.uiLabel4 = new Sunny.UI.UILabel();
-            this.uiButtonSearch = new Sunny.UI.UISymbolButton();
-            this.uisBtn_Export = new Sunny.UI.UISymbolButton();
-            this.uitb_Code = new Sunny.UI.UITextBox();
-            this.uiLabel11 = new Sunny.UI.UILabel();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.dgv_clearrealtime = new Sunny.UI.UIDataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.uiPanel5 = new Sunny.UI.UIPanel();
-            this.uitb_ClearCode = new Sunny.UI.UITextBox();
-            this.uiLabel9 = new Sunny.UI.UILabel();
-            this.uiLabel6 = new Sunny.UI.UILabel();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.dgv_alarmmessage = new Sunny.UI.UIDataGridView();
-            this.dataGridViewTextBoxColumn25 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn26 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.uiPagAlarm = new Sunny.UI.UIPagination();
-            this.uiPanel6 = new Sunny.UI.UIPanel();
-            this.ui_time = new Sunny.UI.UIDatetimePicker();
-            this.btn_AlarmSelect = new Sunny.UI.UISymbolButton();
-            this.uiLabel14 = new Sunny.UI.UILabel();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.lb_right = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lb_userName = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.uiBtn_Exit = new Sunny.UI.UIButton();
-            this.uibtn_log = new Sunny.UI.UIButton();
-            this.btn_params = new Sunny.UI.UIButton();
-            this.btn_user = new Sunny.UI.UIButton();
             this.Col_Code = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_PreSprayWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_PreSprayWeight_1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -172,6 +134,8 @@
             this.Col_StdDevPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Location = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_PlacementHour = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.dgv_his = new Sunny.UI.UIDataGridView();
             this.col_his_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_Code = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_his_PreSprayWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -243,6 +207,43 @@
             this.dgv_his_StdDevPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_Location = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_PlacementHour = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pageData = new Sunny.UI.UIPagination();
+            this.uiPanel4 = new Sunny.UI.UIPanel();
+            this.uidtp_end = new Sunny.UI.UIDatetimePicker();
+            this.uidtp_start = new Sunny.UI.UIDatetimePicker();
+            this.uiLabel5 = new Sunny.UI.UILabel();
+            this.uiLabel4 = new Sunny.UI.UILabel();
+            this.uiButtonSearch = new Sunny.UI.UISymbolButton();
+            this.uisBtn_Export = new Sunny.UI.UISymbolButton();
+            this.uitb_Code = new Sunny.UI.UITextBox();
+            this.uiLabel11 = new Sunny.UI.UILabel();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.dgv_clearrealtime = new Sunny.UI.UIDataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.uiPanel5 = new Sunny.UI.UIPanel();
+            this.uitb_ClearCode = new Sunny.UI.UITextBox();
+            this.uiLabel9 = new Sunny.UI.UILabel();
+            this.uiLabel6 = new Sunny.UI.UILabel();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.dgv_alarmmessage = new Sunny.UI.UIDataGridView();
+            this.dataGridViewTextBoxColumn25 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn26 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.uiPagAlarm = new Sunny.UI.UIPagination();
+            this.uiPanel6 = new Sunny.UI.UIPanel();
+            this.ui_time = new Sunny.UI.UIDatetimePicker();
+            this.btn_AlarmSelect = new Sunny.UI.UISymbolButton();
+            this.uiLabel14 = new Sunny.UI.UILabel();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.lb_right = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lb_userName = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.uiBtn_Exit = new Sunny.UI.UIButton();
+            this.uibtn_log = new Sunny.UI.UIButton();
+            this.btn_params = new Sunny.UI.UIButton();
+            this.btn_user = new Sunny.UI.UIButton();
+            this.lb_clear_heartbeat = new System.Windows.Forms.Label();
             this.uiTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.uiGroupBox2.SuspendLayout();
@@ -400,6 +401,7 @@
             // 
             // uiPanel1
             // 
+            this.uiPanel1.Controls.Add(this.lb_clear_heartbeat);
             this.uiPanel1.Controls.Add(this.lb_heartbeat);
             this.uiPanel1.Controls.Add(this.uiLabel2);
             this.uiPanel1.Controls.Add(this.uiLabel1);
@@ -426,7 +428,7 @@
             // uiLabel2
             // 
             this.uiLabel2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel2.Location = new System.Drawing.Point(121, 6);
+            this.uiLabel2.Location = new System.Drawing.Point(152, 5);
             this.uiLabel2.Name = "uiLabel2";
             this.uiLabel2.Size = new System.Drawing.Size(193, 23);
             this.uiLabel2.Style = Sunny.UI.UIStyle.Custom;
@@ -437,7 +439,7 @@
             // uiLabel1
             // 
             this.uiLabel1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel1.Location = new System.Drawing.Point(39, 6);
+            this.uiLabel1.Location = new System.Drawing.Point(70, 5);
             this.uiLabel1.Name = "uiLabel1";
             this.uiLabel1.Size = new System.Drawing.Size(93, 23);
             this.uiLabel1.Style = Sunny.UI.UIStyle.Custom;
@@ -583,6 +585,537 @@
             this.dgv_realtime.Style = Sunny.UI.UIStyle.Custom;
             this.dgv_realtime.TabIndex = 0;
             // 
+            // Col_Code
+            // 
+            this.Col_Code.HeaderText = "二维码 QR-Code";
+            this.Col_Code.MinimumWidth = 8;
+            this.Col_Code.Name = "Col_Code";
+            this.Col_Code.ReadOnly = true;
+            this.Col_Code.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_Code.Width = 160;
+            // 
+            // Col_PreSprayWeight
+            // 
+            this.Col_PreSprayWeight.HeaderText = "喷前重量  Weight Before Spraying(g)";
+            this.Col_PreSprayWeight.MinimumWidth = 8;
+            this.Col_PreSprayWeight.Name = "Col_PreSprayWeight";
+            this.Col_PreSprayWeight.ReadOnly = true;
+            this.Col_PreSprayWeight.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_PreSprayWeight.Width = 200;
+            // 
+            // Col_PreSprayWeight_1
+            // 
+            this.Col_PreSprayWeight_1.HeaderText = "喷前重量  Weight Before Spraying 1s(g)";
+            this.Col_PreSprayWeight_1.MinimumWidth = 6;
+            this.Col_PreSprayWeight_1.Name = "Col_PreSprayWeight_1";
+            this.Col_PreSprayWeight_1.ReadOnly = true;
+            this.Col_PreSprayWeight_1.Width = 200;
+            // 
+            // Col_PreSprayWeight_1_5
+            // 
+            this.Col_PreSprayWeight_1_5.HeaderText = "喷前重量  Weight Before Spraying 1.5s(g)";
+            this.Col_PreSprayWeight_1_5.MinimumWidth = 6;
+            this.Col_PreSprayWeight_1_5.Name = "Col_PreSprayWeight_1_5";
+            this.Col_PreSprayWeight_1_5.ReadOnly = true;
+            this.Col_PreSprayWeight_1_5.Width = 200;
+            // 
+            // Col_PreSprayWeight_2
+            // 
+            this.Col_PreSprayWeight_2.HeaderText = "喷前重量  Weight Before Spraying 2s(g)";
+            this.Col_PreSprayWeight_2.MinimumWidth = 6;
+            this.Col_PreSprayWeight_2.Name = "Col_PreSprayWeight_2";
+            this.Col_PreSprayWeight_2.ReadOnly = true;
+            this.Col_PreSprayWeight_2.Width = 200;
+            // 
+            // Col_PreSprayWeight_2_5
+            // 
+            this.Col_PreSprayWeight_2_5.HeaderText = "喷前重量  Weight Before Spraying 2.5s(g)";
+            this.Col_PreSprayWeight_2_5.MinimumWidth = 6;
+            this.Col_PreSprayWeight_2_5.Name = "Col_PreSprayWeight_2_5";
+            this.Col_PreSprayWeight_2_5.ReadOnly = true;
+            this.Col_PreSprayWeight_2_5.Width = 200;
+            // 
+            // Col_PostSprayWeight
+            // 
+            this.Col_PostSprayWeight.HeaderText = "喷后重量  Weight After Spraying(g)";
+            this.Col_PostSprayWeight.MinimumWidth = 8;
+            this.Col_PostSprayWeight.Name = "Col_PostSprayWeight";
+            this.Col_PostSprayWeight.ReadOnly = true;
+            this.Col_PostSprayWeight.Width = 200;
+            // 
+            // Col_PostSprayWeight_1
+            // 
+            this.Col_PostSprayWeight_1.HeaderText = "喷后重量 Weight After Spraying 1s(g)";
+            this.Col_PostSprayWeight_1.MinimumWidth = 6;
+            this.Col_PostSprayWeight_1.Name = "Col_PostSprayWeight_1";
+            this.Col_PostSprayWeight_1.ReadOnly = true;
+            this.Col_PostSprayWeight_1.Width = 200;
+            // 
+            // Col_PostSprayWeight_1_5
+            // 
+            this.Col_PostSprayWeight_1_5.HeaderText = "喷后重量 Weight After Spraying 1.5s(g)";
+            this.Col_PostSprayWeight_1_5.MinimumWidth = 6;
+            this.Col_PostSprayWeight_1_5.Name = "Col_PostSprayWeight_1_5";
+            this.Col_PostSprayWeight_1_5.ReadOnly = true;
+            this.Col_PostSprayWeight_1_5.Width = 200;
+            // 
+            // Col_PostSprayWeight_2
+            // 
+            this.Col_PostSprayWeight_2.HeaderText = "喷后重量 Weight After Spraying 2s(g)";
+            this.Col_PostSprayWeight_2.MinimumWidth = 6;
+            this.Col_PostSprayWeight_2.Name = "Col_PostSprayWeight_2";
+            this.Col_PostSprayWeight_2.ReadOnly = true;
+            this.Col_PostSprayWeight_2.Width = 200;
+            // 
+            // Col_PostSprayWeight_2_5
+            // 
+            this.Col_PostSprayWeight_2_5.HeaderText = "喷后重量 Weight After Spraying 2.5s(g)";
+            this.Col_PostSprayWeight_2_5.MinimumWidth = 6;
+            this.Col_PostSprayWeight_2_5.Name = "Col_PostSprayWeight_2_5";
+            this.Col_PostSprayWeight_2_5.ReadOnly = true;
+            this.Col_PostSprayWeight_2_5.Width = 200;
+            // 
+            // Col_SedimentationWeight
+            // 
+            this.Col_SedimentationWeight.HeaderText = "沉积重量 Weight Gain(g)";
+            this.Col_SedimentationWeight.MinimumWidth = 8;
+            this.Col_SedimentationWeight.Name = "Col_SedimentationWeight";
+            this.Col_SedimentationWeight.ReadOnly = true;
+            this.Col_SedimentationWeight.Width = 200;
+            // 
+            // Col_UpperLimit
+            // 
+            this.Col_UpperLimit.HeaderText = "重量上限 Upper Limit of Weight(g)";
+            this.Col_UpperLimit.MinimumWidth = 8;
+            this.Col_UpperLimit.Name = "Col_UpperLimit";
+            this.Col_UpperLimit.ReadOnly = true;
+            this.Col_UpperLimit.Width = 200;
+            // 
+            // Col_LowerLimit
+            // 
+            this.Col_LowerLimit.HeaderText = "重量下限 Lower Limit of Weight(g)";
+            this.Col_LowerLimit.MinimumWidth = 8;
+            this.Col_LowerLimit.Name = "Col_LowerLimit";
+            this.Col_LowerLimit.ReadOnly = true;
+            this.Col_LowerLimit.Width = 200;
+            // 
+            // Col_Result
+            // 
+            this.Col_Result.HeaderText = "重量结果 (0:待检测，1:OK,2:NG) result";
+            this.Col_Result.MinimumWidth = 8;
+            this.Col_Result.Name = "Col_Result";
+            this.Col_Result.ReadOnly = true;
+            this.Col_Result.Width = 200;
+            // 
+            // Col_AddTime
+            // 
+            this.Col_AddTime.HeaderText = "称重时间 AddTime";
+            this.Col_AddTime.MinimumWidth = 8;
+            this.Col_AddTime.Name = "Col_AddTime";
+            this.Col_AddTime.ReadOnly = true;
+            this.Col_AddTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_AddTime.Width = 168;
+            // 
+            // Col_UtilizationRate
+            // 
+            this.Col_UtilizationRate.HeaderText = "银粉利用率 Powder Utilization Rate（%)";
+            this.Col_UtilizationRate.MinimumWidth = 6;
+            this.Col_UtilizationRate.Name = "Col_UtilizationRate";
+            this.Col_UtilizationRate.ReadOnly = true;
+            this.Col_UtilizationRate.Width = 200;
+            // 
+            // Col_AverageTemperature
+            // 
+            this.Col_AverageTemperature.HeaderText = "平均温度 Average Temperature(℃)";
+            this.Col_AverageTemperature.MinimumWidth = 6;
+            this.Col_AverageTemperature.Name = "Col_AverageTemperature";
+            this.Col_AverageTemperature.ReadOnly = true;
+            this.Col_AverageTemperature.Width = 200;
+            // 
+            // Col_AverageTemperatureUpperLimit
+            // 
+            this.Col_AverageTemperatureUpperLimit.HeaderText = "平均温度上限 Upper Limit of Average Temperature";
+            this.Col_AverageTemperatureUpperLimit.MinimumWidth = 6;
+            this.Col_AverageTemperatureUpperLimit.Name = "Col_AverageTemperatureUpperLimit";
+            this.Col_AverageTemperatureUpperLimit.ReadOnly = true;
+            this.Col_AverageTemperatureUpperLimit.Width = 125;
+            // 
+            // Col_AverageTemperatureLowerLimit
+            // 
+            this.Col_AverageTemperatureLowerLimit.HeaderText = "平均温度下限 Lower Limit of Average Temperature";
+            this.Col_AverageTemperatureLowerLimit.MinimumWidth = 6;
+            this.Col_AverageTemperatureLowerLimit.Name = "Col_AverageTemperatureLowerLimit";
+            this.Col_AverageTemperatureLowerLimit.ReadOnly = true;
+            this.Col_AverageTemperatureLowerLimit.Width = 125;
+            // 
+            // Col_AverageTemperatureResult
+            // 
+            this.Col_AverageTemperatureResult.HeaderText = "平均温度结果 Result of Average Temperature";
+            this.Col_AverageTemperatureResult.MinimumWidth = 6;
+            this.Col_AverageTemperatureResult.Name = "Col_AverageTemperatureResult";
+            this.Col_AverageTemperatureResult.ReadOnly = true;
+            this.Col_AverageTemperatureResult.Width = 125;
+            // 
+            // Col_MinTemperature
+            // 
+            this.Col_MinTemperature.HeaderText = "最小温度 Min Temperature(℃)";
+            this.Col_MinTemperature.MinimumWidth = 6;
+            this.Col_MinTemperature.Name = "Col_MinTemperature";
+            this.Col_MinTemperature.ReadOnly = true;
+            this.Col_MinTemperature.Width = 200;
+            // 
+            // Col_MinTemperatureLowerLimit
+            // 
+            this.Col_MinTemperatureLowerLimit.HeaderText = "最小温度下限(Lower Limit of Min Temperature)";
+            this.Col_MinTemperatureLowerLimit.MinimumWidth = 6;
+            this.Col_MinTemperatureLowerLimit.Name = "Col_MinTemperatureLowerLimit";
+            this.Col_MinTemperatureLowerLimit.ReadOnly = true;
+            this.Col_MinTemperatureLowerLimit.Width = 125;
+            // 
+            // Col_MinTemperatureResylt
+            // 
+            this.Col_MinTemperatureResylt.HeaderText = "最小温度结果(Resultof Min Temperature)";
+            this.Col_MinTemperatureResylt.MinimumWidth = 6;
+            this.Col_MinTemperatureResylt.Name = "Col_MinTemperatureResylt";
+            this.Col_MinTemperatureResylt.ReadOnly = true;
+            this.Col_MinTemperatureResylt.Width = 125;
+            // 
+            // Col_MaxTemperature
+            // 
+            this.Col_MaxTemperature.HeaderText = "最大温度 Max Temperature(℃)";
+            this.Col_MaxTemperature.MinimumWidth = 6;
+            this.Col_MaxTemperature.Name = "Col_MaxTemperature";
+            this.Col_MaxTemperature.ReadOnly = true;
+            this.Col_MaxTemperature.Width = 125;
+            // 
+            // Col_AverageNitrogenPressure
+            // 
+            this.Col_AverageNitrogenPressure.HeaderText = "平均氮气压力 Average Nitrogen Gas Pressure(psi)";
+            this.Col_AverageNitrogenPressure.MinimumWidth = 6;
+            this.Col_AverageNitrogenPressure.Name = "Col_AverageNitrogenPressure";
+            this.Col_AverageNitrogenPressure.ReadOnly = true;
+            this.Col_AverageNitrogenPressure.Width = 200;
+            // 
+            // Col_AverageNitrogenPressureUpperLimit
+            // 
+            this.Col_AverageNitrogenPressureUpperLimit.HeaderText = "平均氮气压力上限（Upper Limit of Average Nitrogen Gas Pressure）";
+            this.Col_AverageNitrogenPressureUpperLimit.MinimumWidth = 6;
+            this.Col_AverageNitrogenPressureUpperLimit.Name = "Col_AverageNitrogenPressureUpperLimit";
+            this.Col_AverageNitrogenPressureUpperLimit.ReadOnly = true;
+            this.Col_AverageNitrogenPressureUpperLimit.Width = 125;
+            // 
+            // Col_AverageNitrogenPressureLowerLimit
+            // 
+            this.Col_AverageNitrogenPressureLowerLimit.HeaderText = "平均氮气压力下限（Lower Limit of Average Nitrogen Gas Pressure）";
+            this.Col_AverageNitrogenPressureLowerLimit.MinimumWidth = 6;
+            this.Col_AverageNitrogenPressureLowerLimit.Name = "Col_AverageNitrogenPressureLowerLimit";
+            this.Col_AverageNitrogenPressureLowerLimit.ReadOnly = true;
+            this.Col_AverageNitrogenPressureLowerLimit.Width = 125;
+            // 
+            // Col_AverageNitrogenPressureResult
+            // 
+            this.Col_AverageNitrogenPressureResult.HeaderText = "平均氮气压力结果（result of Average Nitrogen Gas Pressure）";
+            this.Col_AverageNitrogenPressureResult.MinimumWidth = 6;
+            this.Col_AverageNitrogenPressureResult.Name = "Col_AverageNitrogenPressureResult";
+            this.Col_AverageNitrogenPressureResult.ReadOnly = true;
+            this.Col_AverageNitrogenPressureResult.Width = 125;
+            // 
+            // Col_MinNitrogenPressure
+            // 
+            this.Col_MinNitrogenPressure.HeaderText = "最小氮气压力 Min Nitrogen Gas Pressure(psi)";
+            this.Col_MinNitrogenPressure.MinimumWidth = 6;
+            this.Col_MinNitrogenPressure.Name = "Col_MinNitrogenPressure";
+            this.Col_MinNitrogenPressure.ReadOnly = true;
+            this.Col_MinNitrogenPressure.Width = 200;
+            // 
+            // Col_MinNitrogenPressureLowerLimit
+            // 
+            this.Col_MinNitrogenPressureLowerLimit.HeaderText = "最小氮气压力下限(Lower Limit of Min Pressure)";
+            this.Col_MinNitrogenPressureLowerLimit.MinimumWidth = 6;
+            this.Col_MinNitrogenPressureLowerLimit.Name = "Col_MinNitrogenPressureLowerLimit";
+            this.Col_MinNitrogenPressureLowerLimit.ReadOnly = true;
+            this.Col_MinNitrogenPressureLowerLimit.Width = 125;
+            // 
+            // Col_MinNitrogenPressureResult
+            // 
+            this.Col_MinNitrogenPressureResult.HeaderText = "最小氮气压力结果(Resul tof Min Pressure)";
+            this.Col_MinNitrogenPressureResult.MinimumWidth = 6;
+            this.Col_MinNitrogenPressureResult.Name = "Col_MinNitrogenPressureResult";
+            this.Col_MinNitrogenPressureResult.ReadOnly = true;
+            this.Col_MinNitrogenPressureResult.Width = 125;
+            // 
+            // Col_MaxNitrogenPressure
+            // 
+            this.Col_MaxNitrogenPressure.HeaderText = "最大氮气压力 Max Nitrogen Gas Pressure(psi)";
+            this.Col_MaxNitrogenPressure.MinimumWidth = 6;
+            this.Col_MaxNitrogenPressure.Name = "Col_MaxNitrogenPressure";
+            this.Col_MaxNitrogenPressure.ReadOnly = true;
+            this.Col_MaxNitrogenPressure.Width = 125;
+            // 
+            // Col_PowderSupplySpeed
+            // 
+            this.Col_PowderSupplySpeed.HeaderText = "供粉速度 Powder Feeding Rate(g/min)";
+            this.Col_PowderSupplySpeed.MinimumWidth = 6;
+            this.Col_PowderSupplySpeed.Name = "Col_PowderSupplySpeed";
+            this.Col_PowderSupplySpeed.ReadOnly = true;
+            this.Col_PowderSupplySpeed.Width = 200;
+            // 
+            // Col_StartTime
+            // 
+            this.Col_StartTime.HeaderText = "冷喷启动时间 Start Time";
+            this.Col_StartTime.MinimumWidth = 6;
+            this.Col_StartTime.Name = "Col_StartTime";
+            this.Col_StartTime.ReadOnly = true;
+            this.Col_StartTime.Width = 200;
+            // 
+            // Col_EndTime
+            // 
+            this.Col_EndTime.HeaderText = "冷喷结束时间 Stop Time";
+            this.Col_EndTime.MinimumWidth = 6;
+            this.Col_EndTime.Name = "Col_EndTime";
+            this.Col_EndTime.ReadOnly = true;
+            this.Col_EndTime.Width = 200;
+            // 
+            // Col_Beat
+            // 
+            this.Col_Beat.HeaderText = "冷喷节拍 Cycle Time(s)";
+            this.Col_Beat.MinimumWidth = 6;
+            this.Col_Beat.Name = "Col_Beat";
+            this.Col_Beat.ReadOnly = true;
+            this.Col_Beat.Width = 200;
+            // 
+            // Col_PlacementTime
+            // 
+            this.Col_PlacementTime.HeaderText = "摆放时间 Scanning Time After Laser Cleaning";
+            this.Col_PlacementTime.MinimumWidth = 6;
+            this.Col_PlacementTime.Name = "Col_PlacementTime";
+            this.Col_PlacementTime.ReadOnly = true;
+            this.Col_PlacementTime.Width = 200;
+            // 
+            // Col_ThreadRotation
+            // 
+            this.Col_ThreadRotation.HeaderText = "螺杆转速 Auger Speed(°/s)";
+            this.Col_ThreadRotation.MinimumWidth = 6;
+            this.Col_ThreadRotation.Name = "Col_ThreadRotation";
+            this.Col_ThreadRotation.ReadOnly = true;
+            this.Col_ThreadRotation.Width = 200;
+            // 
+            // Col_IntakePressure
+            // 
+            this.Col_IntakePressure.HeaderText = "进气压力 Intake Pressure(Mpa)";
+            this.Col_IntakePressure.MinimumWidth = 6;
+            this.Col_IntakePressure.Name = "Col_IntakePressure";
+            this.Col_IntakePressure.ReadOnly = true;
+            this.Col_IntakePressure.Width = 200;
+            // 
+            // Col_IntakePressureLowerLimit
+            // 
+            this.Col_IntakePressureLowerLimit.HeaderText = "进气压力下限(Lower Limit of Inlet Gas Pressure)";
+            this.Col_IntakePressureLowerLimit.MinimumWidth = 6;
+            this.Col_IntakePressureLowerLimit.Name = "Col_IntakePressureLowerLimit";
+            this.Col_IntakePressureLowerLimit.ReadOnly = true;
+            this.Col_IntakePressureLowerLimit.Width = 125;
+            // 
+            // Col_Real_Intake
+            // 
+            this.Col_Real_Intake.HeaderText = "进气流量";
+            this.Col_Real_Intake.MinimumWidth = 6;
+            this.Col_Real_Intake.Name = "Col_Real_Intake";
+            this.Col_Real_Intake.ReadOnly = true;
+            this.Col_Real_Intake.Width = 125;
+            // 
+            // Col_IntakePressureResult
+            // 
+            this.Col_IntakePressureResult.HeaderText = "进气压力结果(Result)";
+            this.Col_IntakePressureResult.MinimumWidth = 6;
+            this.Col_IntakePressureResult.Name = "Col_IntakePressureResult";
+            this.Col_IntakePressureResult.ReadOnly = true;
+            this.Col_IntakePressureResult.Width = 125;
+            // 
+            // Col_NozzleHeight
+            // 
+            this.Col_NozzleHeight.HeaderText = "喷嘴高度 Nozzle Height(mm)";
+            this.Col_NozzleHeight.MinimumWidth = 6;
+            this.Col_NozzleHeight.Name = "Col_NozzleHeight";
+            this.Col_NozzleHeight.ReadOnly = true;
+            this.Col_NozzleHeight.Width = 200;
+            // 
+            // Col_AverageSpeed
+            // 
+            this.Col_AverageSpeed.HeaderText = "平均粒子速度 Average Speed(m/s)";
+            this.Col_AverageSpeed.MinimumWidth = 6;
+            this.Col_AverageSpeed.Name = "Col_AverageSpeed";
+            this.Col_AverageSpeed.ReadOnly = true;
+            this.Col_AverageSpeed.Width = 200;
+            // 
+            // Col_AverageSpeedUpperLimit
+            // 
+            this.Col_AverageSpeedUpperLimit.HeaderText = "平均粒子速度上限（Upper Limit of Average Speed）";
+            this.Col_AverageSpeedUpperLimit.MinimumWidth = 6;
+            this.Col_AverageSpeedUpperLimit.Name = "Col_AverageSpeedUpperLimit";
+            this.Col_AverageSpeedUpperLimit.ReadOnly = true;
+            this.Col_AverageSpeedUpperLimit.Width = 125;
+            // 
+            // Col_AverageSpeedLowerLimit
+            // 
+            this.Col_AverageSpeedLowerLimit.HeaderText = "平均粒子速度下限（Lower Limit of Average Speed）";
+            this.Col_AverageSpeedLowerLimit.MinimumWidth = 6;
+            this.Col_AverageSpeedLowerLimit.Name = "Col_AverageSpeedLowerLimit";
+            this.Col_AverageSpeedLowerLimit.ReadOnly = true;
+            this.Col_AverageSpeedLowerLimit.Width = 125;
+            // 
+            // Col_AverageSpeedResult
+            // 
+            this.Col_AverageSpeedResult.HeaderText = "平均粒子速度结果（result of Average Speed）";
+            this.Col_AverageSpeedResult.MinimumWidth = 6;
+            this.Col_AverageSpeedResult.Name = "Col_AverageSpeedResult";
+            this.Col_AverageSpeedResult.ReadOnly = true;
+            this.Col_AverageSpeedResult.Width = 125;
+            // 
+            // Col_MaxSpeed
+            // 
+            this.Col_MaxSpeed.HeaderText = "最大粒子速度 Max Speed(m/s)";
+            this.Col_MaxSpeed.MinimumWidth = 6;
+            this.Col_MaxSpeed.Name = "Col_MaxSpeed";
+            this.Col_MaxSpeed.ReadOnly = true;
+            this.Col_MaxSpeed.Width = 200;
+            // 
+            // Col_MinSpeed
+            // 
+            this.Col_MinSpeed.HeaderText = "最小粒子速度 Min Speed(m/s)";
+            this.Col_MinSpeed.MinimumWidth = 6;
+            this.Col_MinSpeed.Name = "Col_MinSpeed";
+            this.Col_MinSpeed.ReadOnly = true;
+            this.Col_MinSpeed.Width = 200;
+            // 
+            // Col_MinSpeedLowerLimit
+            // 
+            this.Col_MinSpeedLowerLimit.HeaderText = "最小粒子速度下限(Lower Limit of Min Speed)";
+            this.Col_MinSpeedLowerLimit.MinimumWidth = 6;
+            this.Col_MinSpeedLowerLimit.Name = "Col_MinSpeedLowerLimit";
+            this.Col_MinSpeedLowerLimit.ReadOnly = true;
+            this.Col_MinSpeedLowerLimit.Width = 125;
+            // 
+            // Col_MinSpeedResult
+            // 
+            this.Col_MinSpeedResult.HeaderText = "最小粒子速度结果(Result of Min Speed)";
+            this.Col_MinSpeedResult.MinimumWidth = 6;
+            this.Col_MinSpeedResult.Name = "Col_MinSpeedResult";
+            this.Col_MinSpeedResult.ReadOnly = true;
+            this.Col_MinSpeedResult.Width = 125;
+            // 
+            // Col_StdDevSpeed
+            // 
+            this.Col_StdDevSpeed.HeaderText = "粒子速度标准偏差值 Speed Standard Deviation(m/s)";
+            this.Col_StdDevSpeed.MinimumWidth = 6;
+            this.Col_StdDevSpeed.Name = "Col_StdDevSpeed";
+            this.Col_StdDevSpeed.ReadOnly = true;
+            this.Col_StdDevSpeed.Width = 200;
+            // 
+            // Col_AverageConcentration
+            // 
+            this.Col_AverageConcentration.HeaderText = "平均粒子浓度 Average Concentration(1/cm2)";
+            this.Col_AverageConcentration.MinimumWidth = 6;
+            this.Col_AverageConcentration.Name = "Col_AverageConcentration";
+            this.Col_AverageConcentration.ReadOnly = true;
+            this.Col_AverageConcentration.Width = 200;
+            // 
+            // Col_AverageConcentrationUpperLimit
+            // 
+            this.Col_AverageConcentrationUpperLimit.HeaderText = "平均粒子浓度上限（Upper Limit of Average Concentration）";
+            this.Col_AverageConcentrationUpperLimit.MinimumWidth = 6;
+            this.Col_AverageConcentrationUpperLimit.Name = "Col_AverageConcentrationUpperLimit";
+            this.Col_AverageConcentrationUpperLimit.ReadOnly = true;
+            this.Col_AverageConcentrationUpperLimit.Width = 125;
+            // 
+            // Col_AverageConcentrationLowerLimit
+            // 
+            this.Col_AverageConcentrationLowerLimit.HeaderText = "平均粒子浓度下限（Lower Limit of Average Concentration）";
+            this.Col_AverageConcentrationLowerLimit.MinimumWidth = 6;
+            this.Col_AverageConcentrationLowerLimit.Name = "Col_AverageConcentrationLowerLimit";
+            this.Col_AverageConcentrationLowerLimit.ReadOnly = true;
+            this.Col_AverageConcentrationLowerLimit.Width = 125;
+            // 
+            // Col_AverageConcentrationResult
+            // 
+            this.Col_AverageConcentrationResult.HeaderText = "平均粒子浓度结果（Result of Average Concentration）";
+            this.Col_AverageConcentrationResult.MinimumWidth = 6;
+            this.Col_AverageConcentrationResult.Name = "Col_AverageConcentrationResult";
+            this.Col_AverageConcentrationResult.ReadOnly = true;
+            this.Col_AverageConcentrationResult.Width = 125;
+            // 
+            // Col_MaxConcentration
+            // 
+            this.Col_MaxConcentration.HeaderText = "最大粒子浓度 Max Concentration(1/cm2)";
+            this.Col_MaxConcentration.MinimumWidth = 6;
+            this.Col_MaxConcentration.Name = "Col_MaxConcentration";
+            this.Col_MaxConcentration.ReadOnly = true;
+            this.Col_MaxConcentration.Width = 200;
+            // 
+            // Col_MinConcentration
+            // 
+            this.Col_MinConcentration.HeaderText = "最小粒子浓度 Min Concentration(1/cm2)";
+            this.Col_MinConcentration.MinimumWidth = 6;
+            this.Col_MinConcentration.Name = "Col_MinConcentration";
+            this.Col_MinConcentration.ReadOnly = true;
+            this.Col_MinConcentration.Width = 200;
+            // 
+            // Col_StdDevConcentration
+            // 
+            this.Col_StdDevConcentration.HeaderText = "粒子浓度标准偏差值 Concentration Standard Deviation(m/s)";
+            this.Col_StdDevConcentration.MinimumWidth = 6;
+            this.Col_StdDevConcentration.Name = "Col_StdDevConcentration";
+            this.Col_StdDevConcentration.ReadOnly = true;
+            this.Col_StdDevConcentration.Width = 125;
+            // 
+            // Col_AveragePosition
+            // 
+            this.Col_AveragePosition.HeaderText = "粒子位置平均值 Average Position";
+            this.Col_AveragePosition.MinimumWidth = 6;
+            this.Col_AveragePosition.Name = "Col_AveragePosition";
+            this.Col_AveragePosition.ReadOnly = true;
+            this.Col_AveragePosition.Width = 200;
+            // 
+            // Col_MaxPosition
+            // 
+            this.Col_MaxPosition.HeaderText = "粒子位置最大值 Max Position";
+            this.Col_MaxPosition.MinimumWidth = 6;
+            this.Col_MaxPosition.Name = "Col_MaxPosition";
+            this.Col_MaxPosition.ReadOnly = true;
+            this.Col_MaxPosition.Width = 200;
+            // 
+            // Col_MinPosition
+            // 
+            this.Col_MinPosition.HeaderText = "粒子位置最小值 Min Position";
+            this.Col_MinPosition.MinimumWidth = 6;
+            this.Col_MinPosition.Name = "Col_MinPosition";
+            this.Col_MinPosition.ReadOnly = true;
+            this.Col_MinPosition.Width = 200;
+            // 
+            // Col_StdDevPosition
+            // 
+            this.Col_StdDevPosition.HeaderText = "粒子位置标准偏差值 Position Standard Deviation";
+            this.Col_StdDevPosition.MinimumWidth = 6;
+            this.Col_StdDevPosition.Name = "Col_StdDevPosition";
+            this.Col_StdDevPosition.ReadOnly = true;
+            this.Col_StdDevPosition.Width = 125;
+            // 
+            // Col_Location
+            // 
+            this.Col_Location.HeaderText = "喷淋位置 Spraying Position";
+            this.Col_Location.MinimumWidth = 6;
+            this.Col_Location.Name = "Col_Location";
+            this.Col_Location.ReadOnly = true;
+            this.Col_Location.Width = 200;
+            // 
+            // Col_PlacementHour
+            // 
+            this.Col_PlacementHour.HeaderText = "摆放时间（小时）Placement Time(h)";
+            this.Col_PlacementHour.MinimumWidth = 6;
+            this.Col_PlacementHour.Name = "Col_PlacementHour";
+            this.Col_PlacementHour.ReadOnly = true;
+            this.Col_PlacementHour.Width = 200;
+            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.dgv_his);
@@ -590,7 +1123,7 @@
             this.tabPage4.Controls.Add(this.uiPanel4);
             this.tabPage4.Location = new System.Drawing.Point(0, 40);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1335, 783);
+            this.tabPage4.Size = new System.Drawing.Size(200, 60);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "历史数据查询";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -718,17 +1251,659 @@
             this.dgv_his.RowTemplate.Height = 23;
             this.dgv_his.ScrollBarRectColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.dgv_his.SelectedIndex = -1;
-            this.dgv_his.Size = new System.Drawing.Size(1335, 669);
+            this.dgv_his.Size = new System.Drawing.Size(200, 0);
             this.dgv_his.Style = Sunny.UI.UIStyle.Custom;
             this.dgv_his.TabIndex = 8;
             this.dgv_his.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_his_CellFormatting);
             this.dgv_his.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgv_his_RowPrePaint);
             // 
+            // col_his_ID
+            // 
+            this.col_his_ID.DataPropertyName = "ID";
+            this.col_his_ID.HeaderText = "序号 ID";
+            this.col_his_ID.MinimumWidth = 8;
+            this.col_his_ID.Name = "col_his_ID";
+            this.col_his_ID.ReadOnly = true;
+            this.col_his_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.col_his_ID.Width = 80;
+            // 
+            // dgv_his_Code
+            // 
+            this.dgv_his_Code.DataPropertyName = "Code";
+            this.dgv_his_Code.HeaderText = "二维码 QR-Code";
+            this.dgv_his_Code.MinimumWidth = 8;
+            this.dgv_his_Code.Name = "dgv_his_Code";
+            this.dgv_his_Code.ReadOnly = true;
+            this.dgv_his_Code.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dgv_his_Code.Width = 150;
+            // 
+            // col_his_PreSprayWeight
+            // 
+            this.col_his_PreSprayWeight.DataPropertyName = "PreSprayWeight";
+            this.col_his_PreSprayWeight.HeaderText = "喷前重量 Weight Before Spraying (g)";
+            this.col_his_PreSprayWeight.MinimumWidth = 8;
+            this.col_his_PreSprayWeight.Name = "col_his_PreSprayWeight";
+            this.col_his_PreSprayWeight.ReadOnly = true;
+            this.col_his_PreSprayWeight.Width = 200;
+            // 
+            // col_his_PreSprayWeight_1
+            // 
+            this.col_his_PreSprayWeight_1.DataPropertyName = "PreSprayWeight_1";
+            this.col_his_PreSprayWeight_1.HeaderText = "喷前重量 Weight Before Spraying 1s(g)";
+            this.col_his_PreSprayWeight_1.MinimumWidth = 6;
+            this.col_his_PreSprayWeight_1.Name = "col_his_PreSprayWeight_1";
+            this.col_his_PreSprayWeight_1.ReadOnly = true;
+            this.col_his_PreSprayWeight_1.Width = 200;
+            // 
+            // col_his_PreSprayWeight_1_5
+            // 
+            this.col_his_PreSprayWeight_1_5.DataPropertyName = "PreSprayWeight_1_5";
+            this.col_his_PreSprayWeight_1_5.HeaderText = "喷前重量 Weight Before Spraying 1.5s(g)";
+            this.col_his_PreSprayWeight_1_5.MinimumWidth = 6;
+            this.col_his_PreSprayWeight_1_5.Name = "col_his_PreSprayWeight_1_5";
+            this.col_his_PreSprayWeight_1_5.ReadOnly = true;
+            this.col_his_PreSprayWeight_1_5.Width = 200;
+            // 
+            // col_his_PreSprayWeight_2
+            // 
+            this.col_his_PreSprayWeight_2.DataPropertyName = "PreSprayWeight_2";
+            this.col_his_PreSprayWeight_2.HeaderText = "喷前重量 Weight Before Spraying 2s(g)";
+            this.col_his_PreSprayWeight_2.MinimumWidth = 6;
+            this.col_his_PreSprayWeight_2.Name = "col_his_PreSprayWeight_2";
+            this.col_his_PreSprayWeight_2.ReadOnly = true;
+            this.col_his_PreSprayWeight_2.Width = 200;
+            // 
+            // col_his_PreSprayWeight_2_5
+            // 
+            this.col_his_PreSprayWeight_2_5.DataPropertyName = "PreSprayWeight_2_5";
+            this.col_his_PreSprayWeight_2_5.HeaderText = "喷前重量 Weight Before Spraying 2.5s(g)";
+            this.col_his_PreSprayWeight_2_5.MinimumWidth = 6;
+            this.col_his_PreSprayWeight_2_5.Name = "col_his_PreSprayWeight_2_5";
+            this.col_his_PreSprayWeight_2_5.ReadOnly = true;
+            this.col_his_PreSprayWeight_2_5.Width = 200;
+            // 
+            // dgv_his_PostSprayWeight
+            // 
+            this.dgv_his_PostSprayWeight.DataPropertyName = "PostSprayWeight";
+            this.dgv_his_PostSprayWeight.HeaderText = "喷后重量 Weight After Spraying(g)";
+            this.dgv_his_PostSprayWeight.MinimumWidth = 8;
+            this.dgv_his_PostSprayWeight.Name = "dgv_his_PostSprayWeight";
+            this.dgv_his_PostSprayWeight.ReadOnly = true;
+            this.dgv_his_PostSprayWeight.Width = 200;
+            // 
+            // dgv_his_PostSprayWeight_1
+            // 
+            this.dgv_his_PostSprayWeight_1.DataPropertyName = "PostSprayWeight_1";
+            this.dgv_his_PostSprayWeight_1.HeaderText = "喷后重量Weight After Spraying 1s(g)";
+            this.dgv_his_PostSprayWeight_1.MinimumWidth = 6;
+            this.dgv_his_PostSprayWeight_1.Name = "dgv_his_PostSprayWeight_1";
+            this.dgv_his_PostSprayWeight_1.ReadOnly = true;
+            this.dgv_his_PostSprayWeight_1.Width = 200;
+            // 
+            // dgv_his_PostSprayWeight_1_5
+            // 
+            this.dgv_his_PostSprayWeight_1_5.DataPropertyName = "PostSprayWeight_1_5";
+            this.dgv_his_PostSprayWeight_1_5.HeaderText = "喷后重量 Weight After Spraying 1.5s(g)";
+            this.dgv_his_PostSprayWeight_1_5.MinimumWidth = 6;
+            this.dgv_his_PostSprayWeight_1_5.Name = "dgv_his_PostSprayWeight_1_5";
+            this.dgv_his_PostSprayWeight_1_5.ReadOnly = true;
+            this.dgv_his_PostSprayWeight_1_5.Width = 200;
+            // 
+            // dgv_his_PostSprayWeight_2
+            // 
+            this.dgv_his_PostSprayWeight_2.DataPropertyName = "PostSprayWeight_2";
+            this.dgv_his_PostSprayWeight_2.HeaderText = "喷后重量 Weight After Spraying 2s(g)";
+            this.dgv_his_PostSprayWeight_2.MinimumWidth = 6;
+            this.dgv_his_PostSprayWeight_2.Name = "dgv_his_PostSprayWeight_2";
+            this.dgv_his_PostSprayWeight_2.ReadOnly = true;
+            this.dgv_his_PostSprayWeight_2.Width = 200;
+            // 
+            // dgv_his_PostSprayWeight_2_5
+            // 
+            this.dgv_his_PostSprayWeight_2_5.DataPropertyName = "PostSprayWeight_2_5";
+            this.dgv_his_PostSprayWeight_2_5.HeaderText = "喷后重量 Weight After Spraying 2.5s(g)";
+            this.dgv_his_PostSprayWeight_2_5.MinimumWidth = 6;
+            this.dgv_his_PostSprayWeight_2_5.Name = "dgv_his_PostSprayWeight_2_5";
+            this.dgv_his_PostSprayWeight_2_5.ReadOnly = true;
+            this.dgv_his_PostSprayWeight_2_5.Width = 200;
+            // 
+            // col_his_SedimentationWeight
+            // 
+            this.col_his_SedimentationWeight.DataPropertyName = "SedimentationWeight";
+            this.col_his_SedimentationWeight.HeaderText = "沉积重量 Weight Gain(g)";
+            this.col_his_SedimentationWeight.MinimumWidth = 8;
+            this.col_his_SedimentationWeight.Name = "col_his_SedimentationWeight";
+            this.col_his_SedimentationWeight.ReadOnly = true;
+            this.col_his_SedimentationWeight.Width = 200;
+            // 
+            // dgv_his_UpperLimit
+            // 
+            this.dgv_his_UpperLimit.DataPropertyName = "WeightUpperLimit";
+            this.dgv_his_UpperLimit.HeaderText = "重量上限 Upper Limit of Weight(g)";
+            this.dgv_his_UpperLimit.MinimumWidth = 8;
+            this.dgv_his_UpperLimit.Name = "dgv_his_UpperLimit";
+            this.dgv_his_UpperLimit.ReadOnly = true;
+            this.dgv_his_UpperLimit.Width = 200;
+            // 
+            // col_his_LowerLimit
+            // 
+            this.col_his_LowerLimit.DataPropertyName = "WeightLowerLimit";
+            this.col_his_LowerLimit.HeaderText = "重量下限 Lower Limit of Weight(g)";
+            this.col_his_LowerLimit.MinimumWidth = 8;
+            this.col_his_LowerLimit.Name = "col_his_LowerLimit";
+            this.col_his_LowerLimit.ReadOnly = true;
+            this.col_his_LowerLimit.Width = 200;
+            // 
+            // col_his_WeightResult
+            // 
+            this.col_his_WeightResult.DataPropertyName = "WeightResult";
+            this.col_his_WeightResult.HeaderText = "重量结果(0:待检测，1:OK,2:NG) result";
+            this.col_his_WeightResult.MinimumWidth = 6;
+            this.col_his_WeightResult.Name = "col_his_WeightResult";
+            this.col_his_WeightResult.ReadOnly = true;
+            this.col_his_WeightResult.Width = 200;
+            // 
+            // dgv_his_AddTime
+            // 
+            this.dgv_his_AddTime.DataPropertyName = "AddTime";
+            this.dgv_his_AddTime.HeaderText = "称重时间 AddTime";
+            this.dgv_his_AddTime.MinimumWidth = 8;
+            this.dgv_his_AddTime.Name = "dgv_his_AddTime";
+            this.dgv_his_AddTime.ReadOnly = true;
+            this.dgv_his_AddTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dgv_his_AddTime.Width = 178;
+            // 
+            // dgv_his_UtilizationRate
+            // 
+            this.dgv_his_UtilizationRate.DataPropertyName = "UtilizationRate";
+            this.dgv_his_UtilizationRate.HeaderText = "银粉利用率 Powder Utilization Rate(%)";
+            this.dgv_his_UtilizationRate.MinimumWidth = 6;
+            this.dgv_his_UtilizationRate.Name = "dgv_his_UtilizationRate";
+            this.dgv_his_UtilizationRate.ReadOnly = true;
+            this.dgv_his_UtilizationRate.Width = 200;
+            // 
+            // dgv_his_AverageTemperature
+            // 
+            this.dgv_his_AverageTemperature.DataPropertyName = "AverageTemperature";
+            this.dgv_his_AverageTemperature.HeaderText = "平均温度 Average Temperature(℃)";
+            this.dgv_his_AverageTemperature.MinimumWidth = 6;
+            this.dgv_his_AverageTemperature.Name = "dgv_his_AverageTemperature";
+            this.dgv_his_AverageTemperature.ReadOnly = true;
+            this.dgv_his_AverageTemperature.Width = 200;
+            // 
+            // dgv_his_AverageTemperatureUpperLimit
+            // 
+            this.dgv_his_AverageTemperatureUpperLimit.DataPropertyName = "AverageTemperatureUpperLimit";
+            this.dgv_his_AverageTemperatureUpperLimit.HeaderText = "平均温度上限(Upper Limit of Average Temperature)";
+            this.dgv_his_AverageTemperatureUpperLimit.MinimumWidth = 6;
+            this.dgv_his_AverageTemperatureUpperLimit.Name = "dgv_his_AverageTemperatureUpperLimit";
+            this.dgv_his_AverageTemperatureUpperLimit.ReadOnly = true;
+            this.dgv_his_AverageTemperatureUpperLimit.Width = 200;
+            // 
+            // dgv_his_AverageTemperatureLowerLimit
+            // 
+            this.dgv_his_AverageTemperatureLowerLimit.DataPropertyName = "AverageTemperatureLowerLimit";
+            this.dgv_his_AverageTemperatureLowerLimit.HeaderText = "平均温度下限(Lower Limit of Average Temperature)";
+            this.dgv_his_AverageTemperatureLowerLimit.MinimumWidth = 6;
+            this.dgv_his_AverageTemperatureLowerLimit.Name = "dgv_his_AverageTemperatureLowerLimit";
+            this.dgv_his_AverageTemperatureLowerLimit.ReadOnly = true;
+            this.dgv_his_AverageTemperatureLowerLimit.Width = 200;
+            // 
+            // dgv_his_AverageTemperatureResult
+            // 
+            this.dgv_his_AverageTemperatureResult.DataPropertyName = "AverageTemperatureResult";
+            this.dgv_his_AverageTemperatureResult.HeaderText = "平均温度结果(result of Average Temperature)";
+            this.dgv_his_AverageTemperatureResult.MinimumWidth = 6;
+            this.dgv_his_AverageTemperatureResult.Name = "dgv_his_AverageTemperatureResult";
+            this.dgv_his_AverageTemperatureResult.ReadOnly = true;
+            this.dgv_his_AverageTemperatureResult.Width = 200;
+            // 
+            // dgv_his_MinTemperature
+            // 
+            this.dgv_his_MinTemperature.DataPropertyName = "MinTemperature";
+            this.dgv_his_MinTemperature.HeaderText = "最小温度 Min Temperature(℃)";
+            this.dgv_his_MinTemperature.MinimumWidth = 6;
+            this.dgv_his_MinTemperature.Name = "dgv_his_MinTemperature";
+            this.dgv_his_MinTemperature.ReadOnly = true;
+            this.dgv_his_MinTemperature.Width = 200;
+            // 
+            // dgv_his_MinTemperatureLowerLimit
+            // 
+            this.dgv_his_MinTemperatureLowerLimit.DataPropertyName = "MinTemperatureLowerLimit";
+            this.dgv_his_MinTemperatureLowerLimit.HeaderText = "最小温度下限(Lower Limit of Min Temperature)";
+            this.dgv_his_MinTemperatureLowerLimit.MinimumWidth = 6;
+            this.dgv_his_MinTemperatureLowerLimit.Name = "dgv_his_MinTemperatureLowerLimit";
+            this.dgv_his_MinTemperatureLowerLimit.ReadOnly = true;
+            this.dgv_his_MinTemperatureLowerLimit.Width = 200;
+            // 
+            // dgv_his_MinTemperatureResult
+            // 
+            this.dgv_his_MinTemperatureResult.DataPropertyName = "MinTemperatureResult";
+            this.dgv_his_MinTemperatureResult.HeaderText = "最小温度结果 Result of Min Temperature";
+            this.dgv_his_MinTemperatureResult.MinimumWidth = 6;
+            this.dgv_his_MinTemperatureResult.Name = "dgv_his_MinTemperatureResult";
+            this.dgv_his_MinTemperatureResult.ReadOnly = true;
+            this.dgv_his_MinTemperatureResult.Width = 200;
+            // 
+            // dgv_his_MaxTemperature
+            // 
+            this.dgv_his_MaxTemperature.DataPropertyName = "MaxTemperature";
+            this.dgv_his_MaxTemperature.HeaderText = "最大温度 Max Temperature(℃)";
+            this.dgv_his_MaxTemperature.MinimumWidth = 6;
+            this.dgv_his_MaxTemperature.Name = "dgv_his_MaxTemperature";
+            this.dgv_his_MaxTemperature.ReadOnly = true;
+            this.dgv_his_MaxTemperature.Width = 200;
+            // 
+            // dgv_his_TemperatureResult
+            // 
+            this.dgv_his_TemperatureResult.DataPropertyName = "TemperatureResult";
+            this.dgv_his_TemperatureResult.HeaderText = "温度结果（Result of Temperature）";
+            this.dgv_his_TemperatureResult.MinimumWidth = 6;
+            this.dgv_his_TemperatureResult.Name = "dgv_his_TemperatureResult";
+            this.dgv_his_TemperatureResult.ReadOnly = true;
+            this.dgv_his_TemperatureResult.Width = 200;
+            // 
+            // dgv_his_AverageNitrogenPressure
+            // 
+            this.dgv_his_AverageNitrogenPressure.DataPropertyName = "AverageNitrogenPressure";
+            this.dgv_his_AverageNitrogenPressure.HeaderText = "平均氮气压力 Average Nitrogen Gas Pressure(psi)";
+            this.dgv_his_AverageNitrogenPressure.MinimumWidth = 6;
+            this.dgv_his_AverageNitrogenPressure.Name = "dgv_his_AverageNitrogenPressure";
+            this.dgv_his_AverageNitrogenPressure.ReadOnly = true;
+            this.dgv_his_AverageNitrogenPressure.Width = 200;
+            // 
+            // dgv_his_AverageNitrogenPressureUpperlimit
+            // 
+            this.dgv_his_AverageNitrogenPressureUpperlimit.DataPropertyName = "AverageNitrogenPressureUpperLimit";
+            this.dgv_his_AverageNitrogenPressureUpperlimit.HeaderText = "平均氮气压力上限（Upper Limit of Average Nitrogen Gas Pressure）";
+            this.dgv_his_AverageNitrogenPressureUpperlimit.MinimumWidth = 6;
+            this.dgv_his_AverageNitrogenPressureUpperlimit.Name = "dgv_his_AverageNitrogenPressureUpperlimit";
+            this.dgv_his_AverageNitrogenPressureUpperlimit.ReadOnly = true;
+            this.dgv_his_AverageNitrogenPressureUpperlimit.Width = 200;
+            // 
+            // dgv_his_AverageNitrogenPressureLowerLimit
+            // 
+            this.dgv_his_AverageNitrogenPressureLowerLimit.DataPropertyName = "AverageNitrogenPressureLowerLimit";
+            this.dgv_his_AverageNitrogenPressureLowerLimit.HeaderText = "平均氮气压力下限（Lower Limit of Average Nitrogen Gas Pressure）";
+            this.dgv_his_AverageNitrogenPressureLowerLimit.MinimumWidth = 6;
+            this.dgv_his_AverageNitrogenPressureLowerLimit.Name = "dgv_his_AverageNitrogenPressureLowerLimit";
+            this.dgv_his_AverageNitrogenPressureLowerLimit.ReadOnly = true;
+            this.dgv_his_AverageNitrogenPressureLowerLimit.Width = 200;
+            // 
+            // dgv_his_AverageNitrogenPressureResult
+            // 
+            this.dgv_his_AverageNitrogenPressureResult.DataPropertyName = "AverageNitrogenPressureResult";
+            this.dgv_his_AverageNitrogenPressureResult.HeaderText = "平均氮气压力结果（result of Average Nitrogen Gas Pressure）";
+            this.dgv_his_AverageNitrogenPressureResult.MinimumWidth = 6;
+            this.dgv_his_AverageNitrogenPressureResult.Name = "dgv_his_AverageNitrogenPressureResult";
+            this.dgv_his_AverageNitrogenPressureResult.ReadOnly = true;
+            this.dgv_his_AverageNitrogenPressureResult.Width = 200;
+            // 
+            // dgv_his_MinNitrogenPressure
+            // 
+            this.dgv_his_MinNitrogenPressure.DataPropertyName = "MinNitrogenPressure";
+            this.dgv_his_MinNitrogenPressure.HeaderText = "最小氮气压力 Min Nitrogen Gas Pressure(psi)";
+            this.dgv_his_MinNitrogenPressure.MinimumWidth = 6;
+            this.dgv_his_MinNitrogenPressure.Name = "dgv_his_MinNitrogenPressure";
+            this.dgv_his_MinNitrogenPressure.ReadOnly = true;
+            this.dgv_his_MinNitrogenPressure.Width = 200;
+            // 
+            // dgv_his_MinNitrogenPressureLowerLimit
+            // 
+            this.dgv_his_MinNitrogenPressureLowerLimit.DataPropertyName = "MinNitrogenPressureLowerLimit";
+            this.dgv_his_MinNitrogenPressureLowerLimit.HeaderText = "最小氮气压力下限(Lower Limit of Min Pressure)";
+            this.dgv_his_MinNitrogenPressureLowerLimit.MinimumWidth = 6;
+            this.dgv_his_MinNitrogenPressureLowerLimit.Name = "dgv_his_MinNitrogenPressureLowerLimit";
+            this.dgv_his_MinNitrogenPressureLowerLimit.ReadOnly = true;
+            this.dgv_his_MinNitrogenPressureLowerLimit.Width = 200;
+            // 
+            // dgv_his_MinNitrogenPressureResult
+            // 
+            this.dgv_his_MinNitrogenPressureResult.DataPropertyName = "MinNitrogenPressureResult";
+            this.dgv_his_MinNitrogenPressureResult.HeaderText = "最小氮气压力结果 Result of Min Pressure";
+            this.dgv_his_MinNitrogenPressureResult.MinimumWidth = 6;
+            this.dgv_his_MinNitrogenPressureResult.Name = "dgv_his_MinNitrogenPressureResult";
+            this.dgv_his_MinNitrogenPressureResult.ReadOnly = true;
+            this.dgv_his_MinNitrogenPressureResult.Width = 200;
+            // 
+            // dgv_his_MaxNitrogenPressure
+            // 
+            this.dgv_his_MaxNitrogenPressure.DataPropertyName = "MaxNitrogenPressure";
+            this.dgv_his_MaxNitrogenPressure.HeaderText = "最大氮气压力 Max Nitrogen Gas Pressure(psi)";
+            this.dgv_his_MaxNitrogenPressure.MinimumWidth = 6;
+            this.dgv_his_MaxNitrogenPressure.Name = "dgv_his_MaxNitrogenPressure";
+            this.dgv_his_MaxNitrogenPressure.ReadOnly = true;
+            this.dgv_his_MaxNitrogenPressure.Width = 200;
+            // 
+            // dgv_his_NitrogenPressureResult
+            // 
+            this.dgv_his_NitrogenPressureResult.DataPropertyName = "NitrogenPressureResult";
+            this.dgv_his_NitrogenPressureResult.HeaderText = "氮气压力结果  Result of NitrogenPressure";
+            this.dgv_his_NitrogenPressureResult.MinimumWidth = 6;
+            this.dgv_his_NitrogenPressureResult.Name = "dgv_his_NitrogenPressureResult";
+            this.dgv_his_NitrogenPressureResult.ReadOnly = true;
+            this.dgv_his_NitrogenPressureResult.Width = 125;
+            // 
+            // dgv_his_PowderSupplySpeed
+            // 
+            this.dgv_his_PowderSupplySpeed.DataPropertyName = "PowderSupplySpeed";
+            this.dgv_his_PowderSupplySpeed.HeaderText = "供粉速度 Powder Feeding Rate(g/min)";
+            this.dgv_his_PowderSupplySpeed.MinimumWidth = 6;
+            this.dgv_his_PowderSupplySpeed.Name = "dgv_his_PowderSupplySpeed";
+            this.dgv_his_PowderSupplySpeed.ReadOnly = true;
+            this.dgv_his_PowderSupplySpeed.Width = 200;
+            // 
+            // dgv_his_StartTime
+            // 
+            this.dgv_his_StartTime.DataPropertyName = "StartTime";
+            this.dgv_his_StartTime.HeaderText = "喷枪启动时间 Start Time";
+            this.dgv_his_StartTime.MinimumWidth = 6;
+            this.dgv_his_StartTime.Name = "dgv_his_StartTime";
+            this.dgv_his_StartTime.ReadOnly = true;
+            this.dgv_his_StartTime.Width = 200;
+            // 
+            // dgv_his_EndTime
+            // 
+            this.dgv_his_EndTime.DataPropertyName = "EndTime";
+            this.dgv_his_EndTime.HeaderText = "喷枪停止时间 Stop Time";
+            this.dgv_his_EndTime.MinimumWidth = 6;
+            this.dgv_his_EndTime.Name = "dgv_his_EndTime";
+            this.dgv_his_EndTime.ReadOnly = true;
+            this.dgv_his_EndTime.Width = 200;
+            // 
+            // dgv_his_Beat
+            // 
+            this.dgv_his_Beat.DataPropertyName = "Beat";
+            this.dgv_his_Beat.HeaderText = "冷喷节拍 Cycle Time(s)";
+            this.dgv_his_Beat.MinimumWidth = 6;
+            this.dgv_his_Beat.Name = "dgv_his_Beat";
+            this.dgv_his_Beat.ReadOnly = true;
+            this.dgv_his_Beat.Width = 200;
+            // 
+            // dgv_his_PlacementTime
+            // 
+            this.dgv_his_PlacementTime.DataPropertyName = "PlacementTime";
+            this.dgv_his_PlacementTime.HeaderText = "激光清洗摆放时间 Scanning Time After Laser Cleaning";
+            this.dgv_his_PlacementTime.MinimumWidth = 6;
+            this.dgv_his_PlacementTime.Name = "dgv_his_PlacementTime";
+            this.dgv_his_PlacementTime.ReadOnly = true;
+            this.dgv_his_PlacementTime.Width = 200;
+            // 
+            // dgv_his_ThreadRotation
+            // 
+            this.dgv_his_ThreadRotation.DataPropertyName = "ThreadRotation";
+            this.dgv_his_ThreadRotation.HeaderText = "螺杆转速 Auger Speed(°/s)";
+            this.dgv_his_ThreadRotation.MinimumWidth = 6;
+            this.dgv_his_ThreadRotation.Name = "dgv_his_ThreadRotation";
+            this.dgv_his_ThreadRotation.ReadOnly = true;
+            this.dgv_his_ThreadRotation.Width = 200;
+            // 
+            // dgv_his_IntakePressure
+            // 
+            this.dgv_his_IntakePressure.DataPropertyName = "IntakePressure";
+            this.dgv_his_IntakePressure.HeaderText = "进气压力 Intake Pressure(Mpa)";
+            this.dgv_his_IntakePressure.MinimumWidth = 6;
+            this.dgv_his_IntakePressure.Name = "dgv_his_IntakePressure";
+            this.dgv_his_IntakePressure.ReadOnly = true;
+            this.dgv_his_IntakePressure.Width = 200;
+            // 
+            // dgv_his_IntakePressureLowerLimit
+            // 
+            this.dgv_his_IntakePressureLowerLimit.DataPropertyName = "IntakePressureLowerLimit";
+            this.dgv_his_IntakePressureLowerLimit.HeaderText = "进气压力下限(Lower Limit of Inlet Gas Pressure)";
+            this.dgv_his_IntakePressureLowerLimit.MinimumWidth = 6;
+            this.dgv_his_IntakePressureLowerLimit.Name = "dgv_his_IntakePressureLowerLimit";
+            this.dgv_his_IntakePressureLowerLimit.ReadOnly = true;
+            this.dgv_his_IntakePressureLowerLimit.Width = 200;
+            // 
+            // Col_IntakeFlow
+            // 
+            this.Col_IntakeFlow.DataPropertyName = "IntakeFlow";
+            this.Col_IntakeFlow.HeaderText = "进气流量";
+            this.Col_IntakeFlow.MinimumWidth = 6;
+            this.Col_IntakeFlow.Name = "Col_IntakeFlow";
+            this.Col_IntakeFlow.ReadOnly = true;
+            this.Col_IntakeFlow.Width = 125;
+            // 
+            // dgv_his_IntakePressureResult
+            // 
+            this.dgv_his_IntakePressureResult.DataPropertyName = "IntakePressureResult";
+            this.dgv_his_IntakePressureResult.HeaderText = "进气压力结果 Result of Intake Pressure";
+            this.dgv_his_IntakePressureResult.MinimumWidth = 6;
+            this.dgv_his_IntakePressureResult.Name = "dgv_his_IntakePressureResult";
+            this.dgv_his_IntakePressureResult.ReadOnly = true;
+            this.dgv_his_IntakePressureResult.Width = 200;
+            // 
+            // dgv_his_NozzleHeight
+            // 
+            this.dgv_his_NozzleHeight.DataPropertyName = "NozzleHeight";
+            this.dgv_his_NozzleHeight.HeaderText = "喷嘴高度 Nozzle Height(mm)";
+            this.dgv_his_NozzleHeight.MinimumWidth = 6;
+            this.dgv_his_NozzleHeight.Name = "dgv_his_NozzleHeight";
+            this.dgv_his_NozzleHeight.ReadOnly = true;
+            this.dgv_his_NozzleHeight.Width = 200;
+            // 
+            // dgv_his_AverageSpeed
+            // 
+            this.dgv_his_AverageSpeed.DataPropertyName = "AverageSpeed";
+            this.dgv_his_AverageSpeed.HeaderText = "平均粒子速度 Average Speed(m/s)";
+            this.dgv_his_AverageSpeed.MinimumWidth = 6;
+            this.dgv_his_AverageSpeed.Name = "dgv_his_AverageSpeed";
+            this.dgv_his_AverageSpeed.ReadOnly = true;
+            this.dgv_his_AverageSpeed.Width = 200;
+            // 
+            // dgv_his_AverageSpeedUpperLimit
+            // 
+            this.dgv_his_AverageSpeedUpperLimit.DataPropertyName = "AverageSpeedUpperLimit";
+            this.dgv_his_AverageSpeedUpperLimit.HeaderText = "平均粒子速度上限（Upper Limit of Average Speed）";
+            this.dgv_his_AverageSpeedUpperLimit.MinimumWidth = 6;
+            this.dgv_his_AverageSpeedUpperLimit.Name = "dgv_his_AverageSpeedUpperLimit";
+            this.dgv_his_AverageSpeedUpperLimit.ReadOnly = true;
+            this.dgv_his_AverageSpeedUpperLimit.Width = 200;
+            // 
+            // dgv_his_AverageSpeedLowerLimit
+            // 
+            this.dgv_his_AverageSpeedLowerLimit.DataPropertyName = "AverageSpeedLowerLimit";
+            this.dgv_his_AverageSpeedLowerLimit.HeaderText = "平均粒子速度下限（Lower Limit of Average Speed）";
+            this.dgv_his_AverageSpeedLowerLimit.MinimumWidth = 6;
+            this.dgv_his_AverageSpeedLowerLimit.Name = "dgv_his_AverageSpeedLowerLimit";
+            this.dgv_his_AverageSpeedLowerLimit.ReadOnly = true;
+            this.dgv_his_AverageSpeedLowerLimit.Width = 200;
+            // 
+            // dgv_his_AverageSpeedResult
+            // 
+            this.dgv_his_AverageSpeedResult.DataPropertyName = "AverageSpeedResult";
+            this.dgv_his_AverageSpeedResult.HeaderText = "平均粒子速度结果（Result of Average Speed）";
+            this.dgv_his_AverageSpeedResult.MinimumWidth = 6;
+            this.dgv_his_AverageSpeedResult.Name = "dgv_his_AverageSpeedResult";
+            this.dgv_his_AverageSpeedResult.ReadOnly = true;
+            this.dgv_his_AverageSpeedResult.Width = 200;
+            // 
+            // dgv_his_MaxSpeed
+            // 
+            this.dgv_his_MaxSpeed.DataPropertyName = "MaxSpeed";
+            this.dgv_his_MaxSpeed.HeaderText = "最大粒子速度 Max Speed(m/s)";
+            this.dgv_his_MaxSpeed.MinimumWidth = 6;
+            this.dgv_his_MaxSpeed.Name = "dgv_his_MaxSpeed";
+            this.dgv_his_MaxSpeed.ReadOnly = true;
+            this.dgv_his_MaxSpeed.Width = 200;
+            // 
+            // dgv_his_MinSpeed
+            // 
+            this.dgv_his_MinSpeed.DataPropertyName = "MinSpeed";
+            this.dgv_his_MinSpeed.HeaderText = "最小粒子速度 Min Speed(m/s)";
+            this.dgv_his_MinSpeed.MinimumWidth = 6;
+            this.dgv_his_MinSpeed.Name = "dgv_his_MinSpeed";
+            this.dgv_his_MinSpeed.ReadOnly = true;
+            this.dgv_his_MinSpeed.Width = 200;
+            // 
+            // dgv_his_MinSpeedLowerLimit
+            // 
+            this.dgv_his_MinSpeedLowerLimit.DataPropertyName = "MinSpeedLowerLimit";
+            this.dgv_his_MinSpeedLowerLimit.HeaderText = "最小粒子速度下限(Lower Limit of Min Speed)";
+            this.dgv_his_MinSpeedLowerLimit.MinimumWidth = 6;
+            this.dgv_his_MinSpeedLowerLimit.Name = "dgv_his_MinSpeedLowerLimit";
+            this.dgv_his_MinSpeedLowerLimit.ReadOnly = true;
+            this.dgv_his_MinSpeedLowerLimit.Width = 200;
+            // 
+            // dgv_his_MinSpeedResult
+            // 
+            this.dgv_his_MinSpeedResult.DataPropertyName = "MinSpeedResult";
+            this.dgv_his_MinSpeedResult.HeaderText = "最小粒子速度结果 Result of Min Speed";
+            this.dgv_his_MinSpeedResult.MinimumWidth = 6;
+            this.dgv_his_MinSpeedResult.Name = "dgv_his_MinSpeedResult";
+            this.dgv_his_MinSpeedResult.ReadOnly = true;
+            this.dgv_his_MinSpeedResult.Width = 200;
+            // 
+            // Column3
+            // 
+            this.Column3.DataPropertyName = "StdDevSpeed";
+            this.Column3.HeaderText = "粒子速度标准偏差值 Speed Standard Deviation(m/s)";
+            this.Column3.MinimumWidth = 6;
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Width = 200;
+            // 
+            // dgv_his_SpeedResult
+            // 
+            this.dgv_his_SpeedResult.DataPropertyName = "SpeedResult";
+            this.dgv_his_SpeedResult.HeaderText = "粒子速度结果 Result of  Speed";
+            this.dgv_his_SpeedResult.MinimumWidth = 6;
+            this.dgv_his_SpeedResult.Name = "dgv_his_SpeedResult";
+            this.dgv_his_SpeedResult.ReadOnly = true;
+            this.dgv_his_SpeedResult.Width = 200;
+            // 
+            // dgv_his_AverageConcentration
+            // 
+            this.dgv_his_AverageConcentration.DataPropertyName = "AverageConcentration";
+            this.dgv_his_AverageConcentration.HeaderText = "平均粒子浓度 Average Concentration(1/cm2)";
+            this.dgv_his_AverageConcentration.MinimumWidth = 6;
+            this.dgv_his_AverageConcentration.Name = "dgv_his_AverageConcentration";
+            this.dgv_his_AverageConcentration.ReadOnly = true;
+            this.dgv_his_AverageConcentration.Width = 200;
+            // 
+            // dgv_his_AverageConcentrationUpperLimit
+            // 
+            this.dgv_his_AverageConcentrationUpperLimit.DataPropertyName = "AverageConcentrationUpperLimit";
+            this.dgv_his_AverageConcentrationUpperLimit.HeaderText = "平均粒子浓度上限（Upper Limit of Average Concentration）";
+            this.dgv_his_AverageConcentrationUpperLimit.MinimumWidth = 6;
+            this.dgv_his_AverageConcentrationUpperLimit.Name = "dgv_his_AverageConcentrationUpperLimit";
+            this.dgv_his_AverageConcentrationUpperLimit.ReadOnly = true;
+            this.dgv_his_AverageConcentrationUpperLimit.Width = 200;
+            // 
+            // dgv_his_AverageConcentrationLowerLimit
+            // 
+            this.dgv_his_AverageConcentrationLowerLimit.DataPropertyName = "AverageConcentrationLowerLimit";
+            this.dgv_his_AverageConcentrationLowerLimit.HeaderText = "平均粒子浓度下限（Lower Limit of Average Concentration）";
+            this.dgv_his_AverageConcentrationLowerLimit.MinimumWidth = 6;
+            this.dgv_his_AverageConcentrationLowerLimit.Name = "dgv_his_AverageConcentrationLowerLimit";
+            this.dgv_his_AverageConcentrationLowerLimit.ReadOnly = true;
+            this.dgv_his_AverageConcentrationLowerLimit.Width = 200;
+            // 
+            // dgv_his_AverageConcentrationResult
+            // 
+            this.dgv_his_AverageConcentrationResult.DataPropertyName = "AverageConcentrationResult";
+            this.dgv_his_AverageConcentrationResult.HeaderText = "平均粒子浓度结果（Result of Average Concentration）";
+            this.dgv_his_AverageConcentrationResult.MinimumWidth = 6;
+            this.dgv_his_AverageConcentrationResult.Name = "dgv_his_AverageConcentrationResult";
+            this.dgv_his_AverageConcentrationResult.ReadOnly = true;
+            this.dgv_his_AverageConcentrationResult.Width = 200;
+            // 
+            // dgv_his_MaxConcentration
+            // 
+            this.dgv_his_MaxConcentration.DataPropertyName = "MaxConcentration";
+            this.dgv_his_MaxConcentration.HeaderText = "最大粒子浓度 Max Concentration(1/cm2)";
+            this.dgv_his_MaxConcentration.MinimumWidth = 6;
+            this.dgv_his_MaxConcentration.Name = "dgv_his_MaxConcentration";
+            this.dgv_his_MaxConcentration.ReadOnly = true;
+            this.dgv_his_MaxConcentration.Width = 200;
+            // 
+            // dgv_his_MinConcentration
+            // 
+            this.dgv_his_MinConcentration.DataPropertyName = "MinConcentration";
+            this.dgv_his_MinConcentration.HeaderText = "最小粒子浓度 Min Concentration(1/cm2)";
+            this.dgv_his_MinConcentration.MinimumWidth = 6;
+            this.dgv_his_MinConcentration.Name = "dgv_his_MinConcentration";
+            this.dgv_his_MinConcentration.ReadOnly = true;
+            this.dgv_his_MinConcentration.Width = 200;
+            // 
+            // dgv_his_StdDevConcentration
+            // 
+            this.dgv_his_StdDevConcentration.DataPropertyName = "StdDevConcentration";
+            this.dgv_his_StdDevConcentration.HeaderText = "粒子浓度标准偏差值 Concentration Standard Deviation";
+            this.dgv_his_StdDevConcentration.MinimumWidth = 6;
+            this.dgv_his_StdDevConcentration.Name = "dgv_his_StdDevConcentration";
+            this.dgv_his_StdDevConcentration.ReadOnly = true;
+            this.dgv_his_StdDevConcentration.Width = 200;
+            // 
+            // dgv_his_ConcentrationResult
+            // 
+            this.dgv_his_ConcentrationResult.DataPropertyName = "ConcentrationResult";
+            this.dgv_his_ConcentrationResult.HeaderText = "粒子浓度结果 Result of Concentration";
+            this.dgv_his_ConcentrationResult.MinimumWidth = 6;
+            this.dgv_his_ConcentrationResult.Name = "dgv_his_ConcentrationResult";
+            this.dgv_his_ConcentrationResult.ReadOnly = true;
+            this.dgv_his_ConcentrationResult.Width = 200;
+            // 
+            // dgv_his_AveragePosition
+            // 
+            this.dgv_his_AveragePosition.DataPropertyName = "AveragePosition";
+            this.dgv_his_AveragePosition.HeaderText = "粒子位置平均值 Average Position";
+            this.dgv_his_AveragePosition.MinimumWidth = 6;
+            this.dgv_his_AveragePosition.Name = "dgv_his_AveragePosition";
+            this.dgv_his_AveragePosition.ReadOnly = true;
+            this.dgv_his_AveragePosition.Width = 200;
+            // 
+            // dgv_his_MaxPosition
+            // 
+            this.dgv_his_MaxPosition.DataPropertyName = "MaxPosition";
+            this.dgv_his_MaxPosition.HeaderText = "粒子位置最大值  Max Position";
+            this.dgv_his_MaxPosition.MinimumWidth = 6;
+            this.dgv_his_MaxPosition.Name = "dgv_his_MaxPosition";
+            this.dgv_his_MaxPosition.ReadOnly = true;
+            this.dgv_his_MaxPosition.Width = 200;
+            // 
+            // dgv_his_MinPosition
+            // 
+            this.dgv_his_MinPosition.DataPropertyName = "MinPosition";
+            this.dgv_his_MinPosition.HeaderText = "粒子位置最小值 Min Position";
+            this.dgv_his_MinPosition.MinimumWidth = 6;
+            this.dgv_his_MinPosition.Name = "dgv_his_MinPosition";
+            this.dgv_his_MinPosition.ReadOnly = true;
+            this.dgv_his_MinPosition.Width = 200;
+            // 
+            // dgv_his_StdDevPosition
+            // 
+            this.dgv_his_StdDevPosition.DataPropertyName = "StdDevPosition";
+            this.dgv_his_StdDevPosition.HeaderText = "粒子位置标准偏差值 Position Standard Deviation";
+            this.dgv_his_StdDevPosition.MinimumWidth = 6;
+            this.dgv_his_StdDevPosition.Name = "dgv_his_StdDevPosition";
+            this.dgv_his_StdDevPosition.ReadOnly = true;
+            this.dgv_his_StdDevPosition.Width = 200;
+            // 
+            // dgv_his_Location
+            // 
+            this.dgv_his_Location.DataPropertyName = "Location";
+            this.dgv_his_Location.HeaderText = "喷淋位置 Spraying Position";
+            this.dgv_his_Location.MinimumWidth = 6;
+            this.dgv_his_Location.Name = "dgv_his_Location";
+            this.dgv_his_Location.ReadOnly = true;
+            this.dgv_his_Location.Width = 200;
+            // 
+            // dgv_his_PlacementHour
+            // 
+            this.dgv_his_PlacementHour.DataPropertyName = "PlacementHour";
+            this.dgv_his_PlacementHour.HeaderText = "摆放时间（小时） Placement Time(h)";
+            this.dgv_his_PlacementHour.MinimumWidth = 6;
+            this.dgv_his_PlacementHour.Name = "dgv_his_PlacementHour";
+            this.dgv_his_PlacementHour.ReadOnly = true;
+            this.dgv_his_PlacementHour.Width = 200;
+            // 
             // pageData
             // 
             this.pageData.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pageData.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pageData.Location = new System.Drawing.Point(0, 750);
+            this.pageData.Location = new System.Drawing.Point(0, 27);
             this.pageData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pageData.MinimumSize = new System.Drawing.Size(1, 1);
             this.pageData.Name = "pageData";
@@ -738,7 +1913,7 @@
             this.pageData.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
             this.pageData.ShowJumpButton = false;
             this.pageData.ShowText = false;
-            this.pageData.Size = new System.Drawing.Size(1335, 33);
+            this.pageData.Size = new System.Drawing.Size(200, 33);
             this.pageData.Style = Sunny.UI.UIStyle.Custom;
             this.pageData.TabIndex = 7;
             this.pageData.Text = null;
@@ -762,7 +1937,7 @@
             this.uiPanel4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiPanel4.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiPanel4.Name = "uiPanel4";
-            this.uiPanel4.Size = new System.Drawing.Size(1335, 81);
+            this.uiPanel4.Size = new System.Drawing.Size(200, 81);
             this.uiPanel4.Style = Sunny.UI.UIStyle.Custom;
             this.uiPanel4.TabIndex = 0;
             this.uiPanel4.Text = null;
@@ -1108,6 +2283,7 @@
             // 
             this.dataGridViewTextBoxColumn25.DataPropertyName = "AlarmMessage";
             this.dataGridViewTextBoxColumn25.HeaderText = "报警信息";
+            this.dataGridViewTextBoxColumn25.MinimumWidth = 6;
             this.dataGridViewTextBoxColumn25.Name = "dataGridViewTextBoxColumn25";
             this.dataGridViewTextBoxColumn25.ReadOnly = true;
             this.dataGridViewTextBoxColumn25.Width = 500;
@@ -1116,6 +2292,7 @@
             // 
             this.dataGridViewTextBoxColumn26.DataPropertyName = "AddTime";
             this.dataGridViewTextBoxColumn26.HeaderText = "添加时间";
+            this.dataGridViewTextBoxColumn26.MinimumWidth = 6;
             this.dataGridViewTextBoxColumn26.Name = "dataGridViewTextBoxColumn26";
             this.dataGridViewTextBoxColumn26.ReadOnly = true;
             this.dataGridViewTextBoxColumn26.Width = 500;
@@ -1226,7 +2403,7 @@
             this.lb_right.AutoSize = true;
             this.lb_right.Location = new System.Drawing.Point(274, 26);
             this.lb_right.Name = "lb_right";
-            this.lb_right.Size = new System.Drawing.Size(15, 16);
+            this.lb_right.Size = new System.Drawing.Size(19, 20);
             this.lb_right.TabIndex = 8;
             this.lb_right.Text = "-";
             // 
@@ -1235,7 +2412,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(212, 26);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 16);
+            this.label4.Size = new System.Drawing.Size(69, 20);
             this.label4.TabIndex = 7;
             this.label4.Text = "权限：";
             // 
@@ -1244,7 +2421,7 @@
             this.lb_userName.AutoSize = true;
             this.lb_userName.Location = new System.Drawing.Point(140, 26);
             this.lb_userName.Name = "lb_userName";
-            this.lb_userName.Size = new System.Drawing.Size(15, 16);
+            this.lb_userName.Size = new System.Drawing.Size(19, 20);
             this.lb_userName.TabIndex = 6;
             this.lb_userName.Text = "-";
             // 
@@ -1253,7 +2430,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(47, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(87, 16);
+            this.label1.Size = new System.Drawing.Size(109, 20);
             this.label1.TabIndex = 5;
             this.label1.Text = "当前用户：";
             // 
@@ -1322,1030 +2499,13 @@
             this.btn_user.TipsFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btn_user.Click += new System.EventHandler(this.uiButtonUser_Click);
             // 
-            // Col_Code
-            // 
-            this.Col_Code.HeaderText = "二维码 QR-Code";
-            this.Col_Code.MinimumWidth = 8;
-            this.Col_Code.Name = "Col_Code";
-            this.Col_Code.ReadOnly = true;
-            this.Col_Code.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_Code.Width = 160;
-            // 
-            // Col_PreSprayWeight
-            // 
-            this.Col_PreSprayWeight.HeaderText = "喷前重量  Weight Before Spraying(g)";
-            this.Col_PreSprayWeight.MinimumWidth = 8;
-            this.Col_PreSprayWeight.Name = "Col_PreSprayWeight";
-            this.Col_PreSprayWeight.ReadOnly = true;
-            this.Col_PreSprayWeight.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_PreSprayWeight.Width = 200;
-            // 
-            // Col_PreSprayWeight_1
-            // 
-            this.Col_PreSprayWeight_1.HeaderText = "喷前重量  Weight Before Spraying 1s(g)";
-            this.Col_PreSprayWeight_1.Name = "Col_PreSprayWeight_1";
-            this.Col_PreSprayWeight_1.ReadOnly = true;
-            this.Col_PreSprayWeight_1.Width = 200;
-            // 
-            // Col_PreSprayWeight_1_5
-            // 
-            this.Col_PreSprayWeight_1_5.HeaderText = "喷前重量  Weight Before Spraying 1.5s(g)";
-            this.Col_PreSprayWeight_1_5.Name = "Col_PreSprayWeight_1_5";
-            this.Col_PreSprayWeight_1_5.ReadOnly = true;
-            this.Col_PreSprayWeight_1_5.Width = 200;
-            // 
-            // Col_PreSprayWeight_2
-            // 
-            this.Col_PreSprayWeight_2.HeaderText = "喷前重量  Weight Before Spraying 2s(g)";
-            this.Col_PreSprayWeight_2.Name = "Col_PreSprayWeight_2";
-            this.Col_PreSprayWeight_2.ReadOnly = true;
-            this.Col_PreSprayWeight_2.Width = 200;
-            // 
-            // Col_PreSprayWeight_2_5
-            // 
-            this.Col_PreSprayWeight_2_5.HeaderText = "喷前重量  Weight Before Spraying 2.5s(g)";
-            this.Col_PreSprayWeight_2_5.Name = "Col_PreSprayWeight_2_5";
-            this.Col_PreSprayWeight_2_5.ReadOnly = true;
-            this.Col_PreSprayWeight_2_5.Width = 200;
-            // 
-            // Col_PostSprayWeight
-            // 
-            this.Col_PostSprayWeight.HeaderText = "喷后重量  Weight After Spraying(g)";
-            this.Col_PostSprayWeight.MinimumWidth = 8;
-            this.Col_PostSprayWeight.Name = "Col_PostSprayWeight";
-            this.Col_PostSprayWeight.ReadOnly = true;
-            this.Col_PostSprayWeight.Width = 200;
-            // 
-            // Col_PostSprayWeight_1
-            // 
-            this.Col_PostSprayWeight_1.HeaderText = "喷后重量 Weight After Spraying 1s(g)";
-            this.Col_PostSprayWeight_1.Name = "Col_PostSprayWeight_1";
-            this.Col_PostSprayWeight_1.ReadOnly = true;
-            this.Col_PostSprayWeight_1.Width = 200;
-            // 
-            // Col_PostSprayWeight_1_5
-            // 
-            this.Col_PostSprayWeight_1_5.HeaderText = "喷后重量 Weight After Spraying 1.5s(g)";
-            this.Col_PostSprayWeight_1_5.Name = "Col_PostSprayWeight_1_5";
-            this.Col_PostSprayWeight_1_5.ReadOnly = true;
-            this.Col_PostSprayWeight_1_5.Width = 200;
-            // 
-            // Col_PostSprayWeight_2
-            // 
-            this.Col_PostSprayWeight_2.HeaderText = "喷后重量 Weight After Spraying 2s(g)";
-            this.Col_PostSprayWeight_2.Name = "Col_PostSprayWeight_2";
-            this.Col_PostSprayWeight_2.ReadOnly = true;
-            this.Col_PostSprayWeight_2.Width = 200;
-            // 
-            // Col_PostSprayWeight_2_5
-            // 
-            this.Col_PostSprayWeight_2_5.HeaderText = "喷后重量 Weight After Spraying 2.5s(g)";
-            this.Col_PostSprayWeight_2_5.Name = "Col_PostSprayWeight_2_5";
-            this.Col_PostSprayWeight_2_5.ReadOnly = true;
-            this.Col_PostSprayWeight_2_5.Width = 200;
-            // 
-            // Col_SedimentationWeight
-            // 
-            this.Col_SedimentationWeight.HeaderText = "沉积重量 Weight Gain(g)";
-            this.Col_SedimentationWeight.MinimumWidth = 8;
-            this.Col_SedimentationWeight.Name = "Col_SedimentationWeight";
-            this.Col_SedimentationWeight.ReadOnly = true;
-            this.Col_SedimentationWeight.Width = 200;
-            // 
-            // Col_UpperLimit
-            // 
-            this.Col_UpperLimit.HeaderText = "重量上限 Upper Limit of Weight(g)";
-            this.Col_UpperLimit.MinimumWidth = 8;
-            this.Col_UpperLimit.Name = "Col_UpperLimit";
-            this.Col_UpperLimit.ReadOnly = true;
-            this.Col_UpperLimit.Width = 200;
-            // 
-            // Col_LowerLimit
-            // 
-            this.Col_LowerLimit.HeaderText = "重量下限 Lower Limit of Weight(g)";
-            this.Col_LowerLimit.MinimumWidth = 8;
-            this.Col_LowerLimit.Name = "Col_LowerLimit";
-            this.Col_LowerLimit.ReadOnly = true;
-            this.Col_LowerLimit.Width = 200;
-            // 
-            // Col_Result
-            // 
-            this.Col_Result.HeaderText = "重量结果 (0:待检测，1:OK,2:NG) result";
-            this.Col_Result.MinimumWidth = 8;
-            this.Col_Result.Name = "Col_Result";
-            this.Col_Result.ReadOnly = true;
-            this.Col_Result.Width = 200;
-            // 
-            // Col_AddTime
-            // 
-            this.Col_AddTime.HeaderText = "称重时间 AddTime";
-            this.Col_AddTime.MinimumWidth = 8;
-            this.Col_AddTime.Name = "Col_AddTime";
-            this.Col_AddTime.ReadOnly = true;
-            this.Col_AddTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_AddTime.Width = 168;
-            // 
-            // Col_UtilizationRate
-            // 
-            this.Col_UtilizationRate.HeaderText = "银粉利用率 Powder Utilization Rate（%)";
-            this.Col_UtilizationRate.Name = "Col_UtilizationRate";
-            this.Col_UtilizationRate.ReadOnly = true;
-            this.Col_UtilizationRate.Width = 200;
-            // 
-            // Col_AverageTemperature
-            // 
-            this.Col_AverageTemperature.HeaderText = "平均温度 Average Temperature(℃)";
-            this.Col_AverageTemperature.Name = "Col_AverageTemperature";
-            this.Col_AverageTemperature.ReadOnly = true;
-            this.Col_AverageTemperature.Width = 200;
-            // 
-            // Col_AverageTemperatureUpperLimit
-            // 
-            this.Col_AverageTemperatureUpperLimit.HeaderText = "平均温度上限 Upper Limit of Average Temperature";
-            this.Col_AverageTemperatureUpperLimit.Name = "Col_AverageTemperatureUpperLimit";
-            this.Col_AverageTemperatureUpperLimit.ReadOnly = true;
-            // 
-            // Col_AverageTemperatureLowerLimit
-            // 
-            this.Col_AverageTemperatureLowerLimit.HeaderText = "平均温度下限 Lower Limit of Average Temperature";
-            this.Col_AverageTemperatureLowerLimit.Name = "Col_AverageTemperatureLowerLimit";
-            this.Col_AverageTemperatureLowerLimit.ReadOnly = true;
-            // 
-            // Col_AverageTemperatureResult
-            // 
-            this.Col_AverageTemperatureResult.HeaderText = "平均温度结果 Result of Average Temperature";
-            this.Col_AverageTemperatureResult.Name = "Col_AverageTemperatureResult";
-            this.Col_AverageTemperatureResult.ReadOnly = true;
-            // 
-            // Col_MinTemperature
-            // 
-            this.Col_MinTemperature.HeaderText = "最小温度 Min Temperature(℃)";
-            this.Col_MinTemperature.Name = "Col_MinTemperature";
-            this.Col_MinTemperature.ReadOnly = true;
-            this.Col_MinTemperature.Width = 200;
-            // 
-            // Col_MinTemperatureLowerLimit
-            // 
-            this.Col_MinTemperatureLowerLimit.HeaderText = "最小温度下限(Lower Limit of Min Temperature)";
-            this.Col_MinTemperatureLowerLimit.Name = "Col_MinTemperatureLowerLimit";
-            this.Col_MinTemperatureLowerLimit.ReadOnly = true;
-            // 
-            // Col_MinTemperatureResylt
-            // 
-            this.Col_MinTemperatureResylt.HeaderText = "最小温度结果(Resultof Min Temperature)";
-            this.Col_MinTemperatureResylt.Name = "Col_MinTemperatureResylt";
-            this.Col_MinTemperatureResylt.ReadOnly = true;
-            // 
-            // Col_MaxTemperature
-            // 
-            this.Col_MaxTemperature.HeaderText = "最大温度 Max Temperature(℃)";
-            this.Col_MaxTemperature.Name = "Col_MaxTemperature";
-            this.Col_MaxTemperature.ReadOnly = true;
-            // 
-            // Col_AverageNitrogenPressure
-            // 
-            this.Col_AverageNitrogenPressure.HeaderText = "平均氮气压力 Average Nitrogen Gas Pressure(psi)";
-            this.Col_AverageNitrogenPressure.Name = "Col_AverageNitrogenPressure";
-            this.Col_AverageNitrogenPressure.ReadOnly = true;
-            this.Col_AverageNitrogenPressure.Width = 200;
-            // 
-            // Col_AverageNitrogenPressureUpperLimit
-            // 
-            this.Col_AverageNitrogenPressureUpperLimit.HeaderText = "平均氮气压力上限（Upper Limit of Average Nitrogen Gas Pressure）";
-            this.Col_AverageNitrogenPressureUpperLimit.Name = "Col_AverageNitrogenPressureUpperLimit";
-            this.Col_AverageNitrogenPressureUpperLimit.ReadOnly = true;
-            // 
-            // Col_AverageNitrogenPressureLowerLimit
-            // 
-            this.Col_AverageNitrogenPressureLowerLimit.HeaderText = "平均氮气压力下限（Lower Limit of Average Nitrogen Gas Pressure）";
-            this.Col_AverageNitrogenPressureLowerLimit.Name = "Col_AverageNitrogenPressureLowerLimit";
-            this.Col_AverageNitrogenPressureLowerLimit.ReadOnly = true;
-            // 
-            // Col_AverageNitrogenPressureResult
-            // 
-            this.Col_AverageNitrogenPressureResult.HeaderText = "平均氮气压力结果（result of Average Nitrogen Gas Pressure）";
-            this.Col_AverageNitrogenPressureResult.Name = "Col_AverageNitrogenPressureResult";
-            this.Col_AverageNitrogenPressureResult.ReadOnly = true;
-            // 
-            // Col_MinNitrogenPressure
-            // 
-            this.Col_MinNitrogenPressure.HeaderText = "最小氮气压力 Min Nitrogen Gas Pressure(psi)";
-            this.Col_MinNitrogenPressure.Name = "Col_MinNitrogenPressure";
-            this.Col_MinNitrogenPressure.ReadOnly = true;
-            this.Col_MinNitrogenPressure.Width = 200;
-            // 
-            // Col_MinNitrogenPressureLowerLimit
-            // 
-            this.Col_MinNitrogenPressureLowerLimit.HeaderText = "最小氮气压力下限(Lower Limit of Min Pressure)";
-            this.Col_MinNitrogenPressureLowerLimit.Name = "Col_MinNitrogenPressureLowerLimit";
-            this.Col_MinNitrogenPressureLowerLimit.ReadOnly = true;
-            // 
-            // Col_MinNitrogenPressureResult
-            // 
-            this.Col_MinNitrogenPressureResult.HeaderText = "最小氮气压力结果(Resul tof Min Pressure)";
-            this.Col_MinNitrogenPressureResult.Name = "Col_MinNitrogenPressureResult";
-            this.Col_MinNitrogenPressureResult.ReadOnly = true;
-            // 
-            // Col_MaxNitrogenPressure
-            // 
-            this.Col_MaxNitrogenPressure.HeaderText = "最大氮气压力 Max Nitrogen Gas Pressure(psi)";
-            this.Col_MaxNitrogenPressure.Name = "Col_MaxNitrogenPressure";
-            this.Col_MaxNitrogenPressure.ReadOnly = true;
-            // 
-            // Col_PowderSupplySpeed
-            // 
-            this.Col_PowderSupplySpeed.HeaderText = "供粉速度 Powder Feeding Rate(g/min)";
-            this.Col_PowderSupplySpeed.Name = "Col_PowderSupplySpeed";
-            this.Col_PowderSupplySpeed.ReadOnly = true;
-            this.Col_PowderSupplySpeed.Width = 200;
-            // 
-            // Col_StartTime
-            // 
-            this.Col_StartTime.HeaderText = "冷喷启动时间 Start Time";
-            this.Col_StartTime.Name = "Col_StartTime";
-            this.Col_StartTime.ReadOnly = true;
-            this.Col_StartTime.Width = 200;
-            // 
-            // Col_EndTime
-            // 
-            this.Col_EndTime.HeaderText = "冷喷结束时间 Stop Time";
-            this.Col_EndTime.Name = "Col_EndTime";
-            this.Col_EndTime.ReadOnly = true;
-            this.Col_EndTime.Width = 200;
-            // 
-            // Col_Beat
-            // 
-            this.Col_Beat.HeaderText = "冷喷节拍 Cycle Time(s)";
-            this.Col_Beat.Name = "Col_Beat";
-            this.Col_Beat.ReadOnly = true;
-            this.Col_Beat.Width = 200;
-            // 
-            // Col_PlacementTime
-            // 
-            this.Col_PlacementTime.HeaderText = "摆放时间 Scanning Time After Laser Cleaning";
-            this.Col_PlacementTime.Name = "Col_PlacementTime";
-            this.Col_PlacementTime.ReadOnly = true;
-            this.Col_PlacementTime.Width = 200;
-            // 
-            // Col_ThreadRotation
-            // 
-            this.Col_ThreadRotation.HeaderText = "螺杆转速 Auger Speed(°/s)";
-            this.Col_ThreadRotation.Name = "Col_ThreadRotation";
-            this.Col_ThreadRotation.ReadOnly = true;
-            this.Col_ThreadRotation.Width = 200;
-            // 
-            // Col_IntakePressure
-            // 
-            this.Col_IntakePressure.HeaderText = "进气压力 Intake Pressure(Mpa)";
-            this.Col_IntakePressure.Name = "Col_IntakePressure";
-            this.Col_IntakePressure.ReadOnly = true;
-            this.Col_IntakePressure.Width = 200;
-            // 
-            // Col_IntakePressureLowerLimit
-            // 
-            this.Col_IntakePressureLowerLimit.HeaderText = "进气压力下限(Lower Limit of Inlet Gas Pressure)";
-            this.Col_IntakePressureLowerLimit.Name = "Col_IntakePressureLowerLimit";
-            this.Col_IntakePressureLowerLimit.ReadOnly = true;
-            // 
-            // Col_Real_Intake
-            // 
-            this.Col_Real_Intake.HeaderText = "进气流量";
-            this.Col_Real_Intake.Name = "Col_Real_Intake";
-            this.Col_Real_Intake.ReadOnly = true;
-            // 
-            // Col_IntakePressureResult
-            // 
-            this.Col_IntakePressureResult.HeaderText = "进气压力结果(Result)";
-            this.Col_IntakePressureResult.Name = "Col_IntakePressureResult";
-            this.Col_IntakePressureResult.ReadOnly = true;
-            // 
-            // Col_NozzleHeight
-            // 
-            this.Col_NozzleHeight.HeaderText = "喷嘴高度 Nozzle Height(mm)";
-            this.Col_NozzleHeight.Name = "Col_NozzleHeight";
-            this.Col_NozzleHeight.ReadOnly = true;
-            this.Col_NozzleHeight.Width = 200;
-            // 
-            // Col_AverageSpeed
-            // 
-            this.Col_AverageSpeed.HeaderText = "平均粒子速度 Average Speed(m/s)";
-            this.Col_AverageSpeed.Name = "Col_AverageSpeed";
-            this.Col_AverageSpeed.ReadOnly = true;
-            this.Col_AverageSpeed.Width = 200;
-            // 
-            // Col_AverageSpeedUpperLimit
-            // 
-            this.Col_AverageSpeedUpperLimit.HeaderText = "平均粒子速度上限（Upper Limit of Average Speed）";
-            this.Col_AverageSpeedUpperLimit.Name = "Col_AverageSpeedUpperLimit";
-            this.Col_AverageSpeedUpperLimit.ReadOnly = true;
-            // 
-            // Col_AverageSpeedLowerLimit
-            // 
-            this.Col_AverageSpeedLowerLimit.HeaderText = "平均粒子速度下限（Lower Limit of Average Speed）";
-            this.Col_AverageSpeedLowerLimit.Name = "Col_AverageSpeedLowerLimit";
-            this.Col_AverageSpeedLowerLimit.ReadOnly = true;
-            // 
-            // Col_AverageSpeedResult
-            // 
-            this.Col_AverageSpeedResult.HeaderText = "平均粒子速度结果（result of Average Speed）";
-            this.Col_AverageSpeedResult.Name = "Col_AverageSpeedResult";
-            this.Col_AverageSpeedResult.ReadOnly = true;
-            // 
-            // Col_MaxSpeed
-            // 
-            this.Col_MaxSpeed.HeaderText = "最大粒子速度 Max Speed(m/s)";
-            this.Col_MaxSpeed.Name = "Col_MaxSpeed";
-            this.Col_MaxSpeed.ReadOnly = true;
-            this.Col_MaxSpeed.Width = 200;
-            // 
-            // Col_MinSpeed
-            // 
-            this.Col_MinSpeed.HeaderText = "最小粒子速度 Min Speed(m/s)";
-            this.Col_MinSpeed.Name = "Col_MinSpeed";
-            this.Col_MinSpeed.ReadOnly = true;
-            this.Col_MinSpeed.Width = 200;
-            // 
-            // Col_MinSpeedLowerLimit
-            // 
-            this.Col_MinSpeedLowerLimit.HeaderText = "最小粒子速度下限(Lower Limit of Min Speed)";
-            this.Col_MinSpeedLowerLimit.Name = "Col_MinSpeedLowerLimit";
-            this.Col_MinSpeedLowerLimit.ReadOnly = true;
-            // 
-            // Col_MinSpeedResult
-            // 
-            this.Col_MinSpeedResult.HeaderText = "最小粒子速度结果(Result of Min Speed)";
-            this.Col_MinSpeedResult.Name = "Col_MinSpeedResult";
-            this.Col_MinSpeedResult.ReadOnly = true;
-            // 
-            // Col_StdDevSpeed
-            // 
-            this.Col_StdDevSpeed.HeaderText = "粒子速度标准偏差值 Speed Standard Deviation(m/s)";
-            this.Col_StdDevSpeed.Name = "Col_StdDevSpeed";
-            this.Col_StdDevSpeed.ReadOnly = true;
-            this.Col_StdDevSpeed.Width = 200;
-            // 
-            // Col_AverageConcentration
-            // 
-            this.Col_AverageConcentration.HeaderText = "平均粒子浓度 Average Concentration(1/cm2)";
-            this.Col_AverageConcentration.Name = "Col_AverageConcentration";
-            this.Col_AverageConcentration.ReadOnly = true;
-            this.Col_AverageConcentration.Width = 200;
-            // 
-            // Col_AverageConcentrationUpperLimit
-            // 
-            this.Col_AverageConcentrationUpperLimit.HeaderText = "平均粒子浓度上限（Upper Limit of Average Concentration）";
-            this.Col_AverageConcentrationUpperLimit.Name = "Col_AverageConcentrationUpperLimit";
-            this.Col_AverageConcentrationUpperLimit.ReadOnly = true;
-            // 
-            // Col_AverageConcentrationLowerLimit
-            // 
-            this.Col_AverageConcentrationLowerLimit.HeaderText = "平均粒子浓度下限（Lower Limit of Average Concentration）";
-            this.Col_AverageConcentrationLowerLimit.Name = "Col_AverageConcentrationLowerLimit";
-            this.Col_AverageConcentrationLowerLimit.ReadOnly = true;
-            // 
-            // Col_AverageConcentrationResult
-            // 
-            this.Col_AverageConcentrationResult.HeaderText = "平均粒子浓度结果（Result of Average Concentration）";
-            this.Col_AverageConcentrationResult.Name = "Col_AverageConcentrationResult";
-            this.Col_AverageConcentrationResult.ReadOnly = true;
-            // 
-            // Col_MaxConcentration
-            // 
-            this.Col_MaxConcentration.HeaderText = "最大粒子浓度 Max Concentration(1/cm2)";
-            this.Col_MaxConcentration.Name = "Col_MaxConcentration";
-            this.Col_MaxConcentration.ReadOnly = true;
-            this.Col_MaxConcentration.Width = 200;
-            // 
-            // Col_MinConcentration
-            // 
-            this.Col_MinConcentration.HeaderText = "最小粒子浓度 Min Concentration(1/cm2)";
-            this.Col_MinConcentration.Name = "Col_MinConcentration";
-            this.Col_MinConcentration.ReadOnly = true;
-            this.Col_MinConcentration.Width = 200;
-            // 
-            // Col_StdDevConcentration
-            // 
-            this.Col_StdDevConcentration.HeaderText = "粒子浓度标准偏差值 Concentration Standard Deviation(m/s)";
-            this.Col_StdDevConcentration.Name = "Col_StdDevConcentration";
-            this.Col_StdDevConcentration.ReadOnly = true;
-            // 
-            // Col_AveragePosition
-            // 
-            this.Col_AveragePosition.HeaderText = "粒子位置平均值 Average Position";
-            this.Col_AveragePosition.Name = "Col_AveragePosition";
-            this.Col_AveragePosition.ReadOnly = true;
-            this.Col_AveragePosition.Width = 200;
-            // 
-            // Col_MaxPosition
-            // 
-            this.Col_MaxPosition.HeaderText = "粒子位置最大值 Max Position";
-            this.Col_MaxPosition.Name = "Col_MaxPosition";
-            this.Col_MaxPosition.ReadOnly = true;
-            this.Col_MaxPosition.Width = 200;
-            // 
-            // Col_MinPosition
-            // 
-            this.Col_MinPosition.HeaderText = "粒子位置最小值 Min Position";
-            this.Col_MinPosition.Name = "Col_MinPosition";
-            this.Col_MinPosition.ReadOnly = true;
-            this.Col_MinPosition.Width = 200;
-            // 
-            // Col_StdDevPosition
-            // 
-            this.Col_StdDevPosition.HeaderText = "粒子位置标准偏差值 Position Standard Deviation";
-            this.Col_StdDevPosition.Name = "Col_StdDevPosition";
-            this.Col_StdDevPosition.ReadOnly = true;
-            // 
-            // Col_Location
-            // 
-            this.Col_Location.HeaderText = "喷淋位置 Spraying Position";
-            this.Col_Location.Name = "Col_Location";
-            this.Col_Location.ReadOnly = true;
-            this.Col_Location.Width = 200;
-            // 
-            // Col_PlacementHour
-            // 
-            this.Col_PlacementHour.HeaderText = "摆放时间（小时）Placement Time(h)";
-            this.Col_PlacementHour.Name = "Col_PlacementHour";
-            this.Col_PlacementHour.ReadOnly = true;
-            this.Col_PlacementHour.Width = 200;
-            // 
-            // col_his_ID
-            // 
-            this.col_his_ID.DataPropertyName = "ID";
-            this.col_his_ID.HeaderText = "序号 ID";
-            this.col_his_ID.MinimumWidth = 8;
-            this.col_his_ID.Name = "col_his_ID";
-            this.col_his_ID.ReadOnly = true;
-            this.col_his_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.col_his_ID.Width = 80;
-            // 
-            // dgv_his_Code
-            // 
-            this.dgv_his_Code.DataPropertyName = "Code";
-            this.dgv_his_Code.HeaderText = "二维码 QR-Code";
-            this.dgv_his_Code.MinimumWidth = 8;
-            this.dgv_his_Code.Name = "dgv_his_Code";
-            this.dgv_his_Code.ReadOnly = true;
-            this.dgv_his_Code.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dgv_his_Code.Width = 150;
-            // 
-            // col_his_PreSprayWeight
-            // 
-            this.col_his_PreSprayWeight.DataPropertyName = "PreSprayWeight";
-            this.col_his_PreSprayWeight.HeaderText = "喷前重量 Weight Before Spraying (g)";
-            this.col_his_PreSprayWeight.MinimumWidth = 8;
-            this.col_his_PreSprayWeight.Name = "col_his_PreSprayWeight";
-            this.col_his_PreSprayWeight.ReadOnly = true;
-            this.col_his_PreSprayWeight.Width = 200;
-            // 
-            // col_his_PreSprayWeight_1
-            // 
-            this.col_his_PreSprayWeight_1.DataPropertyName = "PreSprayWeight_1";
-            this.col_his_PreSprayWeight_1.HeaderText = "喷前重量 Weight Before Spraying 1s(g)";
-            this.col_his_PreSprayWeight_1.Name = "col_his_PreSprayWeight_1";
-            this.col_his_PreSprayWeight_1.ReadOnly = true;
-            this.col_his_PreSprayWeight_1.Width = 200;
-            // 
-            // col_his_PreSprayWeight_1_5
-            // 
-            this.col_his_PreSprayWeight_1_5.DataPropertyName = "PreSprayWeight_1_5";
-            this.col_his_PreSprayWeight_1_5.HeaderText = "喷前重量 Weight Before Spraying 1.5s(g)";
-            this.col_his_PreSprayWeight_1_5.Name = "col_his_PreSprayWeight_1_5";
-            this.col_his_PreSprayWeight_1_5.ReadOnly = true;
-            this.col_his_PreSprayWeight_1_5.Width = 200;
-            // 
-            // col_his_PreSprayWeight_2
-            // 
-            this.col_his_PreSprayWeight_2.DataPropertyName = "PreSprayWeight_2";
-            this.col_his_PreSprayWeight_2.HeaderText = "喷前重量 Weight Before Spraying 2s(g)";
-            this.col_his_PreSprayWeight_2.Name = "col_his_PreSprayWeight_2";
-            this.col_his_PreSprayWeight_2.ReadOnly = true;
-            this.col_his_PreSprayWeight_2.Width = 200;
-            // 
-            // col_his_PreSprayWeight_2_5
-            // 
-            this.col_his_PreSprayWeight_2_5.DataPropertyName = "PreSprayWeight_2_5";
-            this.col_his_PreSprayWeight_2_5.HeaderText = "喷前重量 Weight Before Spraying 2.5s(g)";
-            this.col_his_PreSprayWeight_2_5.Name = "col_his_PreSprayWeight_2_5";
-            this.col_his_PreSprayWeight_2_5.ReadOnly = true;
-            this.col_his_PreSprayWeight_2_5.Width = 200;
-            // 
-            // dgv_his_PostSprayWeight
-            // 
-            this.dgv_his_PostSprayWeight.DataPropertyName = "PostSprayWeight";
-            this.dgv_his_PostSprayWeight.HeaderText = "喷后重量 Weight After Spraying(g)";
-            this.dgv_his_PostSprayWeight.MinimumWidth = 8;
-            this.dgv_his_PostSprayWeight.Name = "dgv_his_PostSprayWeight";
-            this.dgv_his_PostSprayWeight.ReadOnly = true;
-            this.dgv_his_PostSprayWeight.Width = 200;
-            // 
-            // dgv_his_PostSprayWeight_1
-            // 
-            this.dgv_his_PostSprayWeight_1.DataPropertyName = "PostSprayWeight_1";
-            this.dgv_his_PostSprayWeight_1.HeaderText = "喷后重量Weight After Spraying 1s(g)";
-            this.dgv_his_PostSprayWeight_1.Name = "dgv_his_PostSprayWeight_1";
-            this.dgv_his_PostSprayWeight_1.ReadOnly = true;
-            this.dgv_his_PostSprayWeight_1.Width = 200;
-            // 
-            // dgv_his_PostSprayWeight_1_5
-            // 
-            this.dgv_his_PostSprayWeight_1_5.DataPropertyName = "PostSprayWeight_1_5";
-            this.dgv_his_PostSprayWeight_1_5.HeaderText = "喷后重量 Weight After Spraying 1.5s(g)";
-            this.dgv_his_PostSprayWeight_1_5.Name = "dgv_his_PostSprayWeight_1_5";
-            this.dgv_his_PostSprayWeight_1_5.ReadOnly = true;
-            this.dgv_his_PostSprayWeight_1_5.Width = 200;
-            // 
-            // dgv_his_PostSprayWeight_2
-            // 
-            this.dgv_his_PostSprayWeight_2.DataPropertyName = "PostSprayWeight_2";
-            this.dgv_his_PostSprayWeight_2.HeaderText = "喷后重量 Weight After Spraying 2s(g)";
-            this.dgv_his_PostSprayWeight_2.Name = "dgv_his_PostSprayWeight_2";
-            this.dgv_his_PostSprayWeight_2.ReadOnly = true;
-            this.dgv_his_PostSprayWeight_2.Width = 200;
-            // 
-            // dgv_his_PostSprayWeight_2_5
-            // 
-            this.dgv_his_PostSprayWeight_2_5.DataPropertyName = "PostSprayWeight_2_5";
-            this.dgv_his_PostSprayWeight_2_5.HeaderText = "喷后重量 Weight After Spraying 2.5s(g)";
-            this.dgv_his_PostSprayWeight_2_5.Name = "dgv_his_PostSprayWeight_2_5";
-            this.dgv_his_PostSprayWeight_2_5.ReadOnly = true;
-            this.dgv_his_PostSprayWeight_2_5.Width = 200;
-            // 
-            // col_his_SedimentationWeight
-            // 
-            this.col_his_SedimentationWeight.DataPropertyName = "SedimentationWeight";
-            this.col_his_SedimentationWeight.HeaderText = "沉积重量 Weight Gain(g)";
-            this.col_his_SedimentationWeight.MinimumWidth = 8;
-            this.col_his_SedimentationWeight.Name = "col_his_SedimentationWeight";
-            this.col_his_SedimentationWeight.ReadOnly = true;
-            this.col_his_SedimentationWeight.Width = 200;
-            // 
-            // dgv_his_UpperLimit
-            // 
-            this.dgv_his_UpperLimit.DataPropertyName = "WeightUpperLimit";
-            this.dgv_his_UpperLimit.HeaderText = "重量上限 Upper Limit of Weight(g)";
-            this.dgv_his_UpperLimit.MinimumWidth = 8;
-            this.dgv_his_UpperLimit.Name = "dgv_his_UpperLimit";
-            this.dgv_his_UpperLimit.ReadOnly = true;
-            this.dgv_his_UpperLimit.Width = 200;
-            // 
-            // col_his_LowerLimit
-            // 
-            this.col_his_LowerLimit.DataPropertyName = "WeightLowerLimit";
-            this.col_his_LowerLimit.HeaderText = "重量下限 Lower Limit of Weight(g)";
-            this.col_his_LowerLimit.MinimumWidth = 8;
-            this.col_his_LowerLimit.Name = "col_his_LowerLimit";
-            this.col_his_LowerLimit.ReadOnly = true;
-            this.col_his_LowerLimit.Width = 200;
-            // 
-            // col_his_WeightResult
-            // 
-            this.col_his_WeightResult.DataPropertyName = "WeightResult";
-            this.col_his_WeightResult.HeaderText = "重量结果(0:待检测，1:OK,2:NG) result";
-            this.col_his_WeightResult.Name = "col_his_WeightResult";
-            this.col_his_WeightResult.ReadOnly = true;
-            this.col_his_WeightResult.Width = 200;
-            // 
-            // dgv_his_AddTime
-            // 
-            this.dgv_his_AddTime.DataPropertyName = "AddTime";
-            this.dgv_his_AddTime.HeaderText = "称重时间 AddTime";
-            this.dgv_his_AddTime.MinimumWidth = 8;
-            this.dgv_his_AddTime.Name = "dgv_his_AddTime";
-            this.dgv_his_AddTime.ReadOnly = true;
-            this.dgv_his_AddTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dgv_his_AddTime.Width = 178;
-            // 
-            // dgv_his_UtilizationRate
-            // 
-            this.dgv_his_UtilizationRate.DataPropertyName = "UtilizationRate";
-            this.dgv_his_UtilizationRate.HeaderText = "银粉利用率 Powder Utilization Rate(%)";
-            this.dgv_his_UtilizationRate.Name = "dgv_his_UtilizationRate";
-            this.dgv_his_UtilizationRate.ReadOnly = true;
-            this.dgv_his_UtilizationRate.Width = 200;
-            // 
-            // dgv_his_AverageTemperature
-            // 
-            this.dgv_his_AverageTemperature.DataPropertyName = "AverageTemperature";
-            this.dgv_his_AverageTemperature.HeaderText = "平均温度 Average Temperature(℃)";
-            this.dgv_his_AverageTemperature.Name = "dgv_his_AverageTemperature";
-            this.dgv_his_AverageTemperature.ReadOnly = true;
-            this.dgv_his_AverageTemperature.Width = 200;
-            // 
-            // dgv_his_AverageTemperatureUpperLimit
-            // 
-            this.dgv_his_AverageTemperatureUpperLimit.DataPropertyName = "AverageTemperatureUpperLimit";
-            this.dgv_his_AverageTemperatureUpperLimit.HeaderText = "平均温度上限(Upper Limit of Average Temperature)";
-            this.dgv_his_AverageTemperatureUpperLimit.Name = "dgv_his_AverageTemperatureUpperLimit";
-            this.dgv_his_AverageTemperatureUpperLimit.ReadOnly = true;
-            this.dgv_his_AverageTemperatureUpperLimit.Width = 200;
-            // 
-            // dgv_his_AverageTemperatureLowerLimit
-            // 
-            this.dgv_his_AverageTemperatureLowerLimit.DataPropertyName = "AverageTemperatureLowerLimit";
-            this.dgv_his_AverageTemperatureLowerLimit.HeaderText = "平均温度下限(Lower Limit of Average Temperature)";
-            this.dgv_his_AverageTemperatureLowerLimit.Name = "dgv_his_AverageTemperatureLowerLimit";
-            this.dgv_his_AverageTemperatureLowerLimit.ReadOnly = true;
-            this.dgv_his_AverageTemperatureLowerLimit.Width = 200;
-            // 
-            // dgv_his_AverageTemperatureResult
-            // 
-            this.dgv_his_AverageTemperatureResult.DataPropertyName = "AverageTemperatureResult";
-            this.dgv_his_AverageTemperatureResult.HeaderText = "平均温度结果(result of Average Temperature)";
-            this.dgv_his_AverageTemperatureResult.Name = "dgv_his_AverageTemperatureResult";
-            this.dgv_his_AverageTemperatureResult.ReadOnly = true;
-            this.dgv_his_AverageTemperatureResult.Width = 200;
-            // 
-            // dgv_his_MinTemperature
-            // 
-            this.dgv_his_MinTemperature.DataPropertyName = "MinTemperature";
-            this.dgv_his_MinTemperature.HeaderText = "最小温度 Min Temperature(℃)";
-            this.dgv_his_MinTemperature.Name = "dgv_his_MinTemperature";
-            this.dgv_his_MinTemperature.ReadOnly = true;
-            this.dgv_his_MinTemperature.Width = 200;
-            // 
-            // dgv_his_MinTemperatureLowerLimit
-            // 
-            this.dgv_his_MinTemperatureLowerLimit.DataPropertyName = "MinTemperatureLowerLimit";
-            this.dgv_his_MinTemperatureLowerLimit.HeaderText = "最小温度下限(Lower Limit of Min Temperature)";
-            this.dgv_his_MinTemperatureLowerLimit.Name = "dgv_his_MinTemperatureLowerLimit";
-            this.dgv_his_MinTemperatureLowerLimit.ReadOnly = true;
-            this.dgv_his_MinTemperatureLowerLimit.Width = 200;
-            // 
-            // dgv_his_MinTemperatureResult
-            // 
-            this.dgv_his_MinTemperatureResult.DataPropertyName = "MinTemperatureResult";
-            this.dgv_his_MinTemperatureResult.HeaderText = "最小温度结果 Result of Min Temperature";
-            this.dgv_his_MinTemperatureResult.Name = "dgv_his_MinTemperatureResult";
-            this.dgv_his_MinTemperatureResult.ReadOnly = true;
-            this.dgv_his_MinTemperatureResult.Width = 200;
-            // 
-            // dgv_his_MaxTemperature
-            // 
-            this.dgv_his_MaxTemperature.DataPropertyName = "MaxTemperature";
-            this.dgv_his_MaxTemperature.HeaderText = "最大温度 Max Temperature(℃)";
-            this.dgv_his_MaxTemperature.Name = "dgv_his_MaxTemperature";
-            this.dgv_his_MaxTemperature.ReadOnly = true;
-            this.dgv_his_MaxTemperature.Width = 200;
-            // 
-            // dgv_his_TemperatureResult
-            // 
-            this.dgv_his_TemperatureResult.DataPropertyName = "TemperatureResult";
-            this.dgv_his_TemperatureResult.HeaderText = "温度结果（Result of Temperature）";
-            this.dgv_his_TemperatureResult.Name = "dgv_his_TemperatureResult";
-            this.dgv_his_TemperatureResult.ReadOnly = true;
-            this.dgv_his_TemperatureResult.Width = 200;
-            // 
-            // dgv_his_AverageNitrogenPressure
-            // 
-            this.dgv_his_AverageNitrogenPressure.DataPropertyName = "AverageNitrogenPressure";
-            this.dgv_his_AverageNitrogenPressure.HeaderText = "平均氮气压力 Average Nitrogen Gas Pressure(psi)";
-            this.dgv_his_AverageNitrogenPressure.Name = "dgv_his_AverageNitrogenPressure";
-            this.dgv_his_AverageNitrogenPressure.ReadOnly = true;
-            this.dgv_his_AverageNitrogenPressure.Width = 200;
-            // 
-            // dgv_his_AverageNitrogenPressureUpperlimit
-            // 
-            this.dgv_his_AverageNitrogenPressureUpperlimit.DataPropertyName = "AverageNitrogenPressureUpperLimit";
-            this.dgv_his_AverageNitrogenPressureUpperlimit.HeaderText = "平均氮气压力上限（Upper Limit of Average Nitrogen Gas Pressure）";
-            this.dgv_his_AverageNitrogenPressureUpperlimit.Name = "dgv_his_AverageNitrogenPressureUpperlimit";
-            this.dgv_his_AverageNitrogenPressureUpperlimit.ReadOnly = true;
-            this.dgv_his_AverageNitrogenPressureUpperlimit.Width = 200;
-            // 
-            // dgv_his_AverageNitrogenPressureLowerLimit
-            // 
-            this.dgv_his_AverageNitrogenPressureLowerLimit.DataPropertyName = "AverageNitrogenPressureLowerLimit";
-            this.dgv_his_AverageNitrogenPressureLowerLimit.HeaderText = "平均氮气压力下限（Lower Limit of Average Nitrogen Gas Pressure）";
-            this.dgv_his_AverageNitrogenPressureLowerLimit.Name = "dgv_his_AverageNitrogenPressureLowerLimit";
-            this.dgv_his_AverageNitrogenPressureLowerLimit.ReadOnly = true;
-            this.dgv_his_AverageNitrogenPressureLowerLimit.Width = 200;
-            // 
-            // dgv_his_AverageNitrogenPressureResult
-            // 
-            this.dgv_his_AverageNitrogenPressureResult.DataPropertyName = "AverageNitrogenPressureResult";
-            this.dgv_his_AverageNitrogenPressureResult.HeaderText = "平均氮气压力结果（result of Average Nitrogen Gas Pressure）";
-            this.dgv_his_AverageNitrogenPressureResult.Name = "dgv_his_AverageNitrogenPressureResult";
-            this.dgv_his_AverageNitrogenPressureResult.ReadOnly = true;
-            this.dgv_his_AverageNitrogenPressureResult.Width = 200;
-            // 
-            // dgv_his_MinNitrogenPressure
-            // 
-            this.dgv_his_MinNitrogenPressure.DataPropertyName = "MinNitrogenPressure";
-            this.dgv_his_MinNitrogenPressure.HeaderText = "最小氮气压力 Min Nitrogen Gas Pressure(psi)";
-            this.dgv_his_MinNitrogenPressure.Name = "dgv_his_MinNitrogenPressure";
-            this.dgv_his_MinNitrogenPressure.ReadOnly = true;
-            this.dgv_his_MinNitrogenPressure.Width = 200;
-            // 
-            // dgv_his_MinNitrogenPressureLowerLimit
-            // 
-            this.dgv_his_MinNitrogenPressureLowerLimit.DataPropertyName = "MinNitrogenPressureLowerLimit";
-            this.dgv_his_MinNitrogenPressureLowerLimit.HeaderText = "最小氮气压力下限(Lower Limit of Min Pressure)";
-            this.dgv_his_MinNitrogenPressureLowerLimit.Name = "dgv_his_MinNitrogenPressureLowerLimit";
-            this.dgv_his_MinNitrogenPressureLowerLimit.ReadOnly = true;
-            this.dgv_his_MinNitrogenPressureLowerLimit.Width = 200;
-            // 
-            // dgv_his_MinNitrogenPressureResult
-            // 
-            this.dgv_his_MinNitrogenPressureResult.DataPropertyName = "MinNitrogenPressureResult";
-            this.dgv_his_MinNitrogenPressureResult.HeaderText = "最小氮气压力结果 Result of Min Pressure";
-            this.dgv_his_MinNitrogenPressureResult.Name = "dgv_his_MinNitrogenPressureResult";
-            this.dgv_his_MinNitrogenPressureResult.ReadOnly = true;
-            this.dgv_his_MinNitrogenPressureResult.Width = 200;
-            // 
-            // dgv_his_MaxNitrogenPressure
-            // 
-            this.dgv_his_MaxNitrogenPressure.DataPropertyName = "MaxNitrogenPressure";
-            this.dgv_his_MaxNitrogenPressure.HeaderText = "最大氮气压力 Max Nitrogen Gas Pressure(psi)";
-            this.dgv_his_MaxNitrogenPressure.Name = "dgv_his_MaxNitrogenPressure";
-            this.dgv_his_MaxNitrogenPressure.ReadOnly = true;
-            this.dgv_his_MaxNitrogenPressure.Width = 200;
-            // 
-            // dgv_his_NitrogenPressureResult
-            // 
-            this.dgv_his_NitrogenPressureResult.DataPropertyName = "NitrogenPressureResult";
-            this.dgv_his_NitrogenPressureResult.HeaderText = "氮气压力结果  Result of NitrogenPressure";
-            this.dgv_his_NitrogenPressureResult.Name = "dgv_his_NitrogenPressureResult";
-            this.dgv_his_NitrogenPressureResult.ReadOnly = true;
-            // 
-            // dgv_his_PowderSupplySpeed
-            // 
-            this.dgv_his_PowderSupplySpeed.DataPropertyName = "PowderSupplySpeed";
-            this.dgv_his_PowderSupplySpeed.HeaderText = "供粉速度 Powder Feeding Rate(g/min)";
-            this.dgv_his_PowderSupplySpeed.Name = "dgv_his_PowderSupplySpeed";
-            this.dgv_his_PowderSupplySpeed.ReadOnly = true;
-            this.dgv_his_PowderSupplySpeed.Width = 200;
-            // 
-            // dgv_his_StartTime
-            // 
-            this.dgv_his_StartTime.DataPropertyName = "StartTime";
-            this.dgv_his_StartTime.HeaderText = "喷枪启动时间 Start Time";
-            this.dgv_his_StartTime.Name = "dgv_his_StartTime";
-            this.dgv_his_StartTime.ReadOnly = true;
-            this.dgv_his_StartTime.Width = 200;
-            // 
-            // dgv_his_EndTime
-            // 
-            this.dgv_his_EndTime.DataPropertyName = "EndTime";
-            this.dgv_his_EndTime.HeaderText = "喷枪停止时间 Stop Time";
-            this.dgv_his_EndTime.Name = "dgv_his_EndTime";
-            this.dgv_his_EndTime.ReadOnly = true;
-            this.dgv_his_EndTime.Width = 200;
-            // 
-            // dgv_his_Beat
-            // 
-            this.dgv_his_Beat.DataPropertyName = "Beat";
-            this.dgv_his_Beat.HeaderText = "冷喷节拍 Cycle Time(s)";
-            this.dgv_his_Beat.Name = "dgv_his_Beat";
-            this.dgv_his_Beat.ReadOnly = true;
-            this.dgv_his_Beat.Width = 200;
-            // 
-            // dgv_his_PlacementTime
-            // 
-            this.dgv_his_PlacementTime.DataPropertyName = "PlacementTime";
-            this.dgv_his_PlacementTime.HeaderText = "激光清洗摆放时间 Scanning Time After Laser Cleaning";
-            this.dgv_his_PlacementTime.Name = "dgv_his_PlacementTime";
-            this.dgv_his_PlacementTime.ReadOnly = true;
-            this.dgv_his_PlacementTime.Width = 200;
-            // 
-            // dgv_his_ThreadRotation
-            // 
-            this.dgv_his_ThreadRotation.DataPropertyName = "ThreadRotation";
-            this.dgv_his_ThreadRotation.HeaderText = "螺杆转速 Auger Speed(°/s)";
-            this.dgv_his_ThreadRotation.Name = "dgv_his_ThreadRotation";
-            this.dgv_his_ThreadRotation.ReadOnly = true;
-            this.dgv_his_ThreadRotation.Width = 200;
-            // 
-            // dgv_his_IntakePressure
-            // 
-            this.dgv_his_IntakePressure.DataPropertyName = "IntakePressure";
-            this.dgv_his_IntakePressure.HeaderText = "进气压力 Intake Pressure(Mpa)";
-            this.dgv_his_IntakePressure.Name = "dgv_his_IntakePressure";
-            this.dgv_his_IntakePressure.ReadOnly = true;
-            this.dgv_his_IntakePressure.Width = 200;
-            // 
-            // dgv_his_IntakePressureLowerLimit
-            // 
-            this.dgv_his_IntakePressureLowerLimit.DataPropertyName = "IntakePressureLowerLimit";
-            this.dgv_his_IntakePressureLowerLimit.HeaderText = "进气压力下限(Lower Limit of Inlet Gas Pressure)";
-            this.dgv_his_IntakePressureLowerLimit.Name = "dgv_his_IntakePressureLowerLimit";
-            this.dgv_his_IntakePressureLowerLimit.ReadOnly = true;
-            this.dgv_his_IntakePressureLowerLimit.Width = 200;
-            // 
-            // Col_IntakeFlow
-            // 
-            this.Col_IntakeFlow.DataPropertyName = "IntakeFlow";
-            this.Col_IntakeFlow.HeaderText = "进气流量";
-            this.Col_IntakeFlow.Name = "Col_IntakeFlow";
-            this.Col_IntakeFlow.ReadOnly = true;
-            // 
-            // dgv_his_IntakePressureResult
-            // 
-            this.dgv_his_IntakePressureResult.DataPropertyName = "IntakePressureResult";
-            this.dgv_his_IntakePressureResult.HeaderText = "进气压力结果 Result of Intake Pressure";
-            this.dgv_his_IntakePressureResult.Name = "dgv_his_IntakePressureResult";
-            this.dgv_his_IntakePressureResult.ReadOnly = true;
-            this.dgv_his_IntakePressureResult.Width = 200;
-            // 
-            // dgv_his_NozzleHeight
-            // 
-            this.dgv_his_NozzleHeight.DataPropertyName = "NozzleHeight";
-            this.dgv_his_NozzleHeight.HeaderText = "喷嘴高度 Nozzle Height(mm)";
-            this.dgv_his_NozzleHeight.Name = "dgv_his_NozzleHeight";
-            this.dgv_his_NozzleHeight.ReadOnly = true;
-            this.dgv_his_NozzleHeight.Width = 200;
-            // 
-            // dgv_his_AverageSpeed
-            // 
-            this.dgv_his_AverageSpeed.DataPropertyName = "AverageSpeed";
-            this.dgv_his_AverageSpeed.HeaderText = "平均粒子速度 Average Speed(m/s)";
-            this.dgv_his_AverageSpeed.Name = "dgv_his_AverageSpeed";
-            this.dgv_his_AverageSpeed.ReadOnly = true;
-            this.dgv_his_AverageSpeed.Width = 200;
-            // 
-            // dgv_his_AverageSpeedUpperLimit
-            // 
-            this.dgv_his_AverageSpeedUpperLimit.DataPropertyName = "AverageSpeedUpperLimit";
-            this.dgv_his_AverageSpeedUpperLimit.HeaderText = "平均粒子速度上限（Upper Limit of Average Speed）";
-            this.dgv_his_AverageSpeedUpperLimit.Name = "dgv_his_AverageSpeedUpperLimit";
-            this.dgv_his_AverageSpeedUpperLimit.ReadOnly = true;
-            this.dgv_his_AverageSpeedUpperLimit.Width = 200;
-            // 
-            // dgv_his_AverageSpeedLowerLimit
-            // 
-            this.dgv_his_AverageSpeedLowerLimit.DataPropertyName = "AverageSpeedLowerLimit";
-            this.dgv_his_AverageSpeedLowerLimit.HeaderText = "平均粒子速度下限（Lower Limit of Average Speed）";
-            this.dgv_his_AverageSpeedLowerLimit.Name = "dgv_his_AverageSpeedLowerLimit";
-            this.dgv_his_AverageSpeedLowerLimit.ReadOnly = true;
-            this.dgv_his_AverageSpeedLowerLimit.Width = 200;
-            // 
-            // dgv_his_AverageSpeedResult
-            // 
-            this.dgv_his_AverageSpeedResult.DataPropertyName = "AverageSpeedResult";
-            this.dgv_his_AverageSpeedResult.HeaderText = "平均粒子速度结果（Result of Average Speed）";
-            this.dgv_his_AverageSpeedResult.Name = "dgv_his_AverageSpeedResult";
-            this.dgv_his_AverageSpeedResult.ReadOnly = true;
-            this.dgv_his_AverageSpeedResult.Width = 200;
-            // 
-            // dgv_his_MaxSpeed
-            // 
-            this.dgv_his_MaxSpeed.DataPropertyName = "MaxSpeed";
-            this.dgv_his_MaxSpeed.HeaderText = "最大粒子速度 Max Speed(m/s)";
-            this.dgv_his_MaxSpeed.Name = "dgv_his_MaxSpeed";
-            this.dgv_his_MaxSpeed.ReadOnly = true;
-            this.dgv_his_MaxSpeed.Width = 200;
-            // 
-            // dgv_his_MinSpeed
-            // 
-            this.dgv_his_MinSpeed.DataPropertyName = "MinSpeed";
-            this.dgv_his_MinSpeed.HeaderText = "最小粒子速度 Min Speed(m/s)";
-            this.dgv_his_MinSpeed.Name = "dgv_his_MinSpeed";
-            this.dgv_his_MinSpeed.ReadOnly = true;
-            this.dgv_his_MinSpeed.Width = 200;
-            // 
-            // dgv_his_MinSpeedLowerLimit
-            // 
-            this.dgv_his_MinSpeedLowerLimit.DataPropertyName = "MinSpeedLowerLimit";
-            this.dgv_his_MinSpeedLowerLimit.HeaderText = "最小粒子速度下限(Lower Limit of Min Speed)";
-            this.dgv_his_MinSpeedLowerLimit.Name = "dgv_his_MinSpeedLowerLimit";
-            this.dgv_his_MinSpeedLowerLimit.ReadOnly = true;
-            this.dgv_his_MinSpeedLowerLimit.Width = 200;
-            // 
-            // dgv_his_MinSpeedResult
-            // 
-            this.dgv_his_MinSpeedResult.DataPropertyName = "MinSpeedResult";
-            this.dgv_his_MinSpeedResult.HeaderText = "最小粒子速度结果 Result of Min Speed";
-            this.dgv_his_MinSpeedResult.Name = "dgv_his_MinSpeedResult";
-            this.dgv_his_MinSpeedResult.ReadOnly = true;
-            this.dgv_his_MinSpeedResult.Width = 200;
-            // 
-            // Column3
-            // 
-            this.Column3.DataPropertyName = "StdDevSpeed";
-            this.Column3.HeaderText = "粒子速度标准偏差值 Speed Standard Deviation(m/s)";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 200;
-            // 
-            // dgv_his_SpeedResult
-            // 
-            this.dgv_his_SpeedResult.DataPropertyName = "SpeedResult";
-            this.dgv_his_SpeedResult.HeaderText = "粒子速度结果 Result of  Speed";
-            this.dgv_his_SpeedResult.Name = "dgv_his_SpeedResult";
-            this.dgv_his_SpeedResult.ReadOnly = true;
-            this.dgv_his_SpeedResult.Width = 200;
-            // 
-            // dgv_his_AverageConcentration
-            // 
-            this.dgv_his_AverageConcentration.DataPropertyName = "AverageConcentration";
-            this.dgv_his_AverageConcentration.HeaderText = "平均粒子浓度 Average Concentration(1/cm2)";
-            this.dgv_his_AverageConcentration.Name = "dgv_his_AverageConcentration";
-            this.dgv_his_AverageConcentration.ReadOnly = true;
-            this.dgv_his_AverageConcentration.Width = 200;
-            // 
-            // dgv_his_AverageConcentrationUpperLimit
-            // 
-            this.dgv_his_AverageConcentrationUpperLimit.DataPropertyName = "AverageConcentrationUpperLimit";
-            this.dgv_his_AverageConcentrationUpperLimit.HeaderText = "平均粒子浓度上限（Upper Limit of Average Concentration）";
-            this.dgv_his_AverageConcentrationUpperLimit.Name = "dgv_his_AverageConcentrationUpperLimit";
-            this.dgv_his_AverageConcentrationUpperLimit.ReadOnly = true;
-            this.dgv_his_AverageConcentrationUpperLimit.Width = 200;
-            // 
-            // dgv_his_AverageConcentrationLowerLimit
-            // 
-            this.dgv_his_AverageConcentrationLowerLimit.DataPropertyName = "AverageConcentrationLowerLimit";
-            this.dgv_his_AverageConcentrationLowerLimit.HeaderText = "平均粒子浓度下限（Lower Limit of Average Concentration）";
-            this.dgv_his_AverageConcentrationLowerLimit.Name = "dgv_his_AverageConcentrationLowerLimit";
-            this.dgv_his_AverageConcentrationLowerLimit.ReadOnly = true;
-            this.dgv_his_AverageConcentrationLowerLimit.Width = 200;
-            // 
-            // dgv_his_AverageConcentrationResult
-            // 
-            this.dgv_his_AverageConcentrationResult.DataPropertyName = "AverageConcentrationResult";
-            this.dgv_his_AverageConcentrationResult.HeaderText = "平均粒子浓度结果（Result of Average Concentration）";
-            this.dgv_his_AverageConcentrationResult.Name = "dgv_his_AverageConcentrationResult";
-            this.dgv_his_AverageConcentrationResult.ReadOnly = true;
-            this.dgv_his_AverageConcentrationResult.Width = 200;
-            // 
-            // dgv_his_MaxConcentration
-            // 
-            this.dgv_his_MaxConcentration.DataPropertyName = "MaxConcentration";
-            this.dgv_his_MaxConcentration.HeaderText = "最大粒子浓度 Max Concentration(1/cm2)";
-            this.dgv_his_MaxConcentration.Name = "dgv_his_MaxConcentration";
-            this.dgv_his_MaxConcentration.ReadOnly = true;
-            this.dgv_his_MaxConcentration.Width = 200;
-            // 
-            // dgv_his_MinConcentration
-            // 
-            this.dgv_his_MinConcentration.DataPropertyName = "MinConcentration";
-            this.dgv_his_MinConcentration.HeaderText = "最小粒子浓度 Min Concentration(1/cm2)";
-            this.dgv_his_MinConcentration.Name = "dgv_his_MinConcentration";
-            this.dgv_his_MinConcentration.ReadOnly = true;
-            this.dgv_his_MinConcentration.Width = 200;
-            // 
-            // dgv_his_StdDevConcentration
-            // 
-            this.dgv_his_StdDevConcentration.DataPropertyName = "StdDevConcentration";
-            this.dgv_his_StdDevConcentration.HeaderText = "粒子浓度标准偏差值 Concentration Standard Deviation";
-            this.dgv_his_StdDevConcentration.Name = "dgv_his_StdDevConcentration";
-            this.dgv_his_StdDevConcentration.ReadOnly = true;
-            this.dgv_his_StdDevConcentration.Width = 200;
-            // 
-            // dgv_his_ConcentrationResult
-            // 
-            this.dgv_his_ConcentrationResult.DataPropertyName = "ConcentrationResult";
-            this.dgv_his_ConcentrationResult.HeaderText = "粒子浓度结果 Result of Concentration";
-            this.dgv_his_ConcentrationResult.Name = "dgv_his_ConcentrationResult";
-            this.dgv_his_ConcentrationResult.ReadOnly = true;
-            this.dgv_his_ConcentrationResult.Width = 200;
-            // 
-            // dgv_his_AveragePosition
-            // 
-            this.dgv_his_AveragePosition.DataPropertyName = "AveragePosition";
-            this.dgv_his_AveragePosition.HeaderText = "粒子位置平均值 Average Position";
-            this.dgv_his_AveragePosition.Name = "dgv_his_AveragePosition";
-            this.dgv_his_AveragePosition.ReadOnly = true;
-            this.dgv_his_AveragePosition.Width = 200;
-            // 
-            // dgv_his_MaxPosition
-            // 
-            this.dgv_his_MaxPosition.DataPropertyName = "MaxPosition";
-            this.dgv_his_MaxPosition.HeaderText = "粒子位置最大值  Max Position";
-            this.dgv_his_MaxPosition.Name = "dgv_his_MaxPosition";
-            this.dgv_his_MaxPosition.ReadOnly = true;
-            this.dgv_his_MaxPosition.Width = 200;
-            // 
-            // dgv_his_MinPosition
-            // 
-            this.dgv_his_MinPosition.DataPropertyName = "MinPosition";
-            this.dgv_his_MinPosition.HeaderText = "粒子位置最小值 Min Position";
-            this.dgv_his_MinPosition.Name = "dgv_his_MinPosition";
-            this.dgv_his_MinPosition.ReadOnly = true;
-            this.dgv_his_MinPosition.Width = 200;
-            // 
-            // dgv_his_StdDevPosition
-            // 
-            this.dgv_his_StdDevPosition.DataPropertyName = "StdDevPosition";
-            this.dgv_his_StdDevPosition.HeaderText = "粒子位置标准偏差值 Position Standard Deviation";
-            this.dgv_his_StdDevPosition.Name = "dgv_his_StdDevPosition";
-            this.dgv_his_StdDevPosition.ReadOnly = true;
-            this.dgv_his_StdDevPosition.Width = 200;
-            // 
-            // dgv_his_Location
-            // 
-            this.dgv_his_Location.DataPropertyName = "Location";
-            this.dgv_his_Location.HeaderText = "喷淋位置 Spraying Position";
-            this.dgv_his_Location.Name = "dgv_his_Location";
-            this.dgv_his_Location.ReadOnly = true;
-            this.dgv_his_Location.Width = 200;
-            // 
-            // dgv_his_PlacementHour
-            // 
-            this.dgv_his_PlacementHour.DataPropertyName = "PlacementHour";
-            this.dgv_his_PlacementHour.HeaderText = "摆放时间（小时） Placement Time(h)";
-            this.dgv_his_PlacementHour.Name = "dgv_his_PlacementHour";
-            this.dgv_his_PlacementHour.ReadOnly = true;
-            this.dgv_his_PlacementHour.Width = 200;
+            // lb_clear_heartbeat
+            // 
+            this.lb_clear_heartbeat.BackColor = System.Drawing.Color.Gray;
+            this.lb_clear_heartbeat.Location = new System.Drawing.Point(30, 9);
+            this.lb_clear_heartbeat.Name = "lb_clear_heartbeat";
+            this.lb_clear_heartbeat.Size = new System.Drawing.Size(16, 16);
+            this.lb_clear_heartbeat.TabIndex = 3;
             // 
             // FrmMain
             // 
@@ -2574,5 +2734,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_StdDevPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_Location;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_PlacementHour;
+        private System.Windows.Forms.Label lb_clear_heartbeat;
     }
 }

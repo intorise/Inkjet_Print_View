@@ -149,7 +149,7 @@ namespace PR_Spc_Tester.Moudules
         {
             try
             {
-                return mc_net.Write("D5750", val);
+                return mc_net.Write("D5003", val);
             }
             catch (Exception ex)
             {

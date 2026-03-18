@@ -47,10 +47,10 @@ namespace PR_Spc_Tester
         private int TestCount = 0;
         private int LastId = 0; //最新ID;
         private bool PlcEnable = false;
-        private PLCAlarmDal pLCAlarmDal=new PLCAlarmDal();
-        private PLCAlarm _pLCAlarm =new PLCAlarm();
-        TcpClientHelper gunHelp=new TcpClientHelper();
-        SamplingData _samlingData= new SamplingData();
+        private PLCAlarmDal pLCAlarmDal = new PLCAlarmDal();
+        private PLCAlarm _pLCAlarm = new PLCAlarm();
+        TcpClientHelper gunHelp = new TcpClientHelper();
+        SamplingData _samlingData = new SamplingData();
         private static readonly object _fileLock = new object();
         private readonly object _listLock = new object();
         TestProjectDal projectdal = new TestProjectDal();
@@ -64,6 +64,8 @@ namespace PR_Spc_Tester
         /// 测试项目
         /// </summary>
         TestProjectDal testProjectDal = new TestProjectDal();
+        int placementTimeout = 6;
+
         private void InitializeAlarmDictionary()
         {
             alarmDictionary.Add("D5800", "喷淋左移载顶升气缸动作故障");
@@ -109,12 +111,12 @@ namespace PR_Spc_Tester
         private async Task ReadPLCAlarm()
         {
             await Task.Delay(500);
-            string overPLCAddress="D5800";
+            string overPLCAddress = "D5800";
             try
             {
                 while (true)
                 {
-                   
+
                     for (int i = 0; i < 38; i++)
                     {
                         string PLCAddress = "D5800";
@@ -124,7 +126,7 @@ namespace PR_Spc_Tester
 
                         // 重新组合字符串
                         PLCAddress = "D" + number.ToString();
-                        
+
                         OperateResult<short> resultAlarm = plcHelper.ReadPLCAlarm(PLCAddress);
                         //LogService.AddLogToEnqueue($"从{PLCAddress}读取结果{resultAlarm.Content}");
                         if (resultAlarm != null && resultAlarm.Content == 1)
@@ -138,7 +140,7 @@ namespace PR_Spc_Tester
                                     AddTime = DateTime.Now
                                 });
                                 _pLCAlarm.AddTime = DateTime.Now;
-                                _pLCAlarm.AlarmMessage= alarmDictionary[PLCAddress].Trim();
+                                _pLCAlarm.AlarmMessage = alarmDictionary[PLCAddress].Trim();
                                 ShowPLCAlarm(_pLCAlarm);
                             }
                         }
@@ -162,11 +164,14 @@ namespace PR_Spc_Tester
         }
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            LogService.AddLogToEnqueue("程序启动...");
+            int.TryParse(ConfigAppSettings.GetValue("PlacementTimeout"), out placementTimeout);
+            LogService.AddLogToEnqueue("摆放超时时间: " + placementTimeout+"H");
             list = projectdal.GetList();
             DateTime timeNow = DateTime.Now;
             this.Invoke(new Action(() =>
             {
-                uiLabel2.Text=timeNow.ToString();
+                uiLabel2.Text = timeNow.ToString();
             }));
             string dateStr = timeNow.ToString("yyyy-MM-dd");
             uidtp_start.Value = Convert.ToDateTime($"{dateStr} 00:00:00");
@@ -199,16 +204,18 @@ namespace PR_Spc_Tester
                         bool resultGun = gunHelp.ConnectServer();
                         bool resultClear = clearHelper.ConnectPLC();
                         //bool resultGun = true;
-                        if (resultPLC&& resultGun&& resultClear)
+                        if (resultPLC && resultGun && resultClear)
                         {
                             LogService.AddLogToEnqueue("PLC连接成功！");
                             Task.Factory.StartNew(PlcClearAction, TaskCreationOptions.LongRunning);
+                            Task.Factory.StartNew(ClearHeartbeatAction, TaskCreationOptions.LongRunning);//clear plc heartbeat
                             Task.Factory.StartNew(PlcHeavyAction, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(PlcHeavyAction2, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(PlcColdSprayAction, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(PlcMonitorAction, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(ReadPLCAlarm, TaskCreationOptions.LongRunning);
                             Task.Factory.StartNew(WritePLCTemperature, TaskCreationOptions.LongRunning);
+                            Task.Factory.StartNew(WritePLCTemperature2, TaskCreationOptions.LongRunning);
                             break;
                         }
                         else
@@ -217,10 +224,11 @@ namespace PR_Spc_Tester
                             Thread.Sleep(3000);
                         }
                     }
-                } else
+                }
+                else
                 {
                     LogService.AddLogToEnqueue($"数据端，不读取PLC数据");
-                    Task.Factory.StartNew(UpdateNewData,TaskCreationOptions.LongRunning);
+                    Task.Factory.StartNew(UpdateNewData, TaskCreationOptions.LongRunning);
                 }
             }));
 
@@ -285,7 +293,7 @@ namespace PR_Spc_Tester
             {
                 Thread.Sleep(3000);
                 TestData testData = dal.GetLastDataById(LastId);
-                if(testData!=null)
+                if (testData != null)
                 {
                     LastId = testData.ID;
                     UpdateUI(testData);
@@ -293,19 +301,19 @@ namespace PR_Spc_Tester
                 }
             }
         }
-        private void IsOverTime(TestData testData,string code)
+        private void IsOverTime(TestData testData, string code)
         {
             DateTime startTime = DateTime.Now;
-            if (testData.PlacementTime == null&&testData!=null)
+            if (testData.PlacementTime == null && testData != null)
             {
                 LogService.AddLogToEnqueue($"比对条码{code}摆放时间为空", EnumMsgType.Exception);
                 return;
             }
             DateTime placementTime = (DateTime)testData.PlacementTime;
             TimeSpan duration = startTime - placementTime;
-            if (duration.TotalHours > 6)
+            if (duration.TotalHours > placementTimeout)
             {
-                LogService.AddLogToEnqueue($"二维码{code}时间间隔大于6小时", EnumMsgType.Exception);
+                LogService.AddLogToEnqueue($"二维码{code}时间间隔大于{placementTimeout}小时", EnumMsgType.Exception);
                 if (!plcHelper.WriteOverTime(2).IsSuccess)
                 {
                     plcHelper.WriteOverTime(2);
@@ -320,11 +328,40 @@ namespace PR_Spc_Tester
                 }
             }
         }
+
+        private void IsOverTime2(TestData testData, string code)
+        {
+            DateTime startTime = DateTime.Now;
+            if (testData.PlacementTime == null && testData != null)
+            {
+                LogService.AddLogToEnqueue($"比对2->比对条码{code}摆放时间为空", EnumMsgType.Exception);
+                return;
+            }
+            DateTime placementTime = (DateTime)testData.PlacementTime;
+            TimeSpan duration = startTime - placementTime;
+            if (duration.TotalHours > placementTimeout)
+            {
+                LogService.AddLogToEnqueue($"比对2->二维码{code}时间间隔大于{placementTimeout}小时", EnumMsgType.Exception);
+                if (!plcHelper.WriteOverTime2(2).IsSuccess)
+                {
+                    plcHelper.WriteOverTime2(2);
+                }
+            }
+            else
+            {
+                LogService.AddLogToEnqueue($"比对2->二维码{code}时间间隔正常", EnumMsgType.Info);
+                if (!plcHelper.WriteOverTime2(1).IsSuccess)
+                {
+                    plcHelper.WriteOverTime2(1);
+                }
+            }
+        }
         /// <summary>
-        /// 获取冷喷测试数据;
+        /// 获取1号冷喷测试数据;
         /// </summary>
         private async Task PlcColdSprayAction()
         {
+            LogService.AddLogToEnqueue($"冷喷->1号对比线程开始", EnumMsgType.Info);
             TestData testData = new TestData();
             DateTime startTime;
             DateTime endTime;
@@ -333,18 +370,21 @@ namespace PR_Spc_Tester
                 Thread.Sleep(1000);
                 try
                 {
-                    OperateResult<short> result = plcHelper.GetColdSprayReadReady();
+                    // 与PLC的握手约定：
+                    // D5670 = 1 表示PLC已准备好本次冷喷数据；
+                    // 上位机完成冷喷采样后，等待PLC将D5670写为2，随后上位机再写复位信号。
+                    OperateResult<short> result = plcHelper.GetColdSprayReadReady();//PLC 5670地址为冷喷读取准备好信号，值为1时准备好，等待PLC写入2表示测试完成
                     if (result.Content == 1)
                     {
-                        startTime= DateTime.Now;
+                        startTime = DateTime.Now;
                         LogService.AddLogToEnqueue("收到冷喷读取数据信号");
-                        OperateResult<string> resultCode = plcHelper.GetColdSprayCode();
+                        OperateResult<string> resultCode = plcHelper.GetColdSprayCode();//D5570 地址为冷喷二维码，长度49
                         if (resultCode.Content == "")
                         {
                             LogService.AddLogToEnqueue($"读取冷喷二维码为{resultCode.Content}");
                             continue;
                         }
-                        
+
                         string coldSprayCode = resultCode.Content.Trim();
                         LogService.AddLogToEnqueue($"读取冷喷二维码为{coldSprayCode}", EnumMsgType.Info);
                         testData = dal.GetLastDataByCode(coldSprayCode);
@@ -360,12 +400,13 @@ namespace PR_Spc_Tester
                             {
                                 await Task.Delay(1000);
                                 OperateResult<short> resultNotCodeRest = plcHelper.ResetAbnormal();
-                                if (resultNotCodeRest.Content==1)
+                                if (resultNotCodeRest.Content == 1)
                                 {
                                     LogService.AddLogToEnqueue($"冷喷条码{coldSprayCode}不存在于数据库库异常已复位，继续测试");
                                     break;
                                 }
                             }
+                            continue;
                         }
                         DateTime placementTime = (DateTime)testData.PlacementTime;
                         TimeSpan duration = startTime - placementTime;
@@ -385,16 +426,27 @@ namespace PR_Spc_Tester
                                 await Task.Delay(200);
                                 testData = gunHelp.SendString(testData, resultRest.Content);
                                 OperateResult<short> resultOver = plcHelper.GetColdSprayReadReady();
+                                // PLC写2表示本次冷喷流程结束，上位机可进行收尾与落库。
                                 if (resultOver.Content == 2)
                                 {
                                     break;
-                                }                               
+                                }
                             }
                             endTime = DateTime.Now;
                             testData.StartTime = startTime;
                             testData.EndTime = endTime;
+                            // 注意：Seconds 仅返回0~59的“秒分量”，不是总秒数。
+                            // 当前实现可能出现节拍显示为0（例如持续时间<1秒，或跨分钟后秒分量相同）。
+                            // 此处保留现有逻辑，问题分析见README与答复说明。
                             duration = endTime - startTime;
-                            testData.Beat = duration.Seconds;
+                            testData.Beat = (float)Math.Round(duration.TotalSeconds, 2);
+                            LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 结束:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍:{testData.Beat}s", EnumMsgType.Info);
+                            if (testData.Beat <= 0)
+                            {
+                                // 理论上不会<=0，如出现则保底写入最小值并留日志，避免后续利用率分母为0。
+                                testData.Beat = 0.01f;
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}节拍异常<=0，已回退为{testData.Beat}s", EnumMsgType.Exception);
+                            }
                             if (testData.IntakePressure < testData.IntakePressureLowerLimit)
                             {
                                 testData.IntakePressureResult = "NG";
@@ -418,19 +470,21 @@ namespace PR_Spc_Tester
                             }
                         }
                     }
-                   
+
                 }
                 catch (Exception ex)
                 {
-                    LogService.AddLogToEnqueue("采集冷喷数据异常:" + ex.Message+ex.StackTrace, EnumMsgType.Exception);
+                    LogService.AddLogToEnqueue("采集冷喷数据异常:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                 }
             }
         }
+
         /// <summary>
         /// 读取监控数据
         /// </summary>
         private async Task PlcMonitorAction()
         {
+            LogService.AddLogToEnqueue("监控->Start...");
             while (true)
             {
                 try
@@ -447,7 +501,7 @@ namespace PR_Spc_Tester
                             LogService.AddLogToEnqueue("读取监控二维码为空", EnumMsgType.Exception);
                             continue;
                         }
-                       
+
                         string monitorCode = resultCode.Content.Trim();
                         LogService.AddLogToEnqueue($"读取监控二维码为{monitorCode}", EnumMsgType.Info);
                         TestData testData = dal.GetLastDataByCode(monitorCode);
@@ -463,20 +517,21 @@ namespace PR_Spc_Tester
                             {
                                 await Task.Delay(1000);
                                 OperateResult<short> resultNotCodeRest = plcHelper.ResetAbnormal();
-                                if (resultNotCodeRest.Content==1)
+                                if (resultNotCodeRest.Content == 1)
                                 {
                                     LogService.AddLogToEnqueue($"监控条码{monitorCode}不存在数据库异常已复位，继续测试");
                                     break;
                                 }
-                            };
+                            }
+                            continue;
                         }
-                        List<double> temperatureList = new List<double> ();
-                        List<double> nitrogenPressureList = new List<double> ();
-                        List<double> speedList = new List<double> ();
+                        List<double> temperatureList = new List<double>();
+                        List<double> nitrogenPressureList = new List<double>();
+                        List<double> speedList = new List<double>();
                         List<double> positionList = new List<double>();
-                        List<double> concentrationList = new List<double> ();
-                        List<DateTime> timesList= new List<DateTime>();
-                        
+                        List<double> concentrationList = new List<double>();
+                        List<DateTime> timesList = new List<DateTime>();
+
                         using (HiWatchOpcMonitor opcMonitor = new HiWatchOpcMonitor())
                         {
                             string url = ConfigAppSettings.GetValue("MonitorIP").ToString();
@@ -485,6 +540,7 @@ namespace PR_Spc_Tester
                             LogService.AddLogToEnqueue($"OPC UA连接成功");
                             // 开始收集OPC UA数据
                             LogService.AddLogToEnqueue($"开始采集OPC UA数据");
+                            // 每个条码开始监控前清空缓存，避免将上一次条码的样本混入本次统计。
                             opcMonitor.ClearData();
                             // 添加事件处理程序
                             opcMonitor.OnSpeedReceived += (object sender, OpcValueEventArgs e) =>
@@ -526,15 +582,22 @@ namespace PR_Spc_Tester
                                     concentrationList.Add((float)e.Density);
                                     positionList.Add((float)e.Position);
                                     speedList.Add((float)e.Speed);
+                                    // 温度/氮气压力来自喷枪TCP线程写入的共享结构，不是OPC节点本身。
+                                    // 若喷枪链路无数据，这两组序列会被持续写入0。
                                     temperatureList.Add((float)_samlingData.temperature);
                                     nitrogenPressureList.Add((float)_samlingData.pressure);
                                     SaveCurrentDataToCsv(testData.Code);
+
+                                    if (_samlingData.ID % 20 == 0)
+                                    {
+                                        LogService.AddLogToEnqueue($"监控->条码{testData.Code}已采样{_samlingData.ID}点 速度:{e.Speed:F2} 浓度:{e.Density:F2} 位置:{e.Position:F2}", EnumMsgType.Info);
+                                    }
                                 }
                             };
                             // 等待PLC完成信号
                             while (true)
                             {
-                                await Task.Delay(1000);                                
+                                await Task.Delay(1000);
                                 OperateResult<short> resultOver = plcHelper.GetMonitorReadReady();
                                 if (resultOver.Content == 2)
                                 {
@@ -542,7 +605,9 @@ namespace PR_Spc_Tester
                                 }
                             }
                             LogService.AddLogToEnqueue("记录监控完成信号=2");
+                            LogService.AddLogToEnqueue($"监控->条码{testData.Code}采样完成，原始样本数 speed:{speedList.Count} density:{concentrationList.Count} position:{positionList.Count} temp:{temperatureList.Count} pressure:{nitrogenPressureList.Count}", EnumMsgType.Info);
                             opcMonitor.GetCurrentValues(testData);
+                            LogService.AddLogToEnqueue($"监控->条码{testData.Code}统计结果 平均速度:{testData.AverageSpeed:F2} 平均浓度:{testData.AverageConcentration:F2} 平均位置:{testData.AveragePosition:F2}", EnumMsgType.Info);
                             testData.AverageSpeedResult = JudgeUpperLower(testData.AverageSpeed, testData.AverageSpeedUpperLimit, testData.AverageSpeedLowerLimit, "平均速度");
                             testData.MinSpeedResult = JudgeUpperLower(testData.MinSpeed, 0, testData.MinSpeedLowerLimit, "最小速度");
                             testData.AverageConcentrationResult = JudgeUpperLower(testData.AverageConcentration, testData.AverageConcentrationUpperLimit, testData.AverageConcentrationLowerLimit, "平均浓度");
@@ -557,17 +622,17 @@ namespace PR_Spc_Tester
                             testData.MinNitrogenPressure = nitrogenPressureList.MinExcludingZero();
                             testData.MaxNitrogenPressure = (float)(nitrogenPressureList.Count > 0 ? nitrogenPressureList.Max() : 0);
                             testData.AverageNitrogenPressureResult = JudgeUpperLower(testData.AverageNitrogenPressure, testData.AverageNitrogenPressureUpperLimit, testData.AverageNitrogenPressureLowerLimit, "平均氮气压力");
-                            testData.MinNitrogenPressureResult = JudgeUpperLower(testData.MinNitrogenPressure,0, testData.MinNitrogenPressureLowerLimit, "最小氮气压力");
-                            testData.TemperatureResult = testData.AverageTemperatureResult =="OK"&& testData.MinTemperatureResult=="OK" ? "OK" : "NG";
-                            testData.NitrogenPressureResult = testData.AverageNitrogenPressureResult == "OK"&& testData.MinNitrogenPressureResult == "OK" ? "OK" : "NG";
-                            testData.SpeedResult=testData.AverageSpeedResult == "OK"&&testData.MinSpeedResult == "OK" ? "OK" : "NG";
+                            testData.MinNitrogenPressureResult = JudgeUpperLower(testData.MinNitrogenPressure, 0, testData.MinNitrogenPressureLowerLimit, "最小氮气压力");
+                            testData.TemperatureResult = testData.AverageTemperatureResult == "OK" && testData.MinTemperatureResult == "OK" ? "OK" : "NG";
+                            testData.NitrogenPressureResult = testData.AverageNitrogenPressureResult == "OK" && testData.MinNitrogenPressureResult == "OK" ? "OK" : "NG";
+                            testData.SpeedResult = testData.AverageSpeedResult == "OK" && testData.MinSpeedResult == "OK" ? "OK" : "NG";
                             testData.ConcentrationResult = testData.AverageConcentrationResult == "OK" ? "OK" : "NG";
                             LogService.AddLogToEnqueue("记录监控完成信号=2");
                             if (!plcHelper.ResetMonitorReady().IsSuccess)
                             {
                                 plcHelper.ResetMonitorReady();
                             }
-                            
+
                             // 保存数据
                             if (dal.UpMonitordate(testData))
                             {
@@ -577,10 +642,10 @@ namespace PR_Spc_Tester
                             {
                                 dal.UpMonitordate(testData);
                             }
-                            GenerateScatterPlotFromLinkedList(timesList, temperatureList, nitrogenPressureList, speedList, concentrationList,positionList, testData.Code);
+                            GenerateScatterPlotFromLinkedList(timesList, temperatureList, nitrogenPressureList, speedList, concentrationList, positionList, testData.Code);
                             dal.DeleteByWhere();
                         }
-                       
+
                     }
                 }
                 catch (Exception ex)
@@ -594,11 +659,13 @@ namespace PR_Spc_Tester
                 }
             }
         }
+
         /// <summary>
         /// 获取称重测试数据;
         /// </summary>
         private void PlcHeavyAction()
         {
+            LogService.AddLogToEnqueue("称重1->Start...");
             while (true)
             {
                 Thread.Sleep(1000);
@@ -635,46 +702,54 @@ namespace PR_Spc_Tester
                                     LogService.AddLogToEnqueue($"称重条码{heavyCode}不存在数据库异常已复位，继续测试");
                                     break;
                                 }
-                            };
+                            }
+                            continue;
                         }
                         testData = plcHelper.GetTestData(testData);
                         if (testData != null)
                         {
                             int retryTime = 0;
-                            while (retryTime++<3)
+                            while (retryTime++ < 3)
                             {
                                 if (testData.PreSprayWeight == 0 || testData.PostSprayWeight == 0 || testData.SedimentationWeight == 0
                                     || testData.WeightUpperLimit == 0 || testData.WeightLowerLimit == 0)
                                 {
-                                    Thread.Sleep(retryTime*200);
-                                    LogService.AddLogToEnqueue($"第{retryTime+1}次读取到0值数据，重读!");
+                                    Thread.Sleep(retryTime * 200);
+                                    LogService.AddLogToEnqueue($"第{retryTime + 1}次读取到0值数据，重读!");
                                     testData = plcHelper.GetTestData(testData);
                                 }
                             }
-                            while (true)
+                            // 银粉利用率计算依赖Beat（冷喷节拍，单位秒）：
+                            // utilization = 沉积重量 / (供粉速度(g/min) / 60 * Beat(s))
+                            // 若Beat=0，分母会变0，后续被判定为Infinity/NaN并强制写成0%。
+                            // 这也是“利用率长期为0%”的直接触发条件之一。
+                            double denominator = testData.PowderSupplySpeed / 60.0 * testData.Beat;
+                            LogService.AddLogToEnqueue($"称重1->利用率输入 条码:{testData.Code} 沉积重量:{testData.SedimentationWeight:F4} 供粉速度:{testData.PowderSupplySpeed:F4} 节拍:{testData.Beat:F2}s 分母:{denominator:F6}", EnumMsgType.Info);
+                            if (denominator <= 0)
                             {
-                                Thread.Sleep(500);
-                                OperateResult<short> resultOver = plcHelper.GetReadReady();
-                                if (resultOver.Content == 2)
-                                {
-                                    break;
-                                }
-                            }
-                            double utilizationRate = testData.SedimentationWeight / (testData.PowderSupplySpeed / 60.0 * testData.Beat);
-                            if (double.IsInfinity(utilizationRate) || double.IsNaN(utilizationRate))
-                            {
-                                testData.UtilizationRate = "0%"; // 或其他默认值
+                                testData.UtilizationRate = "0%";
+                                LogService.AddLogToEnqueue($"称重1->条码{testData.Code}利用率分母<=0，按0%处理", EnumMsgType.Exception);
                             }
                             else
                             {
-                                testData.UtilizationRate = ((float)utilizationRate*100).ToString("0.00")+ "%";
+                                double utilizationRate = testData.SedimentationWeight / denominator;
+                                if (double.IsInfinity(utilizationRate) || double.IsNaN(utilizationRate))
+                                {
+                                    testData.UtilizationRate = "0%";
+                                    LogService.AddLogToEnqueue($"称重1->条码{testData.Code}利用率计算结果非法({utilizationRate})，按0%处理", EnumMsgType.Exception);
+                                }
+                                else
+                                {
+                                    testData.UtilizationRate = ((float)utilizationRate * 100).ToString("0.00") + "%";
+                                    LogService.AddLogToEnqueue($"称重1->条码{testData.Code}利用率={testData.UtilizationRate}", EnumMsgType.Info);
+                                }
                             }
                             LogService.AddLogToEnqueue("记录称重完成信号=2");
-                            if (!plcHelper.ResetReady().IsSuccess)
+                            if (!plcHelper.ResetReady().IsSuccess)//->PLC D5700,2
                             {
                                 plcHelper.ResetReady();
                             }
-                           
+
                             if (dal.UpHeavydate(testData))
                             {
                                 UpdateUI(testData);
@@ -683,20 +758,20 @@ namespace PR_Spc_Tester
                             {
                                 LogService.AddLogToEnqueue($"数据库中不存在{heavyCode}", EnumMsgType.Exception);
                             }
-                           
+
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogService.AddLogToEnqueue("采集称重数据异常:" + ex.Message+ex.StackTrace, EnumMsgType.Exception);
+                    LogService.AddLogToEnqueue("采集称重数据异常:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                 }
             }
         }
 
         private void PlcClearAction()
         {
-            LogService.AddLogToEnqueue("激光清洗->ready...");
+            LogService.AddLogToEnqueue("激光清洗->Start...");
             while (true)
             {
                 Thread.Sleep(1000);
@@ -778,6 +853,7 @@ namespace PR_Spc_Tester
                         if (ret)
                         {
                             clearHelper.WriteAddCodeOK();
+                            UpdateClearUI(testData);
                             LogService.AddLogToEnqueue($"激光清洗->二维码{heavyCode}添加成功，时间:{DateTime.Now}", EnumMsgType.Info);
                         }
                         else
@@ -794,11 +870,66 @@ namespace PR_Spc_Tester
             }
         }
 
+        private void ClearHeartbeatAction()
+        {
+            LogService.AddLogToEnqueue("激光清洗->心跳Start...");
+            int failedTimes = 0;
+            while (true)
+            {
+                Thread.Sleep(1000);
+                try
+                {
+                    if (!clearHelper.IsConnected())
+                    {
+                        bool result = clearHelper.ConnectPLC();
+                        LogService.AddLogToEnqueue($"激光清洗->清洗机PLC重连结果：{result}");
+                        continue;
+                    }
+
+                    // 交替写入心跳值
+                    OperateResult resultWrite = clearHelper.WritePCHeart(1);
+                    if (resultWrite.IsSuccess)
+                    {
+                        // 可选：更新UI显示心跳状态（比如标签闪烁）
+                        // 这里可以简化处理
+                        ControlHelper.Invoke(lb_heartbeat, delegate
+                        {
+                            lb_clear_heartbeat.BackColor = Color.Green;
+                        });
+                        Thread.Sleep(500); // 短暂延时
+                        clearHelper.WritePCHeart(0);
+                        failedTimes = 0; // 成功则重置失败计数
+                    }
+                    else
+                    {
+                        failedTimes++;
+                        ControlHelper.Invoke(lb_heartbeat, delegate
+                        {
+                            lb_clear_heartbeat.BackColor = Color.Red;
+                        });
+                        LogService.AddLogToEnqueue($"激光清洗->写入清洗机PLC心跳失败: {resultWrite.Message}", EnumMsgType.Error);
+                    }
+
+                    if (failedTimes >= 3)
+                    {
+                        failedTimes = 0;
+                        LogService.AddLogToEnqueue("激光清洗->清洗机PLC通信故障，尝试重连...", EnumMsgType.Error);
+                        clearHelper.ConnectPLC();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogService.AddLogToEnqueue($"激光清洗->清洗机心跳异常: {ex.Message}", EnumMsgType.Exception);
+                }
+            }
+        }
+
         /// <summary>
         /// 获取称重2测试数据;
         /// </summary>
         private void PlcHeavyAction2()
         {
+            LogService.AddLogToEnqueue("称重2->Start...");
             while (true)
             {
                 Thread.Sleep(1000);
@@ -807,21 +938,21 @@ namespace PR_Spc_Tester
                     OperateResult<short> result = plcHelper.GetReadReady2();
                     if (result.Content == 1)
                     {
-                        LogService.AddLogToEnqueue("[称重2]-收到称重读取数据信号");
+                        LogService.AddLogToEnqueue("称重2->-收到称重读取数据信号");
                         OperateResult<string> resultCode = plcHelper.GetHeaverCode2();
                         if (resultCode.Content == "")
                         {
-                            LogService.AddLogToEnqueue($"[称重2]-读取称重二维码为空", EnumMsgType.Exception);
+                            LogService.AddLogToEnqueue($"称重2->-读取称重二维码为空", EnumMsgType.Exception);
                             continue;
                         }
                         string heavyCode = resultCode.Content;
-                        LogService.AddLogToEnqueue($"[称重2]-读取称重二维码为{heavyCode}", EnumMsgType.Info);
+                        LogService.AddLogToEnqueue($"称重2->-读取称重二维码为{heavyCode}", EnumMsgType.Info);
                         TestData testData = new TestData();
                         testData = dal.GetLastDataByCode(heavyCode);
                         Thread.Sleep(100);
                         if (testData == null)
                         {
-                            LogService.AddLogToEnqueue($"[称重2]-称重条码{heavyCode}不存在数据库中", EnumMsgType.Exception);
+                            LogService.AddLogToEnqueue($"称重2->-称重条码{heavyCode}不存在数据库中", EnumMsgType.Exception);
                             if (!plcHelper.WriteNotCode(1).IsSuccess)
                             {
                                 plcHelper.WriteNotCode(1);
@@ -832,11 +963,11 @@ namespace PR_Spc_Tester
                                 OperateResult<short> resultNotCodeRest = plcHelper.ResetAbnormal();
                                 if (resultNotCodeRest.Content == 1)
                                 {
-                                    LogService.AddLogToEnqueue($"[称重2]-称重条码{heavyCode}不存在数据库异常已复位，继续测试");
+                                    LogService.AddLogToEnqueue($"称重2->-称重条码{heavyCode}不存在数据库异常已复位，继续测试");
                                     break;
                                 }
                             }
-                            ;
+                            continue;
                         }
                         testData = plcHelper.GetTestData2(testData);
                         if (testData != null)
@@ -848,29 +979,34 @@ namespace PR_Spc_Tester
                                     || testData.WeightUpperLimit == 0 || testData.WeightLowerLimit == 0)
                                 {
                                     Thread.Sleep(retryTime * 200);
-                                    LogService.AddLogToEnqueue($"[称重2]-第{retryTime + 1}次读取到0值数据，重读!");
+                                    LogService.AddLogToEnqueue($"称重2->-第{retryTime + 1}次读取到0值数据，重读!");
                                     testData = plcHelper.GetTestData2(testData);
                                 }
                             }
-                            while (true)
+                            // 与称重1一致，称重2利用率同样依赖Beat。
+                            // 若冷喷节拍异常为0，这里会得到Infinity/NaN并被写成0%。
+                            double denominator = testData.PowderSupplySpeed / 60.0 * testData.Beat;
+                            LogService.AddLogToEnqueue($"称重2->利用率输入 条码:{testData.Code} 沉积重量:{testData.SedimentationWeight:F4} 供粉速度:{testData.PowderSupplySpeed:F4} 节拍:{testData.Beat:F2}s 分母:{denominator:F6}", EnumMsgType.Info);
+                            if (denominator <= 0)
                             {
-                                Thread.Sleep(500);
-                                OperateResult<short> resultOver = plcHelper.GetReadReady2();
-                                if (resultOver.Content == 2)
-                                {
-                                    break;
-                                }
-                            }
-                            double utilizationRate = testData.SedimentationWeight / (testData.PowderSupplySpeed / 60.0 * testData.Beat);
-                            if (double.IsInfinity(utilizationRate) || double.IsNaN(utilizationRate))
-                            {
-                                testData.UtilizationRate = "0%"; // 或其他默认值
+                                testData.UtilizationRate = "0%";
+                                LogService.AddLogToEnqueue($"称重2->条码{testData.Code}利用率分母<=0，按0%处理", EnumMsgType.Exception);
                             }
                             else
                             {
-                                testData.UtilizationRate = ((float)utilizationRate * 100).ToString("0.00") + "%";
+                                double utilizationRate = testData.SedimentationWeight / denominator;
+                                if (double.IsInfinity(utilizationRate) || double.IsNaN(utilizationRate))
+                                {
+                                    testData.UtilizationRate = "0%";
+                                    LogService.AddLogToEnqueue($"称重2->条码{testData.Code}利用率计算结果非法({utilizationRate})，按0%处理", EnumMsgType.Exception);
+                                }
+                                else
+                                {
+                                    testData.UtilizationRate = ((float)utilizationRate * 100).ToString("0.00") + "%";
+                                    LogService.AddLogToEnqueue($"称重2->条码{testData.Code}利用率={testData.UtilizationRate}", EnumMsgType.Info);
+                                }
                             }
-                            LogService.AddLogToEnqueue("[称重2]-记录称重完成信号=2");
+                            LogService.AddLogToEnqueue("称重2->-记录称重完成信号=2");
                             if (!plcHelper.ResetReady2().IsSuccess)
                             {
                                 plcHelper.ResetReady2();
@@ -882,7 +1018,7 @@ namespace PR_Spc_Tester
                             }
                             else
                             {
-                                LogService.AddLogToEnqueue($"[称重2]-数据库中不存在{heavyCode}", EnumMsgType.Exception);
+                                LogService.AddLogToEnqueue($"称重2->-数据库中不存在{heavyCode}", EnumMsgType.Exception);
                             }
 
                         }
@@ -890,7 +1026,7 @@ namespace PR_Spc_Tester
                 }
                 catch (Exception ex)
                 {
-                    LogService.AddLogToEnqueue("[称重2]-采集称重数据异常:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                    LogService.AddLogToEnqueue("称重2->-采集称重数据异常:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                 }
             }
         }
@@ -899,7 +1035,7 @@ namespace PR_Spc_Tester
         /// 判断上下限值
         /// </summary>
         /// <param name="testData"></param>
-        private string JudgeUpperLower(double result,double upperLimit,double lowerLimit,string msg)
+        private string JudgeUpperLower(double result, double upperLimit, double lowerLimit, string msg)
         {
             if (upperLimit == 0)
             {
@@ -949,7 +1085,7 @@ namespace PR_Spc_Tester
         /// <param name="testData"></param>
         private void UpdateUI(TestData testData)
         {
-            if (testData!=null)
+            if (testData != null)
             {
                 this.Invoke(new Action(() =>
                 {
@@ -979,7 +1115,7 @@ namespace PR_Spc_Tester
                         testData.MinTemperatureLowerLimit.ToString("F2"),
                         testData.MinTemperatureResult,
                         testData.MaxTemperature.ToString("F2"),
-                       
+
                         testData.AverageNitrogenPressure.ToString("F2"),
                         testData.AverageNitrogenPressureUpperLimit.ToString("F2"),
                         testData.AverageNitrogenPressureLowerLimit.ToString("F2"),
@@ -988,7 +1124,7 @@ namespace PR_Spc_Tester
                         testData.MinNitrogenPressureLowerLimit.ToString("f2"),
                         testData.MinNitrogenPressureResult,
                         testData.MaxNitrogenPressure.ToString("F2"),
-                       
+
                         testData.PowderSupplySpeed.ToString("0.00"),
                         testData.StartTime,
                         testData.EndTime,
@@ -1023,7 +1159,7 @@ namespace PR_Spc_Tester
                         testData.Location,
                         testData.PlacementHour
                     });
-                    if(testData.WeightResult=="NG"||testData.TemperatureResult=="NG"||testData.NitrogenPressureResult=="NG"||testData.IntakePressureResult=="NG"||testData.SpeedResult=="NG"||testData.ConcentrationResult=="NG")
+                    if (testData.WeightResult == "NG" || testData.TemperatureResult == "NG" || testData.NitrogenPressureResult == "NG" || testData.IntakePressureResult == "NG" || testData.SpeedResult == "NG" || testData.ConcentrationResult == "NG")
                     {
                         dgv_realtime.Rows[0].DefaultCellStyle.BackColor = Color.LightPink;
                     }
@@ -1043,12 +1179,12 @@ namespace PR_Spc_Tester
                 //PubData.TestProjectItems[1].Datas.Add(testData.PostSprayWeight);
                 //PubData.TestProjectItems[2].Datas.Add(testData.SedimentationWeight);
                 //PubData.TestProjectItems[3].Datas.Add(testData.UpperLimit);
-               // PubData.TestProjectItems[4].Datas.Add(testData.LowerLimit);
+                // PubData.TestProjectItems[4].Datas.Add(testData.LowerLimit);
                 //PubData.TestProjectItems[5].Datas.Add(testData.Result);
                 //PubData.TestProjectItems[6].Datas.Add(testData.AirtighTestTime);
                 //PubData.TestProjectItems[7].Datas.Add(testData.AirtighTestPressure);
                 //PubData.TestProjectItems[8].Datas.Add(testData.AirtighTestLeakageValue);
-               // UpdateCpk();
+                // UpdateCpk();
             }
 
             TestCount++;
@@ -1063,7 +1199,7 @@ namespace PR_Spc_Tester
                         testData.Code,
                         testData.PlacementTime
                     });
-                    
+
                 }));
                 //int Productresult = testData.Result;
 
@@ -1125,7 +1261,8 @@ namespace PR_Spc_Tester
                         Datas = new List<float>()
                     });
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 LogService.AddLogToEnqueue($"{ex.Message}");
             }
@@ -1138,7 +1275,7 @@ namespace PR_Spc_Tester
         {
             try
             {
-               lock(_fileLock)
+                lock (_fileLock)
                 {
                     // 新增保存 CSV 的代码
                     string url = "D:\\Temp";
@@ -1377,13 +1514,13 @@ namespace PR_Spc_Tester
             {
                 FrmLogin frmLogin = new FrmLogin();
                 DialogResult dr = frmLogin.ShowDialog();
-                if(dr==DialogResult.OK)
+                if (dr == DialogResult.OK)
                 {
                     lb_userName.Text = PubInfo.UserName;
                     lb_right.Text = PubInfo.UserTypeStr;
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -1564,12 +1701,12 @@ namespace PR_Spc_Tester
         {
             if (dgv_his.Columns[e.ColumnIndex].Name == "col_his_AirtighTestLeakageValue")
             {
-                if(e.Value.ToString()=="0")
+                if (e.Value.ToString() == "0")
                 {
                     e.Value = "---";
                 }
             }
-            
+
         }
 
         private void dgv_his_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
@@ -1710,8 +1847,9 @@ namespace PR_Spc_Tester
 
         private void WritePLCTemperature()
         {
+            LogService.AddLogToEnqueue("对比1->Start...");
             TestData compareData = new TestData();
-            float[] data=new float[7] { 0,0,0,0,0,0,0};
+            float[] data = new float[7] { 0, 0, 0, 0, 0, 0, 0 };
             while (true)
             {
                 Thread.Sleep(1000);
@@ -1720,11 +1858,11 @@ namespace PR_Spc_Tester
                     OperateResult<short> resultCompare = plcHelper.ReadCompare();//read from D5676
                     if (resultCompare.Content == 1)
                     {
-                        LogService.AddLogToEnqueue("收到冷喷比对信号");
+                        LogService.AddLogToEnqueue("对比1->收到冷喷比对信号");
                         OperateResult<string> resultCompareCode = plcHelper.GetCompareCode();
                         if (resultCompareCode.Content == "")
                         {
-                            LogService.AddLogToEnqueue($"读取冷喷比对二维码为{resultCompareCode.Content}");
+                            LogService.AddLogToEnqueue($"对比1->读取冷喷比对二维码为{resultCompareCode.Content}");
                         }
                         else
                         {
@@ -1732,10 +1870,10 @@ namespace PR_Spc_Tester
                             compareData = dal.GetLastDataByCode(compareCode);
                             if (compareData == null)
                             {
-                                LogService.AddLogToEnqueue($"条码{compareCode}没有录入数据库");
-                                if (!plcHelper.WriteOverTime(2).IsSuccess)
+                                LogService.AddLogToEnqueue($"对比1->条码{compareCode}没有录入数据库");
+                                if (!plcHelper.WriteOverTime(3).IsSuccess)
                                 {
-                                    plcHelper.WriteOverTime(2);
+                                    plcHelper.WriteOverTime(3);
                                 }
 
                             }
@@ -1744,7 +1882,7 @@ namespace PR_Spc_Tester
                                 IsOverTime(compareData, compareCode);
                             }
                         }
-                       
+
                     }
                     data = gunHelp.ReadGun();
                     _samlingData.temperature = Math.Round(data[2], 2);
@@ -1754,7 +1892,59 @@ namespace PR_Spc_Tester
                 }
                 catch (Exception ex)
                 {
-                    LogService.AddLogToEnqueue($"写入PLC温度和压力异常{ex.Message}{ex.StackTrace}", EnumMsgType.Exception);
+                    LogService.AddLogToEnqueue($"对比1->写入PLC温度和压力异常{ex.Message}{ex.StackTrace}", EnumMsgType.Exception);
+                }
+            }
+        }
+
+        private void WritePLCTemperature2()
+        {
+            LogService.AddLogToEnqueue("对比2->Start...");
+            TestData compareData = new TestData();
+            float[] data = new float[7] { 0, 0, 0, 0, 0, 0, 0 };
+            while (true)
+            {
+                Thread.Sleep(1000);
+                try
+                {
+                    OperateResult<short> resultCompare = plcHelper.ReadCompare2();//read from D5698
+                    if (resultCompare.Content == 1)
+                    {
+                        LogService.AddLogToEnqueue("对比2->收到冷喷比对信号");
+                        OperateResult<string> resultCompareCode = plcHelper.GetCompareCode2();
+                        if (resultCompareCode.Content == "")
+                        {
+                            LogService.AddLogToEnqueue($"对比2->读取冷喷比对二维码为{resultCompareCode.Content}");
+                        }
+                        else
+                        {
+                            string compareCode = resultCompareCode.Content.Trim();
+                            compareData = dal.GetLastDataByCode(compareCode);
+                            if (compareData == null)
+                            {
+                                LogService.AddLogToEnqueue($"对比2->条码{compareCode}没有录入数据库");
+                                if (!plcHelper.WriteOverTime(3).IsSuccess)
+                                {
+                                    plcHelper.WriteOverTime(3);
+                                }
+
+                            }
+                            else
+                            {
+                                IsOverTime(compareData, compareCode);
+                            }
+                        }
+
+                    }
+                    data = gunHelp.ReadGun();
+                    _samlingData.temperature = Math.Round(data[2], 2);
+                    _samlingData.pressure = Math.Round(data[3], 2);
+                    plcHelper.WriteTemperature(data[2]);
+                    plcHelper.WritePressure(data[3]);
+                }
+                catch (Exception ex)
+                {
+                    LogService.AddLogToEnqueue($"对比2->写入PLC温度和压力异常{ex.Message}{ex.StackTrace}", EnumMsgType.Exception);
                 }
             }
         }

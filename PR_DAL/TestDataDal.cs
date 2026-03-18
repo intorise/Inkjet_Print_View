@@ -12,6 +12,8 @@ namespace PR_DAL
     /// </summary>
     public class TestDataDal
     {
+        static object insertLocker = new object();
+
         public TestDataDal() { }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace PR_DAL
         /// <returns></returns>
         public bool Add(TestData model)
         {
-            model.AddTime= DateTime.Now;
+            model.AddTime = DateTime.Now;
             string sql = "insert into test_data(Code,PreSprayWeight,PostSprayWeight,SedimentationWeight,UpperLimit,LowerLimit,Result,AddTime)";
             sql += " values(@Code,@PreSprayWeight,@PostSprayWeight,@SedimentationWeight,@UpperLimit,@LowerLimit,@Result," +
                 "@AddTime)";
@@ -94,7 +96,7 @@ namespace PR_DAL
             sql += GetCondition(param);
             sql += " order by ID desc";
             sql += $" limit {startIndex},{param.PageSize}";
-            List<TestData> list = DapperHelper.Query<TestData>(sql);            
+            List<TestData> list = DapperHelper.Query<TestData>(sql);
             return list;
         }
 
@@ -160,11 +162,22 @@ namespace PR_DAL
         /// <returns></returns>
         public bool addNew(TestData model)
         {
-            //model.AddTime = DateTime.Now;
-            string sql = "insert into test_data(Code,PreSprayWeight,PreSprayWeight_1,PreSprayWeight_1_5,PreSprayWeight_2,PreSprayWeight_2_5,PostSprayWeight,PostSprayWeight_1,PostSprayWeight_1_5,PostSprayWeight_2,PostSprayWeight_2_5,SedimentationWeight,WeightUpperLimit,WeightLowerLimit,WeightResult,AddTime,UtilizationRate,AverageTemperature,AverageTemperatureUpperLimit,AverageTemperatureLowerLimit,AverageTemperatureResult,MinTemperature,MinTemperatureLowerLimit,MinTemperatureResult,MaxTemperature,TemperatureResult,AverageNitrogenPressure,AverageNitrogenPressureUpperLimit,AverageNitrogenPressureLowerLimit,AverageNitrogenPressureResult,MinNitrogenPressure,MinNitrogenPressureLowerLimit,MinNitrogenPressureResult,MaxNitrogenPressure,NitrogenPressureResult,PowderSupplySpeed,StartTime,EndTime,Beat,PlacementTime,Location,ThreadRotation,IntakePressure,IntakePressureLowerLimit,IntakePressureResult,NozzleHeight,AverageSpeed,AverageSpeedUpperLimit,AverageSpeedLowerLimit,AverageSpeedResult,MaxSpeed,MinSpeed,MinSpeedLowerLimit,MinSpeedResult,StdDevSpeed,SpeedResult,AverageConcentration,AverageConcentrationUpperLimit,AverageConcentrationLowerLimit,AverageConcentrationResult,MaxConcentration,MinConcentration,StdDevConcentration,ConcentrationResult,AveragePosition,MaxPosition,MinPosition,StdDevPosition,PlacementHour)";
-            sql += " values(@Code,@PreSprayWeight,@PreSprayWeight_1,@PreSprayWeight_1_5,@PreSprayWeight_2,@PreSprayWeight_2_5,@PostSprayWeight,@PostSprayWeight_1,@PostSprayWeight_1_5,@PostSprayWeight_2,@PostSprayWeight_2_5,@SedimentationWeight,@WeightUpperLimit,@WeightLowerLimit,@WeightResult," +
-                "@AddTime,@UtilizationRate,@AverageTemperature,@AverageTemperatureUpperLimit,@AverageTemperatureLowerLimit,@AverageTemperatureResult,@MinTemperature,@MinTemperatureLowerLimit,@MinTemperatureResult,@MaxTemperature,@TemperatureResult,@AverageNitrogenPressure,@AverageNitrogenPressureUpperLimit,@AverageNitrogenPressureLowerLimit,@AverageNitrogenPressureResult,@MinNitrogenPressure,@MinNitrogenPressureLowerLimit,@MinNitrogenPressureResult,@MaxNitrogenPressure,@NitrogenPressureResult,@PowderSupplySpeed,@StartTime,@EndTime,@Beat,@PlacementTime,@Location,@ThreadRotation,@IntakePressure,@IntakePressureLowerLimit,@IntakePressureResult,@NozzleHeight,@AverageSpeed,@AverageSpeedUpperLimit,@AverageSpeedLowerLimit,@AverageSpeedResult,@MaxSpeed,@MinSpeed,@MinSpeedLowerLimit,@MinSpeedResult,@StdDevSpeed,@SpeedResult,@AverageConcentration,@AverageConcentrationUpperLimit,@AverageConcentrationLowerLimit,@AverageConcentrationResult,@MaxConcentration,@MinConcentration,@StdDevConcentration,@ConcentrationResult,@AveragePosition,@MaxPosition,@MinPosition,@StdDevPosition,@PlacementHour)";
-            return DapperHelper.Execute(sql, model) > 0;
+            lock (insertLocker)
+            {
+                string sql = $"select * from test_data where Code='{model.Code}' ORDER BY ID DESC LIMIT 1 ";
+                var data = DapperHelper.QueryFirstOrDefault<TestData>(sql);
+                if (data != null)
+                {
+                    // 重复清洗时刷新该二维码的清洗时间，避免后续按旧时间判定超时。
+                    string updateSql = "update test_data set PlacementTime=@PlacementTime where ID=@ID";
+                    return DapperHelper.Execute(updateSql, new { PlacementTime = model.PlacementTime, ID = data.ID }) > 0;
+                }
+                //model.AddTime = DateTime.Now;
+                sql = "insert into test_data(Code,PreSprayWeight,PreSprayWeight_1,PreSprayWeight_1_5,PreSprayWeight_2,PreSprayWeight_2_5,PostSprayWeight,PostSprayWeight_1,PostSprayWeight_1_5,PostSprayWeight_2,PostSprayWeight_2_5,SedimentationWeight,WeightUpperLimit,WeightLowerLimit,WeightResult,AddTime,UtilizationRate,AverageTemperature,AverageTemperatureUpperLimit,AverageTemperatureLowerLimit,AverageTemperatureResult,MinTemperature,MinTemperatureLowerLimit,MinTemperatureResult,MaxTemperature,TemperatureResult,AverageNitrogenPressure,AverageNitrogenPressureUpperLimit,AverageNitrogenPressureLowerLimit,AverageNitrogenPressureResult,MinNitrogenPressure,MinNitrogenPressureLowerLimit,MinNitrogenPressureResult,MaxNitrogenPressure,NitrogenPressureResult,PowderSupplySpeed,StartTime,EndTime,Beat,PlacementTime,Location,ThreadRotation,IntakePressure,IntakePressureLowerLimit,IntakePressureResult,NozzleHeight,AverageSpeed,AverageSpeedUpperLimit,AverageSpeedLowerLimit,AverageSpeedResult,MaxSpeed,MinSpeed,MinSpeedLowerLimit,MinSpeedResult,StdDevSpeed,SpeedResult,AverageConcentration,AverageConcentrationUpperLimit,AverageConcentrationLowerLimit,AverageConcentrationResult,MaxConcentration,MinConcentration,StdDevConcentration,ConcentrationResult,AveragePosition,MaxPosition,MinPosition,StdDevPosition,PlacementHour)";
+                sql += " values(@Code,@PreSprayWeight,@PreSprayWeight_1,@PreSprayWeight_1_5,@PreSprayWeight_2,@PreSprayWeight_2_5,@PostSprayWeight,@PostSprayWeight_1,@PostSprayWeight_1_5,@PostSprayWeight_2,@PostSprayWeight_2_5,@SedimentationWeight,@WeightUpperLimit,@WeightLowerLimit,@WeightResult," +
+                    "@AddTime,@UtilizationRate,@AverageTemperature,@AverageTemperatureUpperLimit,@AverageTemperatureLowerLimit,@AverageTemperatureResult,@MinTemperature,@MinTemperatureLowerLimit,@MinTemperatureResult,@MaxTemperature,@TemperatureResult,@AverageNitrogenPressure,@AverageNitrogenPressureUpperLimit,@AverageNitrogenPressureLowerLimit,@AverageNitrogenPressureResult,@MinNitrogenPressure,@MinNitrogenPressureLowerLimit,@MinNitrogenPressureResult,@MaxNitrogenPressure,@NitrogenPressureResult,@PowderSupplySpeed,@StartTime,@EndTime,@Beat,@PlacementTime,@Location,@ThreadRotation,@IntakePressure,@IntakePressureLowerLimit,@IntakePressureResult,@NozzleHeight,@AverageSpeed,@AverageSpeedUpperLimit,@AverageSpeedLowerLimit,@AverageSpeedResult,@MaxSpeed,@MinSpeed,@MinSpeedLowerLimit,@MinSpeedResult,@StdDevSpeed,@SpeedResult,@AverageConcentration,@AverageConcentrationUpperLimit,@AverageConcentrationLowerLimit,@AverageConcentrationResult,@MaxConcentration,@MinConcentration,@StdDevConcentration,@ConcentrationResult,@AveragePosition,@MaxPosition,@MinPosition,@StdDevPosition,@PlacementHour)";
+                return DapperHelper.Execute(sql, model) > 0;
+            }
         }
     }
 }

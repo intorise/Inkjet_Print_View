@@ -217,15 +217,38 @@ namespace PR_Spc_Tester.Moudules
                 return new OperateResult<string>(-1, "读取失败" + ex.Message);
             }
         }
+
+        /// <summary>
+        /// 读取比对2二维码
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult<string> GetCompareCode2()
+        {
+            try
+            {
+                string code = mc_net.ReadString("D5900", 34).Content?.RemoveControlChars();
+                return new OperateResult<string>()
+                {
+                    Content = code,
+                    ErrorCode = 0,
+                    Message = $"获取数据成功！"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<string>(-1, "读取失败" + ex.Message);
+            }
+        }
+
         /// <summary>
         /// 获取读取冷喷准备好信号
         /// </summary>
         /// <returns></returns>
-        public OperateResult<short> GetColdSprayReadReady()
+        public OperateResult<short> GetColdSprayReadReady(string address="D5670")
         {
             try
             {
-                return mc_net.ReadInt16("D5670");
+                return mc_net.ReadInt16(address);
             }
             catch (Exception ex)
             {
@@ -309,14 +332,14 @@ namespace PR_Spc_Tester.Moudules
             }
         }
         /// <summary>
-        /// 冷喷复位
+        /// 冷喷复位,1号：5710，2号：5713
         /// </summary>
         /// <returns></returns>
-        public OperateResult ResetColdSprayReady()
+        public OperateResult ResetColdSprayReady(string address= "D5710")
         {
             try
             {
-                return mc_net.Write("D5710", (short)2);
+                return mc_net.Write(address, (short)2);
             }
             catch (Exception ex)
             {
@@ -387,11 +410,27 @@ namespace PR_Spc_Tester.Moudules
         /// 是否比对
         /// </summary>
         /// <returns></returns>
-        public OperateResult<short> ReadCompare()
+        public OperateResult<short> ReadCompare(string address="D5676")
         {
             try
             {
-                return mc_net.ReadInt16("D5676");
+                return mc_net.ReadInt16(address);
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<short>(-1, "读取失败" + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 比对2ready? 1:yes
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult<short> ReadCompare2()
+        {
+            try
+            {
+                return mc_net.ReadInt16("D5698");
             }
             catch (Exception ex)
             {
@@ -508,6 +547,23 @@ namespace PR_Spc_Tester.Moudules
         }
 
         /// <summary>
+        /// 清洗摆放超时
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult WriteOverTime2(short val)
+        {
+            try
+            {
+                // return mc_net.Write("D5722", val);
+                return mc_net.Write("D5713", val);
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<short>(-1, "写入清洗摆放超时失败" + ex.Message);
+            }
+        }
+
+        /// <summary>
         /// 监控异常
         /// </summary>
         /// <returns></returns>
@@ -609,7 +665,6 @@ namespace PR_Spc_Tester.Moudules
                 float upperLimit = mc_net.ReadFloat("D5508").Content;
                 float lowerLimit = mc_net.ReadFloat("D5510").Content;
                 short result = mc_net.ReadInt16 ("D5512").Content;
-                short loaction = mc_net.ReadInt16("D5675").Content;
                 float nozzleHeight = mc_net.ReadInt16("D5678").Content/10.0f;
                 float powderSupplySpeed= mc_net.ReadInt16("D5677").Content/10.0f;
                 float preSprayWeight_1s= mc_net.ReadFloat("D5679").Content;
@@ -626,7 +681,7 @@ namespace PR_Spc_Tester.Moudules
                 testData.WeightUpperLimit = upperLimit;
                 testData.WeightLowerLimit = lowerLimit;
                 testData.WeightResult = result==1?"OK":"NG";
-                testData.Location=loaction==0?"A":"B";
+                testData.Location = "A";
                 testData.AddTime = DateTime.Now;
                 testData.NozzleHeight = nozzleHeight;
                 testData.PowderSupplySpeed= powderSupplySpeed;
@@ -670,7 +725,6 @@ namespace PR_Spc_Tester.Moudules
                 float upperLimit = mc_net.ReadFloat("D5508").Content;//重量上限-和称重1共用一个地址?
                 float lowerLimit = mc_net.ReadFloat("D5510").Content;//重量下限-和称重1共用一个地址?
                 short result = mc_net.ReadInt16("D5976").Content;//重量结果2(0:待检测，1:OK,2:NG)
-                short loaction = mc_net.ReadInt16("D5675").Content;//喷淋位置(0-A  1-B)，和称重1共用一个地址?
                 float nozzleHeight = mc_net.ReadInt16("D5678").Content / 10.0f;//喷嘴高度，和称重1共用一个地址?
                 float powderSupplySpeed = mc_net.ReadInt16("D5677").Content / 10.0f;//供粉速度，和称重1共用一个地址?
                 float preSprayWeight_1s = mc_net.ReadFloat("D5978").Content;//喷前重量1.0S
@@ -688,7 +742,7 @@ namespace PR_Spc_Tester.Moudules
                 testData.WeightUpperLimit = upperLimit;
                 testData.WeightLowerLimit = lowerLimit;
                 testData.WeightResult = result == 1 ? "OK" : "NG";
-                testData.Location = loaction == 0 ? "A" : "B";
+                testData.Location = "B";
                 testData.AddTime = DateTime.Now;
                 testData.NozzleHeight = nozzleHeight;
                 testData.PowderSupplySpeed = powderSupplySpeed;
