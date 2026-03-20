@@ -268,4 +268,84 @@ sequenceDiagram
 
 - 利用率依赖 `Beat`（冷喷节拍），冷喷未完成或节拍异常会直接影响称重结果
 - 监控统计依赖 OPC 采样时长，样本过少会触发“跳过前后裁剪”分支
+
+## 数据库表结构（概览）
+下面列出代码中使用到的主要表及字段（根据 `PR_Model` 实体与 `PR_DAL` 的 SQL 语句推断，类型为建议的 MySQL 映射）：
+
+### `test_data`
+- `ID` : INT PRIMARY KEY 自增 — 主键
+- `Code` : VARCHAR(255) — 条码（QR-Code）
+- `PreSprayWeight`, `PreSprayWeight_1`, `PreSprayWeight_1_5`, `PreSprayWeight_2`, `PreSprayWeight_2_5` : FLOAT — 喷前不同时间点重量
+- `PostSprayWeight`, `PostSprayWeight_1`, `PostSprayWeight_1_5`, `PostSprayWeight_2`, `PostSprayWeight_2_5` : FLOAT — 喷后不同时间点重量
+- `Location` : VARCHAR(100) — 喷淋/测试位置
+- `SedimentationWeight` : FLOAT — 沉积重量
+- `WeightUpperLimit`, `WeightLowerLimit` : FLOAT — 重量上下限
+- `WeightResult` : VARCHAR(32) — 重量判定（0:待检测/1:OK/2:NG）
+- `AddTime` : DATETIME — 建档/称重时间
+- `UtilizationRate` : VARCHAR(32) — 银粉利用率（文本/百分比）
+- 温度相关：
+   - `AverageTemperature`, `MinTemperature`, `MaxTemperature` : FLOAT
+   - `AverageTemperatureUpperLimit`, `AverageTemperatureLowerLimit`, `MinTemperatureLowerLimit` : FLOAT
+   - `AverageTemperatureResult`, `MinTemperatureResult`, `TemperatureResult` : VARCHAR(32)
+- 氮气压力相关：
+   - `AverageNitrogenPressure`, `MinNitrogenPressure`, `MaxNitrogenPressure` : FLOAT
+   - `AverageNitrogenPressureUpperLimit`, `AverageNitrogenPressureLowerLimit`, `MinNitrogenPressureLowerLimit` : FLOAT
+   - `AverageNitrogenPressureResult`, `MinNitrogenPressureResult`, `NitrogenPressureResult` : VARCHAR(32)
+- `PowderSupplySpeed` : FLOAT — 供粉速度
+- 冷喷时间相关：
+   - `StartTime`, `EndTime` : DATETIME — 冷喷启动/停止时间
+   - `Beat` : FLOAT — 节拍（秒）
+- `PlacementTime` : DATETIME — 激光清洗后摆放时间（建档时间）
+- `PlacementHour` : VARCHAR(32) — 摆放时长（以字符串形式 hh:mm）
+- 设备/过程参数：
+   - `ThreadRotation` : FLOAT — 螺杆转速
+   - `IntakePressure` : FLOAT — 进气压力
+   - `IntakePressureLowerLimit` : FLOAT
+   - `IntakePressureResult` : VARCHAR(32)
+   - `IntakeFlow` : DOUBLE — 进气流量
+   - `NozzleHeight` : FLOAT — 喷嘴高度
+- 速度/浓度/位置统计（监控工位的 OPC/融合结果）：
+   - `AverageSpeed`, `MaxSpeed`, `MinSpeed`, `StdDevSpeed` : DOUBLE
+   - `AverageSpeedUpperLimit`, `AverageSpeedLowerLimit`, `MinSpeedLowerLimit` : DOUBLE
+   - `AverageSpeedResult`, `MinSpeedResult`, `SpeedResult` : VARCHAR(32)
+   - `AverageConcentration`, `MaxConcentration`, `MinConcentration`, `StdDevConcentration` : DOUBLE
+   - `AverageConcentrationUpperLimit`, `AverageConcentrationLowerLimit` : DOUBLE
+   - `AverageConcentrationResult`, `ConcentrationResult` : VARCHAR(32)
+   - `AveragePosition`, `MaxPosition`, `MinPosition`, `StdDevPosition` : DOUBLE
+
+(说明) `test_data` 是主表，记录从清洗建档到称重/监控/冷喷全部字段；代码里既有 `insert into test_data(...)` 也有针对单条记录的 `update test_data set ... where ID=...`，因此当前逻辑会在存在记录时更新字段而非追加新行。
+
+### `alarm_statistics`
+- `ID` : INT PRIMARY KEY — 主键
+- `AlarmMessage` : TEXT/VARCHAR(512) — 报警文本
+- `AddTime` : DATETIME — 报警发生时间
+
+### `SysLog`（系统日志）
+- `ID` : INT PRIMARY KEY
+- `UserName` : VARCHAR(128)
+- `Content` : TEXT — 日志内容
+- `LogType` : INT — 日志类型枚举（代码中为 `LogMsgType`）
+- `AddTime` : DATETIME — 日志时间
+
+### `sysuser` / `SysUser`
+- `ID` : INT PRIMARY KEY
+- `UserName` : VARCHAR(128)
+- `PassWord` : VARCHAR(128)
+- `UserType` : INT — 1=管理员，2=工艺，3=操作员（代码注释）
+- `AddTime` : DATETIME
+
+### `test_project`
+- `ID` : INT PRIMARY KEY
+- `ProjectCode` : VARCHAR(128) — 参数代码（如 `AverageSpeed`）
+- `ProjectName` : VARCHAR(256) — 显示名称
+- `Unit` : VARCHAR(64) — 单位
+- `USL_Val`, `LSL_Val` : FLOAT — 上下限
+- `SType` : INT — 类型标识
+- `UpdateTime` : DATETIME — 更新时间
+
+## 建议
+- 目前 `test_data` 在重复建档（相同 `Code`）时只会刷新 `PlacementTime`（`addNew` 的重复分支），且后续工序通过 `update test_data set ... where ID=...` 覆盖字段，若需要保留重跑历史建议：
+   - 引入 `run_id` 或 `attempt` 字段并在每次工序开始时插入新的行，或
+   - 改为将历史事件写入独立的不可变日志表（例如 `test_data_history` / `spray_events`），保留原始 `test_data` 的快照。
+
  

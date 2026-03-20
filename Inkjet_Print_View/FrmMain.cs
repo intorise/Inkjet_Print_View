@@ -848,6 +848,8 @@ namespace PR_Spc_Tester
                         }
 
                         // 将数据插入数据库
+                        var prevRecord = dal.GetLastDataByCode(heavyCode);
+                        bool isRework = prevRecord != null;
                         bool ret = dal.addNew(testData);
 
                         if (ret)
@@ -855,6 +857,10 @@ namespace PR_Spc_Tester
                             clearHelper.WriteAddCodeOK();
                             UpdateClearUI(testData);
                             LogService.AddLogToEnqueue($"激光清洗->二维码{heavyCode}添加成功，时间:{DateTime.Now}", EnumMsgType.Info);
+                            if (isRework)
+                            {
+                                LogService.AddLogToEnqueue($"激光清洗->条码{heavyCode}为返工，已新增一条记录（使用最新记录进行后续工序）", EnumMsgType.Info);
+                            }
                         }
                         else
                         {
