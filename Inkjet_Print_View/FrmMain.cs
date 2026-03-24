@@ -1202,9 +1202,15 @@ namespace PR_Spc_Tester
                 this.Invoke(new Action(() =>
                 {
                     dgv_clearrealtime.Rows.Insert(0, new object[] {
+                        1,
                         testData.Code,
                         testData.PlacementTime
                     });
+
+                    for (int i = 0; i < dgv_clearrealtime.Rows.Count; i++)
+                    {
+                        dgv_clearrealtime.Rows[i].Cells[0].Value = i + 1;
+                    }
 
                 }));
                 //int Productresult = testData.Result;

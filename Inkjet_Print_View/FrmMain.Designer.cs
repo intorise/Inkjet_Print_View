@@ -219,6 +219,7 @@
             this.uiLabel11 = new Sunny.UI.UILabel();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.dgv_clearrealtime = new Sunny.UI.UIDataGridView();
+            this.dataGridViewTextBoxColumn27 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.uiPanel5 = new Sunny.UI.UIPanel();
@@ -2096,6 +2097,7 @@
             this.dgv_clearrealtime.ColumnHeadersHeight = 32;
             this.dgv_clearrealtime.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgv_clearrealtime.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn27,
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
             dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -2134,6 +2136,15 @@
             this.dgv_clearrealtime.Size = new System.Drawing.Size(200, 11);
             this.dgv_clearrealtime.Style = Sunny.UI.UIStyle.Custom;
             this.dgv_clearrealtime.TabIndex = 5;
+            // 
+            // dataGridViewTextBoxColumn27
+            // 
+            this.dataGridViewTextBoxColumn27.HeaderText = "序号";
+            this.dataGridViewTextBoxColumn27.MinimumWidth = 8;
+            this.dataGridViewTextBoxColumn27.Name = "dataGridViewTextBoxColumn27";
+            this.dataGridViewTextBoxColumn27.ReadOnly = true;
+            this.dataGridViewTextBoxColumn27.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn27.Width = 80;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -2595,6 +2606,7 @@
         private Sunny.UI.UILabel uiLabel14;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn25;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn26;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn27;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Code;
