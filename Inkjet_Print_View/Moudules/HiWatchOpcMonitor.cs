@@ -20,7 +20,6 @@ using ScottPlot.Drawing.Colormaps;
 using System.Windows.Markup;
 using System.Text;
 using System.Text.RegularExpressions;
-using PR_Spc_Tester.Services;
 
 namespace PR_Spc_Tester.Moudules
 {
@@ -45,6 +44,10 @@ namespace PR_Spc_Tester.Moudules
         private bool _isConnected;
         // 用于控制重连操作的取消
         private CancellationTokenSource _reconnectCts;
+        private const string CommandNodeId = "ns=2;s=Sensor_00.OPERATIONS.COMMAND";
+        private const string CameraStateNodeId = "ns=2;s=Sensor_00.SensorStatus.CameraState";
+        private const string SessionCurrentLengthNodeId = "ns=2;s=Sensor_00.SessionData.CurrentLength";
+        private const string SessionLastOutputPathNodeId = "ns=2;s=Sensor_00.SessionData.LastOutputPath";
         // 队列中最多可存储的数据点数
         private const int MaxDataPoints = 1000;
         private readonly object _dataLock = new object(); // 数据缓存锁
@@ -52,7 +55,7 @@ namespace PR_Spc_Tester.Moudules
         private double? _latestDensity; // 最新密度数据
         private double? _latestPosition; // 最新位置数据
         private DateTime _latestTimestamp; // 数据时间戳（取三者中最新的或一致的）
-         // 定义事件：当三种数据均采集到后触发
+                                           // 定义事件：当三种数据均采集到后触发
         public event EventHandler<AllDataEventArgs> OnAllDataReceived;
         // 当接收到粒子速度数据时触发的事件
         public event EventHandler<OpcValueEventArgs> OnSpeedReceived;
@@ -60,6 +63,12 @@ namespace PR_Spc_Tester.Moudules
         public event EventHandler<OpcValueEventArgs> OnDensityReceived;
         // 当接收到粒子位置数据时触发的事件
         public event EventHandler<OpcValueEventArgs> OnPositionReceived;
+        // 当接收到 SizeDV50 数据时触发的事件
+        public event EventHandler<OpcValueEventArgs> OnSizeDV50Received;
+        // 当接收到 SizeDV90 数据时触发的事件
+        public event EventHandler<OpcValueEventArgs> OnSizeDV90Received;
+        // 当接收到报警字符串时触发的事件
+        public event EventHandler<OpcStringEventArgs> OnAlertMessageReceived;
 
         // 构造函数，接收 OPC 监控设置，若未提供则使用默认设置
         public HiWatchOpcMonitor(OpcMonitorSettings settings = null)
@@ -94,7 +103,14 @@ namespace PR_Spc_Tester.Moudules
                         ClientConfiguration = new ClientConfiguration()
                     };
                     // 验证应用程序配置
-                    config.Validate(ApplicationType.Client);
+                    try
+                    {
+                        await config.Validate(ApplicationType.Client);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.AddLogToEnqueue("OPC配置校验跳过：" + ex.Message, EnumMsgType.Exception);
+                    }
 
                     // 选择合适的端点描述
                     var endpointDescription = CoreClientUtils.SelectEndpoint(config, endpointUrl, false);
@@ -155,7 +171,7 @@ namespace PR_Spc_Tester.Moudules
                     // 标记为未连接
                     _isConnected = false;
                     // 记录连接失败的日志
-                    LogService.AddLogToEnqueue("OPC UA连接失败"+ex.Message+ex.StackTrace);
+                    LogService.AddLogToEnqueue("OPC UA连接失败" + ex.Message + ex.StackTrace);
                     // 等待 5 秒后重试
                     await Task.Delay(5000, cancellationToken);
                 }
@@ -205,7 +221,7 @@ namespace PR_Spc_Tester.Moudules
                     {
                         AddSpeedData(speed);
                     }
-                    
+
                     // 触发速度数据接收事件
                     OnSpeedReceived?.Invoke(this, new OpcValueEventArgs(speed));
                     lock (_dataLock)
@@ -308,8 +324,8 @@ namespace PR_Spc_Tester.Moudules
                     {
                         AddPositionData(position);
                     }
-                    
-                    
+
+
                     // 触发密度数据接收事件
                     OnPositionReceived?.Invoke(this, new OpcValueEventArgs(position));
                     lock (_dataLock)
@@ -327,6 +343,107 @@ namespace PR_Spc_Tester.Moudules
             // 将位置监控项添加到订阅中
             _subscription.AddItem(positionItem);
 
+            // 创建 SizeDV50 监控项
+            var sizeDv50Item = new MonitoredItem(_subscription.DefaultItem)
+            {
+                StartNodeId = "ns=2;s=Sensor_00.PlumeStatistics.SizeDV50",
+                AttributeId = Attributes.Value,
+                DisplayName = "SizeDV50",
+                NodeClass = NodeClass.Variable,
+                SamplingInterval = _settings.SamplingInterval,
+                QueueSize = _settings.QueueSize,
+                DiscardOldest = true,
+                Filter = new DataChangeFilter
+                {
+                    Trigger = DataChangeTrigger.StatusValueTimestamp,
+                    DeadbandType = (uint)DeadbandType.None,
+                    DeadbandValue = 0
+                }
+            };
+
+            sizeDv50Item.Notification += (item, args) =>
+            {
+                foreach (var value in item.DequeueValues())
+                {
+                    try
+                    {
+                        var dv50 = Convert.ToDouble(value.Value);
+                        OnSizeDV50Received?.Invoke(this, new OpcValueEventArgs(dv50));
+                    }
+                    catch { }
+                }
+            };
+
+            // 创建 SizeDV90 监控项
+            var sizeDv90Item = new MonitoredItem(_subscription.DefaultItem)
+            {
+                StartNodeId = "ns=2;s=Sensor_00.PlumeStatistics.SizeDV90",
+                AttributeId = Attributes.Value,
+                DisplayName = "SizeDV90",
+                NodeClass = NodeClass.Variable,
+                SamplingInterval = _settings.SamplingInterval,
+                QueueSize = _settings.QueueSize,
+                DiscardOldest = true,
+                Filter = new DataChangeFilter
+                {
+                    Trigger = DataChangeTrigger.StatusValueTimestamp,
+                    DeadbandType = (uint)DeadbandType.None,
+                    DeadbandValue = 0
+                }
+            };
+
+            sizeDv90Item.Notification += (item, args) =>
+            {
+                foreach (var value in item.DequeueValues())
+                {
+                    try
+                    {
+                        var dv90 = Convert.ToDouble(value.Value);
+                        OnSizeDV90Received?.Invoke(this, new OpcValueEventArgs(dv90));
+                    }
+                    catch { }
+                }
+            };
+
+            // 创建报警字符串监控项
+            var alertItem = new MonitoredItem(_subscription.DefaultItem)
+            {
+                StartNodeId = "ns=2;s=Sensor_00.CurrentMean.CurrentAlertMessage",
+                AttributeId = Attributes.Value,
+                DisplayName = "CurrentAlertMessage",
+                NodeClass = NodeClass.Variable,
+                SamplingInterval = _settings.SamplingInterval,
+                QueueSize = _settings.QueueSize,
+                DiscardOldest = true,
+                Filter = new DataChangeFilter
+                {
+                    Trigger = DataChangeTrigger.StatusValueTimestamp,
+                    DeadbandType = (uint)DeadbandType.None,
+                    DeadbandValue = 0
+                }
+            };
+
+            alertItem.Notification += (item, args) =>
+            {
+                foreach (var value in item.DequeueValues())
+                {
+                    try
+                    {
+                        var msg = Convert.ToString(value.Value);
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            OnAlertMessageReceived?.Invoke(this, new OpcStringEventArgs(msg));
+                            LogService.AddLogToEnqueue($"OPC 报警消息: {msg}", EnumMsgType.Info);
+                        }
+                    }
+                    catch { }
+                }
+            };
+
+            _subscription.AddItem(sizeDv50Item);
+            _subscription.AddItem(sizeDv90Item);
+            _subscription.AddItem(alertItem);
+
         }
 
         // 将速度数据添加到队列中，并确保队列大小不超过最大数据点数
@@ -334,7 +451,7 @@ namespace PR_Spc_Tester.Moudules
         {
             // 将速度数据加入队列
             _speedData.Enqueue(value);
-          //  LogService.AddLogToEnqueue($"速度数据已添加到队列，当前值: {value}，队列大小: {_speedData.Count}");
+            //  LogService.AddLogToEnqueue($"速度数据已添加到队列，当前值: {value}，队列大小: {_speedData.Count}");
             // 如果队列中的数据点数超过最大数据点数，则移除最早的数据点
             while (_speedData.Count > MaxDataPoints && _speedData.TryDequeue(out _)) ;
         }
@@ -344,7 +461,7 @@ namespace PR_Spc_Tester.Moudules
         {
             // 将密度数据加入队列
             _densityData.Enqueue(value);
-          //  LogService.AddLogToEnqueue($"浓度数据已添加到队列，当前值: {value}，队列大小: {_densityData.Count}");
+            //  LogService.AddLogToEnqueue($"浓度数据已添加到队列，当前值: {value}，队列大小: {_densityData.Count}");
             // 如果队列中的数据点数超过最大数据点数，则移除最早的数据点
             while (_densityData.Count > MaxDataPoints && _densityData.TryDequeue(out _)) ;
         }
@@ -353,7 +470,7 @@ namespace PR_Spc_Tester.Moudules
         {
             // 将密度数据加入队列
             _positionData.Enqueue(value);
-           // LogService.AddLogToEnqueue($"位置数据已添加到队列，当前值: {value}，队列大小: {_positionData.Count}");
+            // LogService.AddLogToEnqueue($"位置数据已添加到队列，当前值: {value}，队列大小: {_positionData.Count}");
             // LogService.AddLogToEnqueue($"位置数据已添加到队列，当前值: {value}，队列大小: {_positionData.Count}");
             // 如果队列中的数据点数超过最大数据点数，则移除最早的数据点
             while (_positionData.Count > MaxDataPoints && _positionData.TryDequeue(out _)) ;
@@ -494,6 +611,324 @@ namespace PR_Spc_Tester.Moudules
             LogService.AddLogToEnqueue("OPC缓存已清空(speed/density/position)", EnumMsgType.Info);
         }
 
+        /// <summary>
+        /// 向指定节点写入值（通用写入）
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteNodeValue(string nodeId, object value)
+        {
+            if (_session == null || !_isConnected)
+                return false;
+            try
+            {
+                var write = new WriteValue
+                {
+                    NodeId = NodeId.Parse(nodeId),
+                    AttributeId = Attributes.Value,
+                    Value = new DataValue(new Variant(value))
+                };
+                var nodesToWrite = new WriteValueCollection { write };
+                StatusCodeCollection results;
+                DiagnosticInfoCollection diag;
+                _session.Write(null, nodesToWrite, out results, out diag);
+                if (results != null && results.Count > 0 && StatusCode.IsGood(results[0]))
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                LogService.AddLogToEnqueue("OPC写入失败" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 向 SESSION COMMAND 节点写入命令（便捷方法）
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public bool WriteSessionCommand(string command)
+        {
+            return WriteNodeValue(CommandNodeId, command);
+        }
+
+        public bool TryReadNodeValueAsString(string nodeId, out string value)
+        {
+            value = string.Empty;
+            if (_session == null || !_isConnected)
+                return false;
+            try
+            {
+                DataValue dataValue = _session.ReadValue(NodeId.Parse(nodeId));
+                if (dataValue == null || StatusCode.IsBad(dataValue.StatusCode))
+                    return false;
+
+                value = Convert.ToString(dataValue.Value) ?? string.Empty;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogService.AddLogToEnqueue("OPC读取字符串节点失败" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                return false;
+            }
+        }
+
+        public bool TryReadNodeValueAsDouble(string nodeId, out double value)
+        {
+            value = 0;
+            if (_session == null || !_isConnected)
+                return false;
+            try
+            {
+                DataValue dataValue = _session.ReadValue(NodeId.Parse(nodeId));
+                if (dataValue == null || StatusCode.IsBad(dataValue.StatusCode) || dataValue.Value == null)
+                    return false;
+
+                value = Convert.ToDouble(dataValue.Value);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogService.AddLogToEnqueue("OPC读取数值节点失败" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                return false;
+            }
+        }
+
+        private static bool IsStandbyState(string state)
+        {
+            string normalized = (state ?? string.Empty).Trim();
+            return string.Equals(normalized, "0", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(normalized, "Standby", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsActiveState(string state)
+        {
+            string normalized = (state ?? string.Empty).Trim();
+            return string.Equals(normalized, "1", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(normalized, "Active", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public async Task<bool> WriteSessionResetAndConfirmAsync(int timeoutMs = 5000, int pollIntervalMs = 200)
+        {
+            double beforeLength;
+            if (TryReadNodeValueAsDouble(SessionCurrentLengthNodeId, out beforeLength))
+                LogService.AddLogToEnqueue($"SESSION RESET前 CurrentLength={beforeLength}", EnumMsgType.Info);
+
+            if (!WriteSessionCommand("SESSION RESET"))
+            {
+                LogService.AddLogToEnqueue("向OPC写入 SESSION RESET 失败", EnumMsgType.Exception);
+                return false;
+            }
+
+            DateTime deadline = DateTime.Now.AddMilliseconds(timeoutMs);
+            while (DateTime.Now <= deadline)
+            {
+                double currentLength;
+                if (TryReadNodeValueAsDouble(SessionCurrentLengthNodeId, out currentLength))
+                {
+                    if (Math.Abs(currentLength) < 0.000001)
+                    {
+                        LogService.AddLogToEnqueue("SESSION RESET确认成功，CurrentLength=0", EnumMsgType.Info);
+                        return true;
+                    }
+                }
+                await Task.Delay(pollIntervalMs);
+            }
+
+            double finalLength;
+            if (TryReadNodeValueAsDouble(SessionCurrentLengthNodeId, out finalLength))
+                LogService.AddLogToEnqueue($"SESSION RESET确认超时，CurrentLength={finalLength}", EnumMsgType.Exception);
+            else
+                LogService.AddLogToEnqueue("SESSION RESET确认超时，CurrentLength读取失败", EnumMsgType.Exception);
+
+            return false;
+        }
+
+        public async Task<bool> WriteSessionStoreAndConfirmAsync(string code, int timeoutMs = 5000, int pollIntervalMs = 200)
+        {
+            string beforePath;
+            TryReadNodeValueAsString(SessionLastOutputPathNodeId, out beforePath);
+            LogService.AddLogToEnqueue($"SESSION STORE前 LastOutputPath={beforePath}", EnumMsgType.Info);
+
+            // 清洗条码参数，移除文件名中不可用的字符，替换空白为下划线，限制长度
+            string originalCode = code ?? string.Empty;
+            string sanitizedCode = originalCode;
+            try
+            {
+                var invalid = Path.GetInvalidFileNameChars();
+                var sb = new StringBuilder();
+                foreach (char c in sanitizedCode)
+                {
+                    if (Array.IndexOf(invalid, c) < 0)
+                    {
+                        sb.Append(c);
+                    }
+                }
+                sanitizedCode = sb.ToString();
+                // 将任意连续空白替换为单个下划线，避免空格作为文件名问题
+                sanitizedCode = Regex.Replace(sanitizedCode, "\\s+", "_");
+                // 限制文件名长度，避免过长
+                const int maxLen = 60;
+                if (sanitizedCode.Length > maxLen)
+                    sanitizedCode = sanitizedCode.Substring(0, maxLen);
+            }
+            catch (Exception ex)
+            {
+                LogService.AddLogToEnqueue($"SESSION STORE 条码清洗失败: {ex.Message}", EnumMsgType.Exception);
+                sanitizedCode = originalCode ?? string.Empty;
+            }
+
+            LogService.AddLogToEnqueue($"SESSION STORE 条码原始: '{originalCode}' -> 清洗后: '{sanitizedCode}'", EnumMsgType.Info);
+
+            // 在发送 SESSION STORE 之前，先发送 SESSION FOLDER 命令，foldername = C:\Users\QR + sanitizedCode
+            try
+            {
+                string folderName = $"C:\\Users\\QR{sanitizedCode}";
+                LogService.AddLogToEnqueue($"发送 SESSION FOLDER {folderName}", EnumMsgType.Info);
+                if (WriteSessionCommand($"SESSION FOLDER {folderName}"))
+                {
+                    LogService.AddLogToEnqueue($"SESSION FOLDER 写入成功: {folderName}", EnumMsgType.Info);
+                }
+                else
+                {
+                    LogService.AddLogToEnqueue($"SESSION FOLDER 写入失败: {folderName}", EnumMsgType.Exception);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.AddLogToEnqueue($"发送 SESSION FOLDER 失败: {ex.Message}", EnumMsgType.Exception);
+            }
+
+            if (!WriteSessionCommand($"SESSION STORE {sanitizedCode}"))
+            {
+                LogService.AddLogToEnqueue($"向OPC写入 SESSION STORE {sanitizedCode} 失败", EnumMsgType.Exception);
+                return false;
+            }
+
+            DateTime deadline = DateTime.Now.AddMilliseconds(timeoutMs);
+            while (DateTime.Now <= deadline)
+            {
+                string currentPath;
+                if (TryReadNodeValueAsString(SessionLastOutputPathNodeId, out currentPath))
+                {
+                    if (!string.IsNullOrWhiteSpace(currentPath) && !string.Equals(currentPath, beforePath, StringComparison.Ordinal))
+                    {
+                        LogService.AddLogToEnqueue($"SESSION STORE确认成功，LastOutputPath={currentPath}", EnumMsgType.Info);
+                        return true;
+                    }
+                }
+                await Task.Delay(pollIntervalMs);
+            }
+
+            string finalPath;
+            if (TryReadNodeValueAsString(SessionLastOutputPathNodeId, out finalPath))
+                LogService.AddLogToEnqueue($"SESSION STORE确认超时，LastOutputPath={finalPath}", EnumMsgType.Exception);
+            else
+                LogService.AddLogToEnqueue("SESSION STORE确认超时，LastOutputPath读取失败", EnumMsgType.Exception);
+
+            return false;
+        }
+
+        public async Task<bool> EnsureSensorStandbyThenActivateAsync(int timeoutMs = 5000, int pollIntervalMs = 200)
+        {
+            string initialState;
+            if (TryReadNodeValueAsString(CameraStateNodeId, out initialState))
+                LogService.AddLogToEnqueue($"SENSOR ACTIVE前 CameraState={initialState}", EnumMsgType.Info);
+            else
+                LogService.AddLogToEnqueue("SENSOR ACTIVE前 CameraState读取失败", EnumMsgType.Exception);
+
+            if (!IsStandbyState(initialState))
+            {
+                if (!WriteSessionCommand("SENSOR IDLE"))
+                {
+                    LogService.AddLogToEnqueue("发送 COMMAND SENSOR IDLE 失败", EnumMsgType.Exception);
+                }
+                else
+                {
+                    LogService.AddLogToEnqueue("已发送 COMMAND SENSOR IDLE，等待进入Standby", EnumMsgType.Info);
+                }
+
+                DateTime standbyDeadline = DateTime.Now.AddMilliseconds(timeoutMs);
+                bool standbyReached = false;
+                while (DateTime.Now <= standbyDeadline)
+                {
+                    string state;
+                    if (TryReadNodeValueAsString(CameraStateNodeId, out state) && IsStandbyState(state))
+                    {
+                        standbyReached = true;
+                        LogService.AddLogToEnqueue("CameraState已进入Standby", EnumMsgType.Info);
+                        break;
+                    }
+                    await Task.Delay(pollIntervalMs);
+                }
+
+                if (!standbyReached)
+                {
+                    LogService.AddLogToEnqueue("等待CameraState进入Standby超时，继续发送ACTIVE", EnumMsgType.Exception);
+                }
+            }
+
+            if (!WriteSessionCommand("SENSOR ACTIVE"))
+            {
+                LogService.AddLogToEnqueue("向OPC写入 COMMAND SENSOR ACTIVE 失败", EnumMsgType.Exception);
+                return false;
+            }
+
+            DateTime activeDeadline = DateTime.Now.AddMilliseconds(timeoutMs);
+            while (DateTime.Now <= activeDeadline)
+            {
+                string state;
+                if (TryReadNodeValueAsString(CameraStateNodeId, out state))
+                {
+                    if (IsActiveState(state))
+                    {
+                        LogService.AddLogToEnqueue($"COMMAND SENSOR ACTIVE后 CameraState={state}", EnumMsgType.Info);
+                        return true;
+                    }
+                }
+                await Task.Delay(pollIntervalMs);
+            }
+
+            string finalState;
+            if (TryReadNodeValueAsString(CameraStateNodeId, out finalState))
+                LogService.AddLogToEnqueue($"等待ACTIVE状态变化超时，CameraState={finalState}", EnumMsgType.Exception);
+            else
+                LogService.AddLogToEnqueue("等待ACTIVE状态变化超时，CameraState读取失败", EnumMsgType.Exception);
+
+            return false;
+        }
+
+        public async Task<bool> WriteSensorIdleAndConfirmStandbyAsync(int timeoutMs = 5000, int pollIntervalMs = 200)
+        {
+            if (!WriteSessionCommand("SENSOR IDLE"))
+            {
+                LogService.AddLogToEnqueue("向OPC写入 COMMAND SENSOR IDLE 失败", EnumMsgType.Exception);
+                return false;
+            }
+
+            DateTime deadline = DateTime.Now.AddMilliseconds(timeoutMs);
+            while (DateTime.Now <= deadline)
+            {
+                string state;
+                if (TryReadNodeValueAsString(CameraStateNodeId, out state) && IsStandbyState(state))
+                {
+                    LogService.AddLogToEnqueue("COMMAND SENSOR IDLE确认成功，CameraState=Standby", EnumMsgType.Info);
+                    return true;
+                }
+                await Task.Delay(pollIntervalMs);
+            }
+
+            string finalState;
+            if (TryReadNodeValueAsString(CameraStateNodeId, out finalState))
+                LogService.AddLogToEnqueue($"COMMAND SENSOR IDLE确认超时，CameraState={finalState}", EnumMsgType.Exception);
+            else
+                LogService.AddLogToEnqueue("COMMAND SENSOR IDLE确认超时，CameraState读取失败", EnumMsgType.Exception);
+
+            return false;
+        }
+
         // 实现 IDisposable 接口，用于释放资源
         public void Dispose()
         {
@@ -512,7 +947,7 @@ namespace PR_Spc_Tester.Moudules
             catch (Exception ex)
             {
                 // 记录释放资源时的错误日志
-                LogService.AddLogToEnqueue("释放OPC资源时出错"+ex.Message+ex.StackTrace);
+                LogService.AddLogToEnqueue("释放OPC资源时出错" + ex.Message + ex.StackTrace);
             }
 
             // 释放重连操作的令牌源
@@ -549,6 +984,18 @@ namespace PR_Spc_Tester.Moudules
 
         // 构造函数，初始化数据值和时间戳
         public OpcValueEventArgs(double value)
+        {
+            Value = value;
+            Timestamp = DateTime.Now;
+        }
+    }
+    // 事件参数类：字符串类型
+    public class OpcStringEventArgs : EventArgs
+    {
+        public string Value { get; }
+        public DateTime Timestamp { get; }
+
+        public OpcStringEventArgs(string value)
         {
             Value = value;
             Timestamp = DateTime.Now;

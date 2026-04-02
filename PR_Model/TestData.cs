@@ -394,6 +394,17 @@ namespace PR_Model
         /// 位置偏差值
         /// </summary>
         public double StdDevPosition { get; set; }
+        [ExcelColumnName("SizeDV50"), ExcelColumnWidth(30)]
+        /// <summary>
+        /// 粒径统计 DV50
+        /// </summary>
+        public double SizeDV50 { get; set; }
+
+        [ExcelColumnName("SizeDV90"), ExcelColumnWidth(30)]
+        /// <summary>
+        /// 粒径统计 DV90
+        /// </summary>
+        public double SizeDV90 { get; set; }
 
         [ExcelColumnName("摆放时间(取小时)(Placement Time(h))"), ExcelColumnWidth(30)]
 

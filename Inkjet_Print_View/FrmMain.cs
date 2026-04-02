@@ -165,6 +165,8 @@ namespace PR_Spc_Tester
         private void FrmMain_Load(object sender, EventArgs e)
         {
             LogService.AddLogToEnqueue("程序启动...");
+            string schemaCheckMessage = DbSchemaInitializer.EnsureSizeDvColumns();
+            LogService.AddLogToEnqueue(schemaCheckMessage, schemaCheckMessage.Contains("失败") ? EnumMsgType.Exception : EnumMsgType.Info);
             int.TryParse(ConfigAppSettings.GetValue("PlacementTimeout"), out placementTimeout);
             LogService.AddLogToEnqueue("摆放超时时间: " + placementTimeout+"H");
             list = projectdal.GetList();
@@ -388,6 +390,44 @@ namespace PR_Spc_Tester
                         string coldSprayCode = resultCode.Content.Trim();
                         LogService.AddLogToEnqueue($"读取冷喷二维码为{coldSprayCode}", EnumMsgType.Info);
                         testData = dal.GetLastDataByCode(coldSprayCode);
+                        // 尝试向 OPC 写入 SESSION RESET 命令，告知监控模块开始新会话
+                        HiWatchOpcMonitor opcSession = null;
+                        try
+                        {
+                            string url = ConfigAppSettings.GetValue("MonitorIP").ToString();
+                            opcSession = new HiWatchOpcMonitor();
+                            await opcSession.ConnectAsync(url);
+                            bool activeConfirmed = await opcSession.EnsureSensorStandbyThenActivateAsync(5000);
+                            if (activeConfirmed)
+                            {
+                                LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认成功", EnumMsgType.Info);
+                            }
+                            else
+                            {
+                                LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认失败", EnumMsgType.Exception);
+                            }
+
+                            try
+                            {
+                                bool resetConfirmed = await opcSession.WriteSessionResetAndConfirmAsync(5000);
+                                if (resetConfirmed)
+                                {
+                                    LogService.AddLogToEnqueue("SESSION RESET执行确认成功", EnumMsgType.Info);
+                                }
+                                else
+                                {
+                                    LogService.AddLogToEnqueue("SESSION RESET执行确认失败", EnumMsgType.Exception);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                LogService.AddLogToEnqueue("写SESSION RESET失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.AddLogToEnqueue("写SESSION RESET失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                        }
                         await Task.Delay(100);
                         if (testData == null)
                         {
@@ -460,10 +500,48 @@ namespace PR_Spc_Tester
                             testData.IntakeFlow = plcHelper.GetIntakeFlow().Content;
 
                             LogService.AddLogToEnqueue("记录冷喷完成信号=2");
+                            // 冷喷完成后向 OPC 写入 SESSION STORE {code}
+                            try
+                            {
+                                if (opcSession != null)
+                                {
+                                    bool storeConfirmed = await opcSession.WriteSessionStoreAndConfirmAsync(testData.Code, 5000);
+                                    if (storeConfirmed)
+                                    {
+                                        LogService.AddLogToEnqueue($"SESSION STORE {testData.Code}执行确认成功", EnumMsgType.Info);
+                                    }
+                                    else
+                                    {
+                                        LogService.AddLogToEnqueue($"SESSION STORE {testData.Code}执行确认失败", EnumMsgType.Exception);
+                                    }
+
+                                    try
+                                    {
+                                        bool idleConfirmed = await opcSession.WriteSensorIdleAndConfirmStandbyAsync(5000);
+                                        if (idleConfirmed)
+                                        {
+                                            LogService.AddLogToEnqueue("COMMAND SENSOR IDLE执行确认成功", EnumMsgType.Info);
+                                        }
+                                        else
+                                        {
+                                            LogService.AddLogToEnqueue("COMMAND SENSOR IDLE执行确认失败", EnumMsgType.Exception);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        LogService.AddLogToEnqueue("写COMMAND SENSOR IDLE失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                LogService.AddLogToEnqueue("写SESSION STORE失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                            }
                             if (!plcHelper.ResetColdSprayReady().IsSuccess)
                             {
                                 plcHelper.ResetColdSprayReady();
                             }
+                            try { opcSession?.Dispose(); } catch { }
                             if (dal.UpColdSpraydate(testData))
                             {
                                 UpdateUI(testData);
@@ -574,9 +652,9 @@ namespace PR_Spc_Tester
                                 lock (_listLock)
                                 {
                                     _samlingData.ID++;
-                                    _samlingData.concentration = Math.Round(e.Density, 2);
-                                    _samlingData.position = Math.Round(e.Position, 2);
-                                    _samlingData.speed = Math.Round(e.Speed, 2);
+                                    _samlingData.concentration = Math.Round(e.Density, 2);//浓度
+                                    _samlingData.position = Math.Round(e.Position, 2);//位置
+                                    _samlingData.speed = Math.Round(e.Speed, 2);//速度
                                     _samlingData.Time = e.Timestamp.ToString("yyyy-MM-dd HH:mm:ss");
                                     timesList.Add(e.Timestamp);
                                     concentrationList.Add((float)e.Density);
@@ -592,6 +670,30 @@ namespace PR_Spc_Tester
                                     {
                                         LogService.AddLogToEnqueue($"监控->条码{testData.Code}已采样{_samlingData.ID}点 速度:{e.Speed:F2} 浓度:{e.Density:F2} 位置:{e.Position:F2}", EnumMsgType.Info);
                                     }
+                                }
+                            };
+                            // 订阅 SizeDV 数据
+                            opcMonitor.OnSizeDV50Received += (sender, e) =>
+                            {
+                                lock (_listLock)
+                                {
+                                    testData.SizeDV50 = e.Value;
+                                }
+                            };
+                            opcMonitor.OnSizeDV90Received += (sender, e) =>
+                            {
+                                lock (_listLock)
+                                {
+                                    testData.SizeDV90 = e.Value;
+                                }
+                            };
+                            opcMonitor.OnAlertMessageReceived += (sender, e) =>
+                            {
+                                LogService.AddLogToEnqueue($"OPC报警消息触发: {e.Value}", EnumMsgType.Exception);
+                                var writeResult = plcHelper.WriteOpcUaAlarmFlag(1);
+                                if (!writeResult.IsSuccess)
+                                {
+                                    LogService.AddLogToEnqueue($"写入PLC报警标志D5725失败: {writeResult.Message}", EnumMsgType.Exception);
                                 }
                             };
                             // 等待PLC完成信号
@@ -1162,6 +1264,8 @@ namespace PR_Spc_Tester
                         testData.MaxPosition.ToString("F2"),
                         testData.MinPosition.ToString("F2"),
                         testData.StdDevPosition.ToString("0.00"),
+                        testData.SizeDV50.ToString("0.00"),
+                        testData.SizeDV90.ToString("0.00"),
                         testData.Location,
                         testData.PlacementHour
                     });

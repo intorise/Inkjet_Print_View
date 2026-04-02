@@ -113,6 +113,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbSchemaInitializer.cs" />
     <Compile Include="DapperHelper.cs" />
     <Compile Include="PLCAlarmDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

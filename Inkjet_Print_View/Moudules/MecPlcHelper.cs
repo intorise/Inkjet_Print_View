@@ -578,6 +578,22 @@ namespace PR_Spc_Tester.Moudules
                 return new OperateResult<short>(-1, "写入监控异常参数失败" + ex.Message);
             }
         }
+
+        /// <summary>
+        /// OPC UA报警信号写入PLC：1=有报警
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult WriteOpcUaAlarmFlag(short val)
+        {
+            try
+            {
+                return mc_net.Write("D5725", val);
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<short>(-1, "写入OPC UA报警信号失败" + ex.Message);
+            }
+        }
         #region 心跳
 
         /// <summary>

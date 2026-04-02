@@ -132,6 +132,8 @@
             this.Col_MaxPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_MinPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_StdDevPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_SizeDV50 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_SizeDV90 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Location = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_PlacementHour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -205,6 +207,8 @@
             this.dgv_his_MaxPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_MinPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_StdDevPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_his_SizeDV50 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_his_SizeDV90 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_Location = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_his_PlacementHour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pageData = new Sunny.UI.UIPagination();
@@ -547,6 +551,8 @@
             this.Col_MaxPosition,
             this.Col_MinPosition,
             this.Col_StdDevPosition,
+            this.Col_SizeDV50,
+            this.Col_SizeDV90,
             this.Col_Location,
             this.Col_PlacementHour});
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1101,6 +1107,22 @@
             this.Col_StdDevPosition.ReadOnly = true;
             this.Col_StdDevPosition.Width = 125;
             // 
+            // Col_SizeDV50
+            // 
+            this.Col_SizeDV50.HeaderText = "粒径统计 DV50";
+            this.Col_SizeDV50.MinimumWidth = 6;
+            this.Col_SizeDV50.Name = "Col_SizeDV50";
+            this.Col_SizeDV50.ReadOnly = true;
+            this.Col_SizeDV50.Width = 125;
+            // 
+            // Col_SizeDV90
+            // 
+            this.Col_SizeDV90.HeaderText = "粒径统计 DV90";
+            this.Col_SizeDV90.MinimumWidth = 6;
+            this.Col_SizeDV90.Name = "Col_SizeDV90";
+            this.Col_SizeDV90.ReadOnly = true;
+            this.Col_SizeDV90.Width = 125;
+            // 
             // Col_Location
             // 
             this.Col_Location.HeaderText = "喷淋位置 Spraying Position";
@@ -1217,6 +1239,8 @@
             this.dgv_his_MaxPosition,
             this.dgv_his_MinPosition,
             this.dgv_his_StdDevPosition,
+            this.dgv_his_SizeDV50,
+            this.dgv_his_SizeDV90,
             this.dgv_his_Location,
             this.dgv_his_PlacementHour});
             dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1881,6 +1905,24 @@
             this.dgv_his_StdDevPosition.Name = "dgv_his_StdDevPosition";
             this.dgv_his_StdDevPosition.ReadOnly = true;
             this.dgv_his_StdDevPosition.Width = 200;
+            // 
+            // dgv_his_SizeDV50
+            // 
+            this.dgv_his_SizeDV50.DataPropertyName = "SizeDV50";
+            this.dgv_his_SizeDV50.HeaderText = "粒径统计 DV50";
+            this.dgv_his_SizeDV50.MinimumWidth = 6;
+            this.dgv_his_SizeDV50.Name = "dgv_his_SizeDV50";
+            this.dgv_his_SizeDV50.ReadOnly = true;
+            this.dgv_his_SizeDV50.Width = 125;
+            // 
+            // dgv_his_SizeDV90
+            // 
+            this.dgv_his_SizeDV90.DataPropertyName = "SizeDV90";
+            this.dgv_his_SizeDV90.HeaderText = "粒径统计 DV90";
+            this.dgv_his_SizeDV90.MinimumWidth = 6;
+            this.dgv_his_SizeDV90.Name = "dgv_his_SizeDV90";
+            this.dgv_his_SizeDV90.ReadOnly = true;
+            this.dgv_his_SizeDV90.Width = 125;
             // 
             // dgv_his_Location
             // 
@@ -2673,6 +2715,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_MaxPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_MinPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_StdDevPosition;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_SizeDV50;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_SizeDV90;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Location;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_PlacementHour;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_his_ID;
@@ -2744,6 +2788,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_MaxPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_MinPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_StdDevPosition;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_SizeDV50;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_SizeDV90;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_Location;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgv_his_PlacementHour;
         private System.Windows.Forms.Label lb_clear_heartbeat;
