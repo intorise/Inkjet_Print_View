@@ -132,7 +132,7 @@ namespace PR_DAL
         {
             string sql = "select * from test_data";
             sql += GetCondition(param);
-            sql += " order by ID asc";
+            sql += " order by ID desc";
             return DapperHelper.Query<TestData>(sql);
         }
         /// <summary>
