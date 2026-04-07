@@ -17,6 +17,7 @@ using PR_Spc_Tester.Services;
 using PR_Spc_Tester.UserForms;
 using ScottPlot;
 using Sunny.UI;
+using System.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -59,6 +60,11 @@ namespace PR_Spc_Tester
         /// 测试数据
         /// </summary>
         TestDataDal dal = new TestDataDal();
+        // Realtime binding structures
+        private BindingList<TestData> realtimeList = new BindingList<TestData>();
+        private BindingSource realtimeBinding = new BindingSource();
+        private Dictionary<string, TestData> realtimeDict = new Dictionary<string, TestData>();
+        private int realtimeMaxCount = 500; // max items to keep in realtime list
         // TestDataServerDal dalRemote = new TestDataServerDal(ConfigAppSettings.GetValue("ConStringRemote"));
         /// <summary>
         /// 测试项目
@@ -187,6 +193,20 @@ namespace PR_Spc_Tester
             Thread.Sleep(1000);
 
             InitDataGridSpc();
+            // realtime binding init
+            realtimeBinding.DataSource = realtimeList;
+            dgv_realtime.AutoGenerateColumns = false;
+            dgv_realtime.DataSource = realtimeBinding;
+            try
+            {
+                dgv_realtime.Columns["Col_Code"].DataPropertyName = "Code";
+                dgv_realtime.Columns["Col_AddTime"].DataPropertyName = "AddTime";
+                dgv_realtime.Columns["Col_PostSprayWeight"].DataPropertyName = "PostSprayWeight";
+                dgv_realtime.Columns["Col_SedimentationWeight"].DataPropertyName = "SedimentationWeight";
+                dgv_realtime.Columns["Col_Result"].DataPropertyName = "WeightResult";
+                dgv_realtime.Columns["Col_UtilizationRate"].DataPropertyName = "UtilizationRate";
+            }
+            catch { }
             TestCount = dal.GetTotalCount();
 
             UpdateCpk();
@@ -529,6 +549,7 @@ namespace PR_Spc_Tester
                             if (dal.UpColdSpraydate(testData))
                             {
                                 UpdateUI(testData);
+                                this.Invoke(new Action(() => { LoadHis(); }));
                             }
                         }
                     }
@@ -723,6 +744,7 @@ namespace PR_Spc_Tester
                             if (dal.UpMonitordate(testData))
                             {
                                 UpdateUI(testData);
+                                this.Invoke(new Action(() => { LoadHis(); }));
                             }
                             else
                             {
@@ -839,6 +861,7 @@ namespace PR_Spc_Tester
                             if (dal.UpHeavydate(testData))
                             {
                                 UpdateUI(testData);
+                                this.Invoke(new Action(() => { LoadHis(); }));
                             }
                             else
                             {
@@ -1107,6 +1130,7 @@ namespace PR_Spc_Tester
                             if (dal.UpHeavydate(testData))
                             {
                                 UpdateUI(testData);
+                                this.Invoke(new Action(() => { LoadHis(); }));
                             }
                             else
                             {
@@ -1181,81 +1205,74 @@ namespace PR_Spc_Tester
             {
                 this.Invoke(new Action(() =>
                 {
-                    dgv_realtime.Rows.Insert(0, new object[] {
-                        testData.Code,
-                        testData.PreSprayWeight.ToString("0.00"),
-                        testData.PreSprayWeight_1.ToString("0.00"),
-                        testData.PreSprayWeight_1_5.ToString("0.00"),
-                        testData.PreSprayWeight_2.ToString("0.00"),
-                        testData.PreSprayWeight_2_5.ToString("0.00"),
-                        testData.PostSprayWeight.ToString("0.00"),
-                        testData.PostSprayWeight_1.ToString("0.00"),
-                        testData.PostSprayWeight_1_5.ToString("0.00"),
-                        testData.PostSprayWeight_2.ToString("0.00"),
-                        testData.PostSprayWeight_2_5.ToString("0.00"),
-                        testData.SedimentationWeight.ToString("0.00"),
-                        testData.WeightUpperLimit.ToString("0.00"),
-                        testData.WeightLowerLimit.ToString("0.00"),
-                        testData.WeightResult,
-                        testData.AddTime,
-                        testData.UtilizationRate,
-                        testData.AverageTemperature.ToString("F2"),
-                        testData.AverageTemperatureUpperLimit.ToString("F2"),
-                        testData.AverageTemperatureLowerLimit.ToString("F2"),
-                        testData.AverageTemperatureResult,
-                        testData.MinTemperature.ToString("F2"),
-                        testData.MinTemperatureLowerLimit.ToString("F2"),
-                        testData.MinTemperatureResult,
-                        testData.MaxTemperature.ToString("F2"),
-
-                        testData.AverageNitrogenPressure.ToString("F2"),
-                        testData.AverageNitrogenPressureUpperLimit.ToString("F2"),
-                        testData.AverageNitrogenPressureLowerLimit.ToString("F2"),
-                        testData.AverageNitrogenPressureResult,
-                        testData.MinNitrogenPressure.ToString("F2"),
-                        testData.MinNitrogenPressureLowerLimit.ToString("f2"),
-                        testData.MinNitrogenPressureResult,
-                        testData.MaxNitrogenPressure.ToString("F2"),
-
-                        testData.PowderSupplySpeed.ToString("0.00"),
-                        testData.StartTime,
-                        testData.EndTime,
-                        testData.Beat.ToString("0.00"),
-                        testData.PlacementTime,
-                        testData.ThreadRotation.ToString("0.00"),
-                        testData.IntakePressure.ToString("0.00"),
-                        testData.IntakePressureLowerLimit.ToString("F2"),
-                        testData.IntakeFlow.ToString("0.00"), //进气流量
-                        testData.IntakePressureResult,
-                        testData.NozzleHeight.ToString("0.00"),
-                        testData.AverageSpeed.ToString("0.00"),
-                        testData.AverageSpeedUpperLimit.ToString("0.00"),
-                        testData.AverageSpeedLowerLimit.ToString("0.00"),
-                        testData.AverageSpeedResult,
-                        testData.MaxSpeed.ToString("0.00"),
-                        testData.MinSpeed.ToString("0.00"),
-                        testData.MinSpeedLowerLimit.ToString("F2"),
-                        testData.MinSpeedResult,
-                        testData.StdDevSpeed.ToString("0.00"),
-                        testData.AverageConcentration.ToString("0.00"),
-                        testData.AverageConcentrationUpperLimit.ToString("0.00"),
-                        testData.AverageConcentrationLowerLimit.ToString("0.00"),
-                        testData.AverageConcentrationResult,
-                        testData.MaxConcentration.ToString("0.00"),
-                        testData.MinConcentration.ToString("0.00"),
-                        testData.StdDevConcentration.ToString("0.00"),
-                        testData.AveragePosition.ToString("F2"),
-                        testData.MaxPosition.ToString("F2"),
-                        testData.MinPosition.ToString("F2"),
-                        testData.StdDevPosition.ToString("0.00"),
-                        testData.SizeDV50.ToString("0.00"),
-                        testData.SizeDV90.ToString("0.00"),
-                        testData.Location,
-                        testData.PlacementHour
-                    });
-                    if (testData.WeightResult == "NG" || testData.TemperatureResult == "NG" || testData.NitrogenPressureResult == "NG" || testData.IntakePressureResult == "NG" || testData.SpeedResult == "NG" || testData.ConcentrationResult == "NG")
+                    // Update realtime binding list (prevent duplicate Code rows)
+                    if (string.IsNullOrEmpty(testData.Code)) return;
+                    if (realtimeDict.TryGetValue(testData.Code, out var existing))
                     {
-                        dgv_realtime.Rows[0].DefaultCellStyle.BackColor = Color.LightPink;
+                        // update fields on existing object
+                        existing.PreSprayWeight = testData.PreSprayWeight;
+                        existing.PreSprayWeight_1 = testData.PreSprayWeight_1;
+                        existing.PreSprayWeight_1_5 = testData.PreSprayWeight_1_5;
+                        existing.PreSprayWeight_2 = testData.PreSprayWeight_2;
+                        existing.PreSprayWeight_2_5 = testData.PreSprayWeight_2_5;
+                        existing.PostSprayWeight = testData.PostSprayWeight;
+                        existing.PostSprayWeight_1 = testData.PostSprayWeight_1;
+                        existing.PostSprayWeight_1_5 = testData.PostSprayWeight_1_5;
+                        existing.PostSprayWeight_2 = testData.PostSprayWeight_2;
+                        existing.PostSprayWeight_2_5 = testData.PostSprayWeight_2_5;
+                        existing.SedimentationWeight = testData.SedimentationWeight;
+                        existing.WeightUpperLimit = testData.WeightUpperLimit;
+                        existing.WeightLowerLimit = testData.WeightLowerLimit;
+                        existing.WeightResult = testData.WeightResult;
+                        existing.AddTime = testData.AddTime;
+                        existing.UtilizationRate = testData.UtilizationRate;
+                        existing.AverageTemperature = testData.AverageTemperature;
+                        existing.AverageNitrogenPressure = testData.AverageNitrogenPressure;
+                        existing.MinNitrogenPressure = testData.MinNitrogenPressure;
+                        existing.PowderSupplySpeed = testData.PowderSupplySpeed;
+                        existing.StartTime = testData.StartTime;
+                        existing.EndTime = testData.EndTime;
+                        existing.Beat = testData.Beat;
+                        existing.PlacementTime = testData.PlacementTime;
+                        existing.IntakePressure = testData.IntakePressure;
+                        existing.IntakeFlow = testData.IntakeFlow;
+                        existing.IntakePressureResult = testData.IntakePressureResult;
+                        existing.UtilizationRate = testData.UtilizationRate;
+                        int idx = realtimeList.IndexOf(existing);
+                        if (idx >= 0) realtimeList.ResetItem(idx);
+                        // update row color if needed
+                        if (idx >= 0)
+                        {
+                            if (existing.WeightResult == "NG" || existing.TemperatureResult == "NG" || existing.NitrogenPressureResult == "NG" || existing.IntakePressureResult == "NG" || existing.SpeedResult == "NG" || existing.ConcentrationResult == "NG")
+                            {
+                                dgv_realtime.Rows[idx].DefaultCellStyle.BackColor = Color.LightPink;
+                            }
+                            else
+                            {
+                                dgv_realtime.Rows[idx].DefaultCellStyle.BackColor = Color.White;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // insert new item at top
+                        realtimeList.Insert(0, testData);
+                        realtimeDict[testData.Code] = testData;
+                        // apply highlight for newest row
+                        if (dgv_realtime.Rows.Count > 0)
+                        {
+                            if (testData.WeightResult == "NG" || testData.TemperatureResult == "NG" || testData.NitrogenPressureResult == "NG" || testData.IntakePressureResult == "NG" || testData.SpeedResult == "NG" || testData.ConcentrationResult == "NG")
+                            {
+                                dgv_realtime.Rows[0].DefaultCellStyle.BackColor = Color.LightPink;
+                            }
+                        }
+                        // trim list if too long
+                        if (realtimeList.Count > realtimeMaxCount)
+                        {
+                            var last = realtimeList[realtimeList.Count - 1];
+                            try { realtimeDict.Remove(last.Code); } catch { }
+                            realtimeList.RemoveAt(realtimeList.Count - 1);
+                        }
                     }
                 }));
                 //int Productresult = testData.Result;

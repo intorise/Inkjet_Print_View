@@ -94,7 +94,7 @@ namespace PR_DAL
             int startIndex = (param.PageNum - 1) * param.PageSize;
             string sql = "select * from test_data";
             sql += GetCondition(param);
-            sql += " order by ID desc";
+            sql += " order by COALESCE(AddTime,PlacementTime) desc, ID desc";
             sql += $" limit {startIndex},{param.PageSize}";
             List<TestData> list = DapperHelper.Query<TestData>(sql);
             return list;
@@ -132,7 +132,7 @@ namespace PR_DAL
         {
             string sql = "select * from test_data";
             sql += GetCondition(param);
-            sql += " order by ID desc";
+            sql += " order by COALESCE(AddTime,PlacementTime) desc, ID desc";
             return DapperHelper.Query<TestData>(sql);
         }
         /// <summary>
