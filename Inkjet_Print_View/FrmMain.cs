@@ -505,6 +505,7 @@ namespace PR_Spc_Tester
                             {
                                 if (opcSession != null)
                                 {
+                                    // 仅写 SESSION STORE（不发送 COMMAND SENSOR IDLE）
                                     bool storeConfirmed = await opcSession.WriteSessionStoreAndConfirmAsync(testData.Code, 5000);
                                     if (storeConfirmed)
                                     {
@@ -513,23 +514,6 @@ namespace PR_Spc_Tester
                                     else
                                     {
                                         LogService.AddLogToEnqueue($"SESSION STORE {testData.Code}执行确认失败", EnumMsgType.Exception);
-                                    }
-
-                                    try
-                                    {
-                                        bool idleConfirmed = await opcSession.WriteSensorIdleAndConfirmStandbyAsync(5000);
-                                        if (idleConfirmed)
-                                        {
-                                            LogService.AddLogToEnqueue("COMMAND SENSOR IDLE执行确认成功", EnumMsgType.Info);
-                                        }
-                                        else
-                                        {
-                                            LogService.AddLogToEnqueue("COMMAND SENSOR IDLE执行确认失败", EnumMsgType.Exception);
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        LogService.AddLogToEnqueue("写COMMAND SENSOR IDLE失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                                     }
                                 }
                             }
