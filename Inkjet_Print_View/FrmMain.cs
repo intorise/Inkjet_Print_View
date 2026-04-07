@@ -65,6 +65,9 @@ namespace PR_Spc_Tester
         private BindingSource realtimeBinding = new BindingSource();
         private Dictionary<string, TestData> realtimeDict = new Dictionary<string, TestData>();
         private int realtimeMaxCount = 500; // max items to keep in realtime list
+        // Alarm binding structures
+        private BindingList<PLCAlarm> alarmList = new BindingList<PLCAlarm>();
+        private BindingSource alarmBinding = new BindingSource();
         // TestDataServerDal dalRemote = new TestDataServerDal(ConfigAppSettings.GetValue("ConStringRemote"));
         /// <summary>
         /// 测试项目
@@ -207,6 +210,10 @@ namespace PR_Spc_Tester
                 dgv_realtime.Columns["Col_UtilizationRate"].DataPropertyName = "UtilizationRate";
             }
             catch { }
+            // alarm binding init
+            alarmBinding.DataSource = alarmList;
+            dgv_alarmmessage.AutoGenerateColumns = false;
+            dgv_alarmmessage.DataSource = alarmBinding;
             TestCount = dal.GetTotalCount();
 
             UpdateCpk();
@@ -1186,12 +1193,13 @@ namespace PR_Spc_Tester
             {
                 this.Invoke(new Action(() =>
                 {
-
-
-                    dgv_alarmmessage.Rows.Insert(0, new object[] {
-                        alarmData.AlarmMessage,
-                        alarmData.AddTime
-                    });
+                    // insert alarm at top of binding list
+                    alarmList.Insert(0, alarmData);
+                    // keep reasonable size
+                    if (alarmList.Count > 500)
+                    {
+                        alarmList.RemoveAt(alarmList.Count - 1);
+                    }
                 }));
             }
         }
@@ -1953,12 +1961,16 @@ namespace PR_Spc_Tester
             List<PLCAlarm> list = pLCAlarmDal.GetList(param);
             int count = pLCAlarmDal.GetCount(param);
             pageData.TotalCount = count;
-            dgv_alarmmessage.DataSource = list;
+            // update binding list instead of replacing DataSource
+            alarmList.Clear();
+            foreach (var a in list)
+            {
+                alarmList.Add(a);
+            }
         }
 
         private void btn_AlarmSelect_Click(object sender, EventArgs e)
         {
-            dgv_alarmmessage.Rows.Clear();
             LoadAlarm();
         }
 
