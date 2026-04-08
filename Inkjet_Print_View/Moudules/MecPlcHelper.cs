@@ -29,6 +29,7 @@ namespace PR_Spc_Tester.Moudules
         public MecPlcHelper() { }
         MelsecMcNet mc_net = null;
         bool _isConnected;
+        private readonly object _mcLock = new object();
 
         /// <summary>
         /// 连接PLC
@@ -354,11 +355,41 @@ namespace PR_Spc_Tester.Moudules
         {
             try
             {
-                return mc_net.Write("D5711", (short)2);
+                lock (_mcLock)
+                {
+                    if (mc_net == null)
+                    {
+                        ConnectPLC();
+                    }
+                    return mc_net.Write("D5711", (short)2);
+                }
             }
             catch (Exception ex)
             {
-                return new OperateResult<short>(-1, "读取失败" + ex.Message);
+                return new OperateResult<short>(-1, "ResetMonitorReady 失败: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 写入监控状态到 D5711（例如：4=判定非OK, 2=复位）
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult WriteMonitorStatus(short val)
+        {
+            try
+            {
+                lock (_mcLock)
+                {
+                    if (mc_net == null)
+                    {
+                        ConnectPLC();
+                    }
+                    return mc_net.Write("D5711", val);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<short>(-1, "写入监控状态失败: " + ex.Message);
             }
         }
         /// <summary>

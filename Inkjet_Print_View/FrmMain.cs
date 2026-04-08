@@ -742,9 +742,34 @@ namespace PR_Spc_Tester
                             testData.SpeedResult = testData.AverageSpeedResult == "OK" && testData.MinSpeedResult == "OK" ? "OK" : "NG";
                             testData.ConcentrationResult = testData.AverageConcentrationResult == "OK" ? "OK" : "NG";
                             LogService.AddLogToEnqueue("记录监控完成信号=2");
-                            if (!plcHelper.ResetMonitorReady().IsSuccess)
+                            // 判定结果：若任一业务维度为 NG，则写入 D5711=4；否则写入 D5711=2 (复位)
+                            bool anyNg = testData.WeightResult == "NG" || testData.TemperatureResult == "NG" || testData.AverageNitrogenPressureResult == "NG" || testData.NitrogenPressureResult == "NG" || testData.IntakePressureResult == "NG" || testData.SpeedResult == "NG" || testData.ConcentrationResult == "NG";
+                            if (anyNg)
                             {
-                                plcHelper.ResetMonitorReady();
+                                var writeRes = plcHelper.WriteMonitorStatus(4);
+                                if (!writeRes.IsSuccess)
+                                {
+                                    LogService.AddLogToEnqueue($"写入监控结果 D5711=4 失败: {writeRes.Message}", EnumMsgType.Exception);
+                                    // 重试一次
+                                    writeRes = plcHelper.WriteMonitorStatus(4);
+                                    if (!writeRes.IsSuccess)
+                                    {
+                                        LogService.AddLogToEnqueue($"重试写入监控结果失败: {writeRes.Message}", EnumMsgType.Exception);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var resetRes = plcHelper.ResetMonitorReady();
+                                if (!resetRes.IsSuccess)
+                                {
+                                    // 再试一次
+                                    resetRes = plcHelper.ResetMonitorReady();
+                                    if (!resetRes.IsSuccess)
+                                    {
+                                        LogService.AddLogToEnqueue($"写入监控复位 D5711=2 失败: {resetRes.Message}", EnumMsgType.Exception);
+                                    }
+                                }
                             }
 
                             // 保存数据
