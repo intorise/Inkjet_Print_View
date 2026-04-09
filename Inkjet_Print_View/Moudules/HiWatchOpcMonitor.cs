@@ -746,7 +746,7 @@ namespace PR_Spc_Tester.Moudules
             return false;
         }
 
-        public async Task<bool> WriteSessionStoreAndConfirmAsync(string code, int timeoutMs = 5000, int pollIntervalMs = 200)
+        public async Task<bool> WriteSessionStoreAndConfirmAsync(string code, int confirmDelayMs = 100)
         {
             string beforePath;
             TryReadNodeValueAsString(SessionLastOutputPathNodeId, out beforePath);
@@ -801,37 +801,40 @@ namespace PR_Spc_Tester.Moudules
                 LogService.AddLogToEnqueue($"发送 SESSION FOLDER 失败: {ex.Message}", EnumMsgType.Exception);
             }
 
-            if (!WriteSessionCommand($"SESSION STORE {sanitizedCode}"))
+            bool storeWriteOk = WriteSessionCommand($"SESSION STORE {sanitizedCode}");
+            if (!storeWriteOk)
             {
                 LogService.AddLogToEnqueue($"向OPC写入 SESSION STORE {sanitizedCode} 失败", EnumMsgType.Exception);
                 return false;
             }
 
-            DateTime deadline = DateTime.Now.AddMilliseconds(timeoutMs);
-            while (DateTime.Now <= deadline)
+            // 仅做一次确认：发送后短暂等待，再读取一次结果。
+            if (confirmDelayMs < 0)
             {
-                string currentPath;
-                if (TryReadNodeValueAsString(SessionLastOutputPathNodeId, out currentPath))
+                confirmDelayMs = 50;
+            }
+            await Task.Delay(confirmDelayMs);
+
+            string currentPath;
+            if (TryReadNodeValueAsString(SessionLastOutputPathNodeId, out currentPath))
+            {
+                // 以“命令写入成功(status=0语义) + LastOutputPath非空”作为成功判据。
+                if (!string.IsNullOrWhiteSpace(currentPath))
                 {
-                    if (!string.IsNullOrWhiteSpace(currentPath) && !string.Equals(currentPath, beforePath, StringComparison.Ordinal))
-                    {
-                        LogService.AddLogToEnqueue($"SESSION STORE确认成功，LastOutputPath={currentPath}", EnumMsgType.Info);
-                        return true;
-                    }
+                    LogService.AddLogToEnqueue($"SESSION STORE判定成功: status=0, LastOutputPath={currentPath}", EnumMsgType.Info);
+                    return true;
                 }
-                await Task.Delay(pollIntervalMs);
+
+                LogService.AddLogToEnqueue("SESSION STORE判定失败: status=0, LastOutputPath为空", EnumMsgType.Exception);
+                return false;
             }
 
-            string finalPath;
-            if (TryReadNodeValueAsString(SessionLastOutputPathNodeId, out finalPath))
-                LogService.AddLogToEnqueue($"SESSION STORE确认超时，LastOutputPath={finalPath}", EnumMsgType.Exception);
-            else
-                LogService.AddLogToEnqueue("SESSION STORE确认超时，LastOutputPath读取失败", EnumMsgType.Exception);
+            LogService.AddLogToEnqueue("SESSION STORE判定失败: status=0, LastOutputPath读取失败", EnumMsgType.Exception);
 
             return false;
         }
 
-        public async Task<bool> EnsureSensorStandbyThenActivateAsync(int timeoutMs = 5000, int pollIntervalMs = 200)
+        public async Task<bool> EnsureSensorStandbyThenActivateAsync(int timeoutMs = 5000, int pollIntervalMs = 200, bool allowIdleBeforeActive = false)
         {
             string initialState;
             if (TryReadNodeValueAsString(CameraStateNodeId, out initialState))
@@ -839,7 +842,7 @@ namespace PR_Spc_Tester.Moudules
             else
                 LogService.AddLogToEnqueue("SENSOR ACTIVE前 CameraState读取失败", EnumMsgType.Exception);
 
-            if (!IsStandbyState(initialState))
+            if (allowIdleBeforeActive && !IsStandbyState(initialState))
             {
                 if (!WriteSessionCommand("SENSOR IDLE"))
                 {
@@ -868,6 +871,10 @@ namespace PR_Spc_Tester.Moudules
                 {
                     LogService.AddLogToEnqueue("等待CameraState进入Standby超时，继续发送ACTIVE", EnumMsgType.Exception);
                 }
+            }
+            else if (!allowIdleBeforeActive && !IsStandbyState(initialState))
+            {
+                LogService.AddLogToEnqueue("SENSOR IDLE开关关闭，跳过IDLE并直接发送ACTIVE", EnumMsgType.Info);
             }
 
             if (!WriteSessionCommand("SENSOR ACTIVE"))

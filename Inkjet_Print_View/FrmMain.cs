@@ -74,6 +74,7 @@ namespace PR_Spc_Tester
         /// </summary>
         TestProjectDal testProjectDal = new TestProjectDal();
         int placementTimeout = 6;
+        private bool allowSensorIdleBeforeActive = false;
 
         private void InitializeAlarmDictionary()
         {
@@ -178,6 +179,8 @@ namespace PR_Spc_Tester
             LogService.AddLogToEnqueue(schemaCheckMessage, schemaCheckMessage.Contains("失败") ? EnumMsgType.Exception : EnumMsgType.Info);
             int.TryParse(ConfigAppSettings.GetValue("PlacementTimeout"), out placementTimeout);
             LogService.AddLogToEnqueue("摆放超时时间: " + placementTimeout+"H");
+            allowSensorIdleBeforeActive = (ConfigAppSettings.GetValue("AllowSensorIdleBeforeActive") ?? "0").ToString() == "1";
+            LogService.AddLogToEnqueue($"SENSOR IDLE预处理开关: {(allowSensorIdleBeforeActive ? "开启" : "关闭")}", EnumMsgType.Info);
             list = projectdal.GetList();
             DateTime timeNow = DateTime.Now;
             this.Invoke(new Action(() =>
@@ -407,24 +410,14 @@ namespace PR_Spc_Tester
                     {
                         startTime = DateTime.Now;
                         LogService.AddLogToEnqueue("收到冷喷读取数据信号");
-                        OperateResult<string> resultCode = plcHelper.GetColdSprayCode();//D5570 地址为冷喷二维码，长度49
-                        if (resultCode.Content == "")
-                        {
-                            LogService.AddLogToEnqueue($"读取冷喷二维码为{resultCode.Content}");
-                            continue;
-                        }
-
-                        string coldSprayCode = resultCode.Content.Trim();
-                        LogService.AddLogToEnqueue($"读取冷喷二维码为{coldSprayCode}", EnumMsgType.Info);
-                        testData = dal.GetLastDataByCode(coldSprayCode);
-                        // 尝试向 OPC 写入 SESSION RESET 命令，告知监控模块开始新会话
+                        // 收到冷喷启动信号后优先发送激活命令，减少启动侧等待。
                         HiWatchOpcMonitor opcSession = null;
                         try
                         {
                             string url = ConfigAppSettings.GetValue("MonitorIP").ToString();
                             opcSession = new HiWatchOpcMonitor();
                             await opcSession.ConnectAsync(url);
-                            bool activeConfirmed = await opcSession.EnsureSensorStandbyThenActivateAsync(5000);
+                            bool activeConfirmed = await opcSession.EnsureSensorStandbyThenActivateAsync(5000, 200, allowSensorIdleBeforeActive);
                             if (activeConfirmed)
                             {
                                 LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认成功", EnumMsgType.Info);
@@ -455,6 +448,18 @@ namespace PR_Spc_Tester
                         {
                             LogService.AddLogToEnqueue("写SESSION RESET失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                         }
+
+                        OperateResult<string> resultCode = plcHelper.GetColdSprayCode();//D5570 地址为冷喷二维码，长度49
+                        if (resultCode.Content == "")
+                        {
+                            LogService.AddLogToEnqueue($"读取冷喷二维码为{resultCode.Content}");
+                            try { opcSession?.Dispose(); } catch { }
+                            continue;
+                        }
+
+                        string coldSprayCode = resultCode.Content.Trim();
+                        LogService.AddLogToEnqueue($"读取冷喷二维码为{coldSprayCode}", EnumMsgType.Info);
+                        testData = dal.GetLastDataByCode(coldSprayCode);
                         await Task.Delay(100);
                         if (testData == null)
                         {
@@ -470,6 +475,7 @@ namespace PR_Spc_Tester
                                 if (resultNotCodeRest.Content == 1)
                                 {
                                     LogService.AddLogToEnqueue($"冷喷条码{coldSprayCode}不存在于数据库库异常已复位，继续测试");
+                                    try { opcSession?.Dispose(); } catch { }
                                     break;
                                 }
                             }
@@ -483,7 +489,7 @@ namespace PR_Spc_Tester
                         {
                             resultRest = plcHelper.SwitchPowderCans();
                         }
-                        LogService.AddLogToEnqueue($"读取切换粉罐的值为{resultRest.Content}");
+                        LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}读取切换粉罐的值为{resultRest.Content}", EnumMsgType.Info);
                         if (testData != null)
                         {
                             testData.Code = coldSprayCode;
@@ -526,27 +532,27 @@ namespace PR_Spc_Tester
                             //进气流量 
                             testData.IntakeFlow = plcHelper.GetIntakeFlow().Content;
 
-                            LogService.AddLogToEnqueue("记录冷喷完成信号=2");
+                            LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}记录冷喷完成信号=2", EnumMsgType.Info);
                             // 冷喷完成后向 OPC 写入 SESSION STORE {code}
                             try
                             {
                                 if (opcSession != null)
                                 {
                                     // 仅写 SESSION STORE（不发送 COMMAND SENSOR IDLE）
-                                    bool storeConfirmed = await opcSession.WriteSessionStoreAndConfirmAsync(testData.Code, 5000);
+                                    bool storeConfirmed = await opcSession.WriteSessionStoreAndConfirmAsync(testData.Code, 100);
                                     if (storeConfirmed)
                                     {
-                                        LogService.AddLogToEnqueue($"SESSION STORE {testData.Code}执行确认成功", EnumMsgType.Info);
+                                        LogService.AddLogToEnqueue($"冷喷->条码{testData.Code} SESSION STORE执行确认成功", EnumMsgType.Info);
                                     }
                                     else
                                     {
-                                        LogService.AddLogToEnqueue($"SESSION STORE {testData.Code}执行确认失败", EnumMsgType.Exception);
+                                        LogService.AddLogToEnqueue($"冷喷->条码{testData.Code} SESSION STORE执行确认失败", EnumMsgType.Exception);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                LogService.AddLogToEnqueue("写SESSION STORE失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}写SESSION STORE失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                             }
                             if (!plcHelper.ResetColdSprayReady().IsSuccess)
                             {
@@ -627,9 +633,9 @@ namespace PR_Spc_Tester
                             string url = ConfigAppSettings.GetValue("MonitorIP").ToString();
                             await opcMonitor.ConnectAsync(url);
                             _samlingData.ID = 0;
-                            LogService.AddLogToEnqueue($"OPC UA连接成功");
+                            LogService.AddLogToEnqueue($"监控->条码{testData.Code} OPC UA连接成功", EnumMsgType.Info);
                             // 开始收集OPC UA数据
-                            LogService.AddLogToEnqueue($"开始采集OPC UA数据");
+                            LogService.AddLogToEnqueue($"监控->条码{testData.Code}开始采集OPC UA数据", EnumMsgType.Info);
                             // 每个条码开始监控前清空缓存，避免将上一次条码的样本混入本次统计。
                             opcMonitor.ClearData();
                             // 添加事件处理程序
@@ -701,24 +707,25 @@ namespace PR_Spc_Tester
                             };
                             opcMonitor.OnAlertMessageReceived += (sender, e) =>
                             {
-                                LogService.AddLogToEnqueue($"OPC报警消息触发: {e.Value}", EnumMsgType.Exception);
+                                LogService.AddLogToEnqueue($"监控->条码{testData.Code} OPC报警消息触发: {e.Value}", EnumMsgType.Exception);
                                 var writeResult = plcHelper.WriteOpcUaAlarmFlag(1);
                                 if (!writeResult.IsSuccess)
                                 {
-                                    LogService.AddLogToEnqueue($"写入PLC报警标志D5725失败: {writeResult.Message}", EnumMsgType.Exception);
+                                    LogService.AddLogToEnqueue($"监控->条码{testData.Code}写入PLC报警标志D5725失败: {writeResult.Message}", EnumMsgType.Exception);
                                 }
                             };
                             // 等待PLC完成信号
                             while (true)
                             {
-                                await Task.Delay(1000);
+                                // 监控完成边界改为10ms轮询，减少1秒级结束抖动。
+                                await Task.Delay(10);
                                 OperateResult<short> resultOver = plcHelper.GetMonitorReadReady();
                                 if (resultOver.Content == 2)
                                 {
                                     break;
                                 }
                             }
-                            LogService.AddLogToEnqueue("记录监控完成信号=2");
+                            LogService.AddLogToEnqueue($"监控->条码{testData.Code}记录监控完成信号=2", EnumMsgType.Info);
                             LogService.AddLogToEnqueue($"监控->条码{testData.Code}采样完成，原始样本数 speed:{speedList.Count} density:{concentrationList.Count} position:{positionList.Count} temp:{temperatureList.Count} pressure:{nitrogenPressureList.Count}", EnumMsgType.Info);
                             opcMonitor.GetCurrentValues(testData);
                             LogService.AddLogToEnqueue($"监控->条码{testData.Code}统计结果 平均速度:{testData.AverageSpeed:F2} 平均浓度:{testData.AverageConcentration:F2} 平均位置:{testData.AveragePosition:F2}", EnumMsgType.Info);
@@ -741,7 +748,7 @@ namespace PR_Spc_Tester
                             testData.NitrogenPressureResult = testData.AverageNitrogenPressureResult == "OK" && testData.MinNitrogenPressureResult == "OK" ? "OK" : "NG";
                             testData.SpeedResult = testData.AverageSpeedResult == "OK" && testData.MinSpeedResult == "OK" ? "OK" : "NG";
                             testData.ConcentrationResult = testData.AverageConcentrationResult == "OK" ? "OK" : "NG";
-                            LogService.AddLogToEnqueue("记录监控完成信号=2");
+                            LogService.AddLogToEnqueue($"监控->条码{testData.Code}记录监控完成信号=2", EnumMsgType.Info);
                             // 判定结果：若任一业务维度为 NG，则写入 D5711=4；否则写入 D5711=2 (复位)
                             bool anyNg = testData.WeightResult == "NG" || testData.TemperatureResult == "NG" || testData.AverageNitrogenPressureResult == "NG" || testData.NitrogenPressureResult == "NG" || testData.IntakePressureResult == "NG" || testData.SpeedResult == "NG" || testData.ConcentrationResult == "NG";
                             if (anyNg)
