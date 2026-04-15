@@ -8,6 +8,12 @@ namespace PR_Spc_Tester.Services
 {
     public static class ListExtensions
     {
+        public static float AverageExcludingZero(this List<double> list)
+        {
+            var filtered = list.Where(x => x != 0).ToList();
+            return (float)(filtered.Count > 0 ? filtered.Average() : 0);
+        }
+
         public static float MinExcludingZero(this List<double> list)
         {
             var filtered = list.Where(x => x != 0).ToList();

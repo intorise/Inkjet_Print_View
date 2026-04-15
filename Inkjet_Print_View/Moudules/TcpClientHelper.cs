@@ -80,7 +80,7 @@ namespace PR_Spc_Tester.Moudules
         {
             get
             {
-                return mClient.Connected;
+                return mClient != null && mClient.Connected;
             }
         }
         /// <summary>
@@ -141,7 +141,7 @@ namespace PR_Spc_Tester.Moudules
             catch (Exception ex)
             {
                 LogHelper.WriteErrLog($"读取冷喷漆数据异常，消息：[{ex.Message}][{ex.StackTrace}]");
-                return null;
+                return testData;
             }
         }
         public void Dispose()

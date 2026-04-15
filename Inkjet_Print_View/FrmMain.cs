@@ -397,9 +397,12 @@ namespace PR_Spc_Tester
             TestData testData = new TestData();
             DateTime startTime;
             DateTime endTime;
+            const int coldSpraySignalPollMs = 50;
+            const int opcConfirmPollMs = 50;
+            const int opcConfirmTimeoutMs = 200;
             while (true)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(coldSpraySignalPollMs);
                 try
                 {
                     // 与PLC的握手约定：
@@ -417,26 +420,26 @@ namespace PR_Spc_Tester
                             string url = ConfigAppSettings.GetValue("MonitorIP").ToString();
                             opcSession = new HiWatchOpcMonitor();
                             await opcSession.ConnectAsync(url);
-                            bool activeConfirmed = await opcSession.EnsureSensorStandbyThenActivateAsync(5000, 200, allowSensorIdleBeforeActive);
+                            bool activeConfirmed = await opcSession.EnsureSensorStandbyThenActivateAsync(opcConfirmTimeoutMs, opcConfirmPollMs, allowSensorIdleBeforeActive);
                             if (activeConfirmed)
                             {
                                 LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认成功", EnumMsgType.Info);
                             }
                             else
                             {
-                                LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认失败", EnumMsgType.Exception);
+                                LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认失败，按非阻断策略继续后续流程", EnumMsgType.Exception);
                             }
 
                             try
                             {
-                                bool resetConfirmed = await opcSession.WriteSessionResetAndConfirmAsync(5000);
+                                bool resetConfirmed = await opcSession.WriteSessionResetAndConfirmAsync(opcConfirmTimeoutMs, opcConfirmPollMs);
                                 if (resetConfirmed)
                                 {
                                     LogService.AddLogToEnqueue("SESSION RESET执行确认成功", EnumMsgType.Info);
                                 }
                                 else
                                 {
-                                    LogService.AddLogToEnqueue("SESSION RESET执行确认失败", EnumMsgType.Exception);
+                                    LogService.AddLogToEnqueue("SESSION RESET执行确认失败，按非阻断策略继续后续流程", EnumMsgType.Exception);
                                 }
                             }
                             catch (Exception ex)
@@ -496,8 +499,16 @@ namespace PR_Spc_Tester
                             testData.IntakePressure = plcHelper.GetIntakePressure().Content;
                             while (true)
                             {
-                                await Task.Delay(200);
-                                testData = gunHelp.SendString(testData, resultRest.Content);
+                                await Task.Delay(coldSpraySignalPollMs);
+                                var updatedData = gunHelp.SendString(testData, resultRest.Content);
+                                if (updatedData != null)
+                                {
+                                    testData = updatedData;
+                                }
+                                else
+                                {
+                                    LogService.AddLogToEnqueue($"冷喷->条码{coldSprayCode}读取喷枪数据失败，保留上一帧有效数据继续", EnumMsgType.Exception);
+                                }
                                 OperateResult<short> resultOver = plcHelper.GetColdSprayReadReady();
                                 // PLC写2表示本次冷喷流程结束，上位机可进行收尾与落库。
                                 if (resultOver.Content == 2)
@@ -508,12 +519,9 @@ namespace PR_Spc_Tester
                             endTime = DateTime.Now;
                             testData.StartTime = startTime;
                             testData.EndTime = endTime;
-                            // 注意：Seconds 仅返回0~59的“秒分量”，不是总秒数。
-                            // 当前实现可能出现节拍显示为0（例如持续时间<1秒，或跨分钟后秒分量相同）。
-                            // 此处保留现有逻辑，问题分析见README与答复说明。
                             duration = endTime - startTime;
                             testData.Beat = (float)Math.Round(duration.TotalSeconds, 2);
-                            LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 结束:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍:{testData.Beat}s", EnumMsgType.Info);
+                            LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 结束:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍:{testData.Beat:F2}s", EnumMsgType.Info);
                             if (testData.Beat <= 0)
                             {
                                 // 理论上不会<=0，如出现则保底写入最小值并留日志，避免后续利用率分母为0。
@@ -539,14 +547,14 @@ namespace PR_Spc_Tester
                                 if (opcSession != null)
                                 {
                                     // 仅写 SESSION STORE（不发送 COMMAND SENSOR IDLE）
-                                    bool storeConfirmed = await opcSession.WriteSessionStoreAndConfirmAsync(testData.Code, 100);
+                                    bool storeConfirmed = await opcSession.WriteSessionStoreAndConfirmAsync(testData.Code, 50);
                                     if (storeConfirmed)
                                     {
                                         LogService.AddLogToEnqueue($"冷喷->条码{testData.Code} SESSION STORE执行确认成功", EnumMsgType.Info);
                                     }
                                     else
                                     {
-                                        LogService.AddLogToEnqueue($"冷喷->条码{testData.Code} SESSION STORE执行确认失败", EnumMsgType.Exception);
+                                        LogService.AddLogToEnqueue($"冷喷->条码{testData.Code} SESSION STORE执行确认失败，按非阻断策略继续后续流程", EnumMsgType.Exception);
                                     }
                                 }
                             }
@@ -732,13 +740,18 @@ namespace PR_Spc_Tester
                             testData.AverageSpeedResult = JudgeUpperLower(testData.AverageSpeed, testData.AverageSpeedUpperLimit, testData.AverageSpeedLowerLimit, "平均速度");
                             testData.MinSpeedResult = JudgeUpperLower(testData.MinSpeed, 0, testData.MinSpeedLowerLimit, "最小速度");
                             testData.AverageConcentrationResult = JudgeUpperLower(testData.AverageConcentration, testData.AverageConcentrationUpperLimit, testData.AverageConcentrationLowerLimit, "平均浓度");
-                            testData.AverageTemperature = (float)(temperatureList.Count > 0 ? temperatureList.Average() : 0);
+                            testData.AverageTemperature = temperatureList.AverageExcludingZero();
                             //testData.MinTemperature = (float)(temperatureList.Count > 0 ? temperatureList.Min() : 0);
                             testData.MinTemperature = temperatureList.MinExcludingZero();
                             testData.MaxTemperature = (float)(temperatureList.Count > 0 ? temperatureList.Max() : 0);
                             testData.AverageTemperatureResult = JudgeUpperLower(testData.AverageTemperature, testData.AverageTemperatureUpperLimit, testData.AverageTemperatureLowerLimit, "平均温度");
+                            if (Math.Abs(testData.AverageTemperature) < 0.000001)
+                            {
+                                testData.AverageTemperatureResult = "NG";
+                                LogService.AddLogToEnqueue($"监控->条码{testData.Code}平均温度为0，强制判定NG", EnumMsgType.Exception);
+                            }
                             testData.MinTemperatureResult = JudgeUpperLower(testData.MinTemperature, 0, testData.MinTemperatureLowerLimit, "最小温度");
-                            testData.AverageNitrogenPressure = (float)(nitrogenPressureList.Count > 0 ? nitrogenPressureList.Average() : 0);
+                            testData.AverageNitrogenPressure = nitrogenPressureList.AverageExcludingZero();
                             //testData.MinNitrogenPressure = (float)(nitrogenPressureList.Count > 0 ? nitrogenPressureList.Min() : 0);
                             testData.MinNitrogenPressure = nitrogenPressureList.MinExcludingZero();
                             testData.MaxNitrogenPressure = (float)(nitrogenPressureList.Count > 0 ? nitrogenPressureList.Max() : 0);

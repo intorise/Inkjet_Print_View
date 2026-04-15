@@ -710,7 +710,7 @@ namespace PR_Spc_Tester.Moudules
                 || string.Equals(normalized, "Active", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async Task<bool> WriteSessionResetAndConfirmAsync(int timeoutMs = 5000, int pollIntervalMs = 200)
+        public async Task<bool> WriteSessionResetAndConfirmAsync(int timeoutMs = 200, int pollIntervalMs = 50)
         {
             double beforeLength;
             if (TryReadNodeValueAsDouble(SessionCurrentLengthNodeId, out beforeLength))
@@ -746,7 +746,7 @@ namespace PR_Spc_Tester.Moudules
             return false;
         }
 
-        public async Task<bool> WriteSessionStoreAndConfirmAsync(string code, int confirmDelayMs = 100)
+        public async Task<bool> WriteSessionStoreAndConfirmAsync(string code, int confirmDelayMs = 50)
         {
             string beforePath;
             TryReadNodeValueAsString(SessionLastOutputPathNodeId, out beforePath);
@@ -834,7 +834,7 @@ namespace PR_Spc_Tester.Moudules
             return false;
         }
 
-        public async Task<bool> EnsureSensorStandbyThenActivateAsync(int timeoutMs = 5000, int pollIntervalMs = 200, bool allowIdleBeforeActive = false)
+        public async Task<bool> EnsureSensorStandbyThenActivateAsync(int timeoutMs = 200, int pollIntervalMs = 50, bool allowIdleBeforeActive = false)
         {
             string initialState;
             if (TryReadNodeValueAsString(CameraStateNodeId, out initialState))
