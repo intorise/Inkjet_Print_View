@@ -842,6 +842,12 @@ namespace PR_Spc_Tester.Moudules
             else
                 LogService.AddLogToEnqueue("SENSOR ACTIVE前 CameraState读取失败", EnumMsgType.Exception);
 
+            if (IsActiveState(initialState))
+            {
+                LogService.AddLogToEnqueue("CameraState已是Active，跳过发送SENSOR ACTIVE", EnumMsgType.Info);
+                return true;
+            }
+
             if (allowIdleBeforeActive && !IsStandbyState(initialState))
             {
                 if (!WriteSessionCommand("SENSOR IDLE"))
