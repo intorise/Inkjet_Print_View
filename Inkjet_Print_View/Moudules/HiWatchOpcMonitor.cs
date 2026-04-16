@@ -48,6 +48,7 @@ namespace PR_Spc_Tester.Moudules
         private const string CameraStateNodeId = "ns=2;s=Sensor_00.SensorStatus.CameraState";
         private const string SessionCurrentLengthNodeId = "ns=2;s=Sensor_00.SessionData.CurrentLength";
         private const string SessionLastOutputPathNodeId = "ns=2;s=Sensor_00.SessionData.LastOutputPath";
+        public DateTime? LastSensorActiveCommandSentAt { get; private set; }
         // 队列中最多可存储的数据点数
         private const int MaxDataPoints = 1000;
         private readonly object _dataLock = new object(); // 数据缓存锁
@@ -836,6 +837,7 @@ namespace PR_Spc_Tester.Moudules
 
         public async Task<bool> EnsureSensorStandbyThenActivateAsync(int timeoutMs = 200, int pollIntervalMs = 50, bool allowIdleBeforeActive = false)
         {
+            LastSensorActiveCommandSentAt = null;
             string initialState;
             if (TryReadNodeValueAsString(CameraStateNodeId, out initialState))
                 LogService.AddLogToEnqueue($"SENSOR ACTIVE前 CameraState={initialState}", EnumMsgType.Info);
@@ -888,6 +890,7 @@ namespace PR_Spc_Tester.Moudules
                 LogService.AddLogToEnqueue("向OPC写入 COMMAND SENSOR ACTIVE 失败", EnumMsgType.Exception);
                 return false;
             }
+            LastSensorActiveCommandSentAt = DateTime.Now;
 
             DateTime activeDeadline = DateTime.Now.AddMilliseconds(timeoutMs);
             while (DateTime.Now <= activeDeadline)
