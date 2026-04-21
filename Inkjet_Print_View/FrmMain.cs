@@ -75,8 +75,6 @@ namespace PR_Spc_Tester
         TestProjectDal testProjectDal = new TestProjectDal();
         int placementTimeout = 6;
         private bool allowSensorIdleBeforeActive = false;
-        // 配置: 是否发送 SESSION RESET（默认不发送）
-        private bool SendSessionReset = false;
 
         private void InitializeAlarmDictionary()
         {
@@ -183,9 +181,6 @@ namespace PR_Spc_Tester
             LogService.AddLogToEnqueue("摆放超时时间: " + placementTimeout+"H");
             allowSensorIdleBeforeActive = (ConfigAppSettings.GetValue("AllowSensorIdleBeforeActive") ?? "0").ToString() == "1";
             LogService.AddLogToEnqueue($"SENSOR IDLE预处理开关: {(allowSensorIdleBeforeActive ? "开启" : "关闭")}", EnumMsgType.Info);
-            // 读取 SESSION RESET 发送开关，默认不发送（0）
-            SendSessionReset = (ConfigAppSettings.GetValue("SendSessionReset") ?? "0").ToString() == "1";
-            LogService.AddLogToEnqueue($"SESSION RESET发送开关: {(SendSessionReset ? "开启" : "关闭")}", EnumMsgType.Info);
             list = projectdal.GetList();
             DateTime timeNow = DateTime.Now;
             this.Invoke(new Action(() =>
@@ -446,28 +441,21 @@ namespace PR_Spc_Tester
                                 LogService.AddLogToEnqueue("COMMAND SENSOR ACTIVE执行确认失败，按非阻断策略继续后续流程", EnumMsgType.Exception);
                             }
 
-                            if (SendSessionReset)
+                            try
                             {
-                                try
+                                bool resetConfirmed = await opcSession.WriteSessionResetAndConfirmAsync(opcConfirmTimeoutMs, opcConfirmPollMs);
+                                if (resetConfirmed)
                                 {
-                                    bool resetConfirmed = await opcSession.WriteSessionResetAndConfirmAsync(opcConfirmTimeoutMs, opcConfirmPollMs);
-                                    if (resetConfirmed)
-                                    {
-                                        LogService.AddLogToEnqueue("SESSION RESET执行确认成功", EnumMsgType.Info);
-                                    }
-                                    else
-                                    {
-                                        LogService.AddLogToEnqueue("SESSION RESET执行确认失败，按非阻断策略继续后续流程", EnumMsgType.Exception);
-                                    }
+                                    LogService.AddLogToEnqueue("SESSION RESET执行确认成功", EnumMsgType.Info);
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    LogService.AddLogToEnqueue("写SESSION RESET失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
+                                    LogService.AddLogToEnqueue("SESSION RESET执行确认失败，按非阻断策略继续后续流程", EnumMsgType.Exception);
                                 }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                LogService.AddLogToEnqueue("SESSION RESET发送被配置为关闭，跳过发送", EnumMsgType.Info);
+                                LogService.AddLogToEnqueue("写SESSION RESET失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                             }
                         }
                         catch (Exception ex)
