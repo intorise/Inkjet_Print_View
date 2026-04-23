@@ -418,6 +418,7 @@ namespace PR_Spc_Tester
                     {
                         DateTime coldSprayReadyAt = DateTime.Now;
                         startTime = coldSprayReadyAt;
+                        LogService.AddLogToEnqueue($"冷喷->节拍开始时间取PLC准备信号时刻:{startTime:yyyy-MM-dd HH:mm:ss.fff}", EnumMsgType.Info);
                         LogService.AddLogToEnqueue("收到冷喷读取数据信号");
                         // 收到冷喷启动信号后优先发送激活命令，减少启动侧等待。
                         HiWatchOpcMonitor opcSession = null;
@@ -427,15 +428,6 @@ namespace PR_Spc_Tester
                             opcSession = new HiWatchOpcMonitor();
                             await opcSession.ConnectAsync(url);
                             bool activeConfirmed = await opcSession.EnsureSensorStandbyThenActivateAsync(opcConfirmTimeoutMs, opcConfirmPollMs, allowSensorIdleBeforeActive);
-                            if (opcSession.LastSensorActiveCommandSentAt.HasValue)
-                            {
-                                startTime = opcSession.LastSensorActiveCommandSentAt.Value;
-                                LogService.AddLogToEnqueue($"冷喷->节拍开始时间取COMMAND SENSOR ACTIVE发送时刻:{startTime:yyyy-MM-dd HH:mm:ss.fff}", EnumMsgType.Info);
-                            }
-                            else
-                            {
-                                LogService.AddLogToEnqueue($"冷喷->未获取到COMMAND SENSOR ACTIVE发送时刻，节拍开始时间回退为PLC准备信号时刻:{coldSprayReadyAt:yyyy-MM-dd HH:mm:ss.fff}", EnumMsgType.Exception);
-                            }
 
                             if (activeConfirmed)
                             {
@@ -784,7 +776,6 @@ namespace PR_Spc_Tester
                             testData.NitrogenPressureResult = testData.AverageNitrogenPressureResult == "OK" && testData.MinNitrogenPressureResult == "OK" ? "OK" : "NG";
                             testData.SpeedResult = testData.AverageSpeedResult == "OK" && testData.MinSpeedResult == "OK" ? "OK" : "NG";
                             testData.ConcentrationResult = testData.AverageConcentrationResult == "OK" ? "OK" : "NG";
-                            LogService.AddLogToEnqueue($"监控->条码{testData.Code}记录监控完成信号=2", EnumMsgType.Info);
                             // 判定结果：若任一业务维度为 NG，则写入 D5711=4；否则写入 D5711=2 (复位)
                             bool anyNg = testData.WeightResult == "NG" || testData.TemperatureResult == "NG" || testData.AverageNitrogenPressureResult == "NG" || testData.NitrogenPressureResult == "NG" || testData.IntakePressureResult == "NG" || testData.SpeedResult == "NG" || testData.ConcentrationResult == "NG";
                             if (anyNg)
@@ -838,7 +829,7 @@ namespace PR_Spc_Tester
                 }
                 finally
                 {
-                    await Task.Delay(1000); // 常规间隔
+                    await Task.Delay(50); // 常规间隔
                 }
             }
         }
