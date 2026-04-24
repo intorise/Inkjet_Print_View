@@ -534,14 +534,24 @@ namespace PR_Spc_Tester
                             endTime = DateTime.Now;
                             testData.StartTime = startTime;
                             testData.EndTime = endTime;
-                            duration = endTime - startTime;
-                            testData.Beat = (float)Math.Round(duration.TotalSeconds, 2);
-                            LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 结束:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍:{testData.Beat:F2}s", EnumMsgType.Info);
+                            OperateResult<float> beatResult = plcHelper.GetBeat();
+                            if (beatResult != null && beatResult.IsSuccess)
+                            {
+                                testData.Beat = (float)Math.Round(beatResult.Content, 2);
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 结束:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍来源:PLC D5994 值:{testData.Beat:F2}s", EnumMsgType.Info);
+                            }
+                            else
+                            {
+                                TimeSpan durationByPc = endTime - startTime;
+                                testData.Beat = (float)Math.Round(durationByPc.TotalSeconds, 2);
+                                string err = beatResult == null ? "返回空对象" : beatResult.Message;
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}读取PLC节拍D5994失败({err})，已回退PC计算节拍:{testData.Beat:F2}s", EnumMsgType.Exception);
+                            }
                             if (testData.Beat <= 0)
                             {
-                                // 理论上不会<=0，如出现则保底写入最小值并留日志，避免后续利用率分母为0。
+                                // PLC返回异常值时保底，避免后续利用率分母为0。
                                 testData.Beat = 0.01f;
-                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}节拍异常<=0，已回退为{testData.Beat}s", EnumMsgType.Exception);
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}读取PLC节拍异常<=0，已回退为{testData.Beat:F2}s", EnumMsgType.Exception);
                             }
                             if (testData.IntakePressure < testData.IntakePressureLowerLimit)
                             {

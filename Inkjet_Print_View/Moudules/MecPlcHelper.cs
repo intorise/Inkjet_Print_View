@@ -25,7 +25,7 @@ namespace PR_Spc_Tester.Moudules
     /// </summary>
     public class MecPlcHelper
     {
-        
+
         public MecPlcHelper() { }
         MelsecMcNet mc_net = null;
         bool _isConnected;
@@ -71,9 +71,10 @@ namespace PR_Spc_Tester.Moudules
             try
             {
                 return mc_net.ReadInt16("D5500");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return new OperateResult<short>(-1, "读取失败"+ex.Message);
+                return new OperateResult<short>(-1, "读取失败" + ex.Message);
             }
         }
 
@@ -102,7 +103,7 @@ namespace PR_Spc_Tester.Moudules
             try
             {
                 return mc_net.ReadInt16(vaule);
-               
+
             }
             catch (Exception ex)
             {
@@ -245,7 +246,7 @@ namespace PR_Spc_Tester.Moudules
         /// 获取读取冷喷准备好信号
         /// </summary>
         /// <returns></returns>
-        public OperateResult<short> GetColdSprayReadReady(string address="D5670")
+        public OperateResult<short> GetColdSprayReadReady(string address = "D5670")
         {
             try
             {
@@ -272,6 +273,23 @@ namespace PR_Spc_Tester.Moudules
                 return new OperateResult<float>(-1, "读取失败" + ex.Message);
             }
         }
+
+        /// <summary>
+        /// 读取节拍时间,冷喷节拍D5994 32位浮点数
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult<float> GetBeat()
+        {
+            try
+            {
+                return mc_net.ReadFloat("D5994");
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<float>(-1, "读取失败" + ex.Message);
+            }
+        }
+
         /// <summary>
         /// 获取读取监控准备好信号
         /// </summary>
@@ -336,7 +354,7 @@ namespace PR_Spc_Tester.Moudules
         /// 冷喷复位,1号：5710，2号：5713
         /// </summary>
         /// <returns></returns>
-        public OperateResult ResetColdSprayReady(string address= "D5710")
+        public OperateResult ResetColdSprayReady(string address = "D5710")
         {
             try
             {
@@ -441,7 +459,7 @@ namespace PR_Spc_Tester.Moudules
         /// 是否比对
         /// </summary>
         /// <returns></returns>
-        public OperateResult<short> ReadCompare(string address="D5676")
+        public OperateResult<short> ReadCompare(string address = "D5676")
         {
             try
             {
@@ -568,7 +586,7 @@ namespace PR_Spc_Tester.Moudules
         {
             try
             {
-               // return mc_net.Write("D5722", val);
+                // return mc_net.Write("D5722", val);
                 return mc_net.Write("D5712", val);
             }
             catch (Exception ex)
@@ -690,7 +708,7 @@ namespace PR_Spc_Tester.Moudules
                 return new OperateResult<short>(-1, "读取失败" + ex.Message);
             }
         }
-        
+
         #endregion
 
         /// <summary>
@@ -701,7 +719,7 @@ namespace PR_Spc_Tester.Moudules
         {
             try
             {
-                if(mc_net == null)
+                if (mc_net == null)
                 {
                     ConnectPLC();
                 }
@@ -711,10 +729,10 @@ namespace PR_Spc_Tester.Moudules
                 float sedimentationWeight = mc_net.ReadFloat("D5506").Content;
                 float upperLimit = mc_net.ReadFloat("D5508").Content;
                 float lowerLimit = mc_net.ReadFloat("D5510").Content;
-                short result = mc_net.ReadInt16 ("D5512").Content;
-                float nozzleHeight = mc_net.ReadInt16("D5678").Content/10.0f;
-                float powderSupplySpeed= mc_net.ReadInt16("D5677").Content/10.0f;
-                float preSprayWeight_1s= mc_net.ReadFloat("D5679").Content;
+                short result = mc_net.ReadInt16("D5512").Content;
+                float nozzleHeight = mc_net.ReadInt16("D5678").Content / 10.0f;
+                float powderSupplySpeed = mc_net.ReadInt16("D5677").Content / 10.0f;
+                float preSprayWeight_1s = mc_net.ReadFloat("D5679").Content;
                 float preSprayWeight_1_5s = mc_net.ReadFloat("D5681").Content;
                 float preSprayWeight_2s = mc_net.ReadFloat("D5683").Content;
                 float preSprayWeight_2_5s = mc_net.ReadFloat("D5685").Content;
@@ -727,27 +745,27 @@ namespace PR_Spc_Tester.Moudules
                 testData.SedimentationWeight = (float)(Math.Round(Math.Abs(sedimentationWeight), 2)); ;
                 testData.WeightUpperLimit = upperLimit;
                 testData.WeightLowerLimit = lowerLimit;
-                testData.WeightResult = result==1?"OK":"NG";
+                testData.WeightResult = result == 1 ? "OK" : "NG";
                 testData.Location = "A";
                 testData.AddTime = DateTime.Now;
                 testData.NozzleHeight = nozzleHeight;
-                testData.PowderSupplySpeed= powderSupplySpeed;
+                testData.PowderSupplySpeed = powderSupplySpeed;
                 testData.PreSprayWeight_1 = preSprayWeight_1s;
-                testData.PreSprayWeight_1_5= preSprayWeight_1_5s;
-                testData.PreSprayWeight_2= preSprayWeight_2s;
-                testData.PreSprayWeight_2_5= preSprayWeight_2_5s;
+                testData.PreSprayWeight_1_5 = preSprayWeight_1_5s;
+                testData.PreSprayWeight_2 = preSprayWeight_2s;
+                testData.PreSprayWeight_2_5 = preSprayWeight_2_5s;
                 testData.PostSprayWeight_1 = aftSprayWeight_1s;
-                testData.PostSprayWeight_1_5= aftSprayWeight_1_5s;
-                testData.PostSprayWeight_2= aftSprayWeight_2s;
-                testData.PostSprayWeight_2_5= aftSprayWeight_2_5s;
+                testData.PostSprayWeight_1_5 = aftSprayWeight_1_5s;
+                testData.PostSprayWeight_2 = aftSprayWeight_2s;
+                testData.PostSprayWeight_2_5 = aftSprayWeight_2_5s;
 
                 LogService.AddLogToEnqueue($"获取数据：{testData}");
 
-               return testData;
+                return testData;
             }
             catch (Exception ex)
             {
-                LogHelper.WriteErrLog("读取PLC数据Csv异常：" + ex.Message+"\r\n"+ex.StackTrace);
+                LogHelper.WriteErrLog("读取PLC数据Csv异常：" + ex.Message + "\r\n" + ex.StackTrace);
                 return null;
             }
         }
@@ -837,11 +855,11 @@ namespace PR_Spc_Tester.Moudules
                         float usl = project.USL_Val;
                         int sType = project.SType; //1:单边公差 2:双边公差
 
-                        if(prop.PropertyType.Name != "Single")
+                        if (prop.PropertyType.Name != "Single")
                         {
                             continue;
                         }
-                        
+
                         if (prop.GetValue(testData) != null)
                         {
                             float propValue = (float)prop.GetValue(testData);
