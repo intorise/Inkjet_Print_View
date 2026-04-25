@@ -358,11 +358,18 @@ namespace PR_Spc_Tester.Moudules
         {
             try
             {
-                return mc_net.Write(address, (short)2);
+                lock (_mcLock)
+                {
+                    if (mc_net == null)
+                    {
+                        ConnectPLC();
+                    }
+                    return mc_net.Write(address, (short)2);
+                }
             }
             catch (Exception ex)
             {
-                return new OperateResult<short>(-1, "读取失败" + ex.Message);
+                return new OperateResult<short>(-1, $"ResetColdSprayReady({address}) 失败: " + ex.Message);
             }
         }
         /// <summary>

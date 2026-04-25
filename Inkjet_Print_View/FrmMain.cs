@@ -587,9 +587,25 @@ namespace PR_Spc_Tester
                             {
                                 LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}写SESSION STORE失败:" + ex.Message + ex.StackTrace, EnumMsgType.Exception);
                             }
-                            if (!plcHelper.ResetColdSprayReady().IsSuccess)
+                            var coldResetRes = plcHelper.ResetColdSprayReady();
+                            if (!coldResetRes.IsSuccess)
                             {
-                                plcHelper.ResetColdSprayReady();
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}写入冷喷复位 D5710=2 失败: {coldResetRes.Message}", EnumMsgType.Exception);
+                                coldResetRes = plcHelper.ResetColdSprayReady();
+                                if (!coldResetRes.IsSuccess)
+                                {
+                                    LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}重试写入冷喷复位 D5710=2 失败: {coldResetRes.Message}", EnumMsgType.Exception);
+                                }
+                            }
+
+                            OperateResult<short> coldResetReadBack = plcHelper.ReadPLCAlarm("D5710");
+                            if (coldResetReadBack.IsSuccess)
+                            {
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}写后读回 D5710={coldResetReadBack.Content}", EnumMsgType.Info);
+                            }
+                            else
+                            {
+                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}写后读回 D5710 失败: {coldResetReadBack.Message}", EnumMsgType.Exception);
                             }
                             try { opcSession?.Dispose(); } catch { }
                             if (dal.UpColdSpraydate(testData))
