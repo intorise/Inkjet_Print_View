@@ -531,18 +531,18 @@ namespace PR_Spc_Tester
                                     break;
                                 }
                             }
-                            endTime = DateTime.Now;
+                            DateTime actualEndTime = DateTime.Now;
                             testData.StartTime = startTime;
-                            testData.EndTime = endTime;
                             OperateResult<float> beatResult = plcHelper.GetBeat();
+                            string beatSource = "PC回退";
                             if (beatResult != null && beatResult.IsSuccess)
                             {
                                 testData.Beat = (float)Math.Round(beatResult.Content, 2);
-                                LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 结束:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍来源:PLC D5994 值:{testData.Beat:F2}s", EnumMsgType.Info);
+                                beatSource = "PLC D5994";
                             }
                             else
                             {
-                                TimeSpan durationByPc = endTime - startTime;
+                                TimeSpan durationByPc = actualEndTime - startTime;
                                 testData.Beat = (float)Math.Round(durationByPc.TotalSeconds, 2);
                                 string err = beatResult == null ? "返回空对象" : beatResult.Message;
                                 LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}读取PLC节拍D5994失败({err})，已回退PC计算节拍:{testData.Beat:F2}s", EnumMsgType.Exception);
@@ -553,6 +553,10 @@ namespace PR_Spc_Tester
                                 testData.Beat = 0.01f;
                                 LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}读取PLC节拍异常<=0，已回退为{testData.Beat:F2}s", EnumMsgType.Exception);
                             }
+                            endTime = startTime.AddSeconds(testData.Beat);
+                            testData.EndTime = endTime;
+                            double stopTimeDriftMs = (actualEndTime - endTime).TotalMilliseconds;
+                            LogService.AddLogToEnqueue($"冷喷->条码{testData.Code}开始:{testData.StartTime:yyyy-MM-dd HH:mm:ss.fff} 理论停止:{testData.EndTime:yyyy-MM-dd HH:mm:ss.fff} 实际完成:{actualEndTime:yyyy-MM-dd HH:mm:ss.fff} 节拍来源:{beatSource} 值:{testData.Beat:F2}s 偏差:{stopTimeDriftMs:F0}ms", EnumMsgType.Info);
                             if (testData.IntakePressure < testData.IntakePressureLowerLimit)
                             {
                                 testData.IntakePressureResult = "NG";
