@@ -216,8 +216,18 @@ namespace PR_Spc_Tester
                 dgv_realtime.Columns["Col_SedimentationWeight"].DataPropertyName = "SedimentationWeight";
                 dgv_realtime.Columns["Col_Result"].DataPropertyName = "WeightResult";
                 dgv_realtime.Columns["Col_UtilizationRate"].DataPropertyName = "UtilizationRate";
+                dgv_realtime.Columns["Col_NozzleHeight"].DataPropertyName = "NozzleHeight";
             }
             catch { }
+
+            // 隐藏进气流量列
+            try
+            {
+                dgv_realtime.Columns["Col_Real_Intake"].Visible = false;
+                dgv_his.Columns["Col_IntakeFlow"].Visible = false;
+            }
+            catch { }
+
             // alarm binding init
             alarmBinding.DataSource = alarmList;
             dgv_alarmmessage.AutoGenerateColumns = false;
@@ -802,6 +812,33 @@ namespace PR_Spc_Tester
                             testData.MaxNitrogenPressure = (float)(nitrogenPressureList.Count > 0 ? nitrogenPressureList.Max() : 0);
                             testData.AverageNitrogenPressureResult = JudgeUpperLower(testData.AverageNitrogenPressure, testData.AverageNitrogenPressureUpperLimit, testData.AverageNitrogenPressureLowerLimit, "平均氮气压力");
                             testData.MinNitrogenPressureResult = JudgeUpperLower(testData.MinNitrogenPressure, 0, testData.MinNitrogenPressureLowerLimit, "最小氮气压力");
+
+                            // 数据完整性检查：除流量外任何参数缺失 → NG
+                            // 样本数检查：粒子数据采集条数 < 100 → NG
+                            if (speedList.Count < 100)
+                            {
+                                testData.AverageSpeedResult = "NG";
+                                testData.MinSpeedResult = "NG";
+                                testData.AverageConcentrationResult = "NG";
+                                testData.AverageTemperatureResult = "NG";
+                                testData.MinTemperatureResult = "NG";
+                                testData.AverageNitrogenPressureResult = "NG";
+                                testData.MinNitrogenPressureResult = "NG";
+                                LogService.AddLogToEnqueue($"监控->条码{testData.Code}粒子数据采集条数{speedList.Count}<100，强制判定NG", EnumMsgType.Exception);
+                            }
+                            else if (speedList.Count == 0 || concentrationList.Count == 0 || positionList.Count == 0
+                                || temperatureList.Count == 0 || nitrogenPressureList.Count == 0)
+                            {
+                                testData.AverageSpeedResult = "NG";
+                                testData.MinSpeedResult = "NG";
+                                testData.AverageConcentrationResult = "NG";
+                                testData.AverageTemperatureResult = "NG";
+                                testData.MinTemperatureResult = "NG";
+                                testData.AverageNitrogenPressureResult = "NG";
+                                testData.MinNitrogenPressureResult = "NG";
+                                LogService.AddLogToEnqueue($"监控->条码{testData.Code}数据不全(speed:{speedList.Count} conc:{concentrationList.Count} pos:{positionList.Count} temp:{temperatureList.Count} n2:{nitrogenPressureList.Count})，强制判定NG", EnumMsgType.Exception);
+                            }
+
                             testData.TemperatureResult = testData.AverageTemperatureResult == "OK" && testData.MinTemperatureResult == "OK" ? "OK" : "NG";
                             testData.NitrogenPressureResult = testData.AverageNitrogenPressureResult == "OK" && testData.MinNitrogenPressureResult == "OK" ? "OK" : "NG";
                             testData.SpeedResult = testData.AverageSpeedResult == "OK" && testData.MinSpeedResult == "OK" ? "OK" : "NG";
@@ -1333,6 +1370,7 @@ namespace PR_Spc_Tester
                         existing.PlacementTime = testData.PlacementTime;
                         existing.IntakePressure = testData.IntakePressure;
                         existing.IntakeFlow = testData.IntakeFlow;
+                        existing.NozzleHeight = testData.NozzleHeight;
                         existing.IntakePressureResult = testData.IntakePressureResult;
                         existing.UtilizationRate = testData.UtilizationRate;
                         int idx = realtimeList.IndexOf(existing);
@@ -1846,9 +1884,9 @@ namespace PR_Spc_Tester
                 IWorkbook workbook = new XSSFWorkbook();  // xlsx 格式
                 ISheet sheet = workbook.CreateSheet("测试数据");
 
-                // 获取属性列表，并过滤掉被[ExcelIgnore]标记的属性
+                // 获取属性列表，并过滤掉被[ExcelIgnore]标记的属性和进气流量列
                 var properties = typeof(TestData).GetProperties()
-                    .Where(p => !p.IsDefined(typeof(ExcelIgnoreAttribute), false))
+                    .Where(p => !p.IsDefined(typeof(ExcelIgnoreAttribute), false) && p.Name != "IntakeFlow")
                     .ToList();
 
                 // 创建表头行

@@ -262,14 +262,13 @@ namespace PR_Model
         /// 进气压力结果
         /// </summary>
         public string IntakePressureResult { get; set; }
-        [ExcelColumnName("喷嘴高度(Nozzle Height)"), ExcelColumnWidth(30)]
-
         [ExcelColumn(Name = "进气流量", Width = 30)]
         public double IntakeFlow { get; set; }
 
         /// <summary>
         /// 喷嘴高度 
         /// </summary>
+        [ExcelColumnName("喷嘴高度(Nozzle Height)"), ExcelColumnWidth(30)]
         public float NozzleHeight { get; set; }
         [ExcelColumnName("平均粒子速度(Average Speed)"), ExcelColumnWidth(30)]
         /// <summary>
